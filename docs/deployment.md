@@ -27,6 +27,27 @@ bench --site <site> run-tests --app reckon_constructions
 Review workflow fixtures and role permissions after migration. Approved construction documents must remain immutable.
 The app also installs traceability Custom Fields on standard Quotation, Material Request, and Sales Invoice records so integration retries remain idempotent.
 
+## Demo seed and cleanup
+
+Run the complete UAT dataset only on a development or test site with an existing Company:
+
+```bash
+bench --site <site> execute reckon_constructions.demo.seed_demo_data
+```
+
+The command is idempotent. To rebuild the dataset, use `reset=true`. Before deletion, preview the
+exact records that will be removed. A real clear requires `confirm=true`:
+
+```bash
+bench --site <site> execute reckon_constructions.demo.seed_demo_data --kwargs '{"reset": true}'
+bench --site <site> execute reckon_constructions.demo.clear_demo_data --kwargs '{"dry_run": true}'
+bench --site <site> execute reckon_constructions.demo.clear_demo_data --kwargs '{"confirm": true}'
+```
+
+Cleanup is limited to deterministic `RC-DEMO-*` records plus generated Quotation, Material Request,
+and Sales Invoice records linked to the demo documents. It never removes the Company, Currency,
+UOM, item groups, customer groups, territory, chart of accounts, or other non-demo accounting setup.
+
 ## Rollback
 
 Stop workers, restore the last known-good site backup, and redeploy the matching application commit. Do not downgrade by editing DocType JSON directly on a live site. Re-run migration and the app test suite before reopening traffic.

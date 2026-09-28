@@ -53,6 +53,24 @@ On a real bench, also run the project test suite:
 bench --site your-site.local run-tests --app reckon_constructions
 ```
 
+## Demo Data
+
+The app includes a deterministic demo dataset covering the BOQ-to-progress-certificate and
+invoice-proposal flow, including ERPNext Customer, Item, Project, Quotation, Sales Order, Task,
+Material Request and Sales Invoice records. It uses the first existing Company and does not
+create or delete accounting setup.
+
+```bash
+bench --site your-site.local execute reckon_constructions.demo.seed_demo_data
+bench --site your-site.local execute reckon_constructions.demo.seed_demo_data --kwargs '{"reset": true}'
+bench --site your-site.local execute reckon_constructions.demo.clear_demo_data --kwargs '{"dry_run": true}'
+bench --site your-site.local execute reckon_constructions.demo.clear_demo_data --kwargs '{"confirm": true}'
+```
+
+The seed is idempotent and uses `RC-DEMO-*` names. The clear operation cancels submitted demo
+documents before deleting them and requires explicit confirmation; it does not delete Company,
+Currency, UOM, Item Group, Customer Group, Territory or accounting records outside the demo set.
+
 ## Repository Layout
 
 - `reckon_constructions/` - Frappe app package.

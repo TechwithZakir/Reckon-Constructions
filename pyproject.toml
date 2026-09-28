@@ -22,4 +22,4 @@ where = ["."]
 include = ["reckon_constructions*"]
 
 [tool.setuptools.package-data]
-reckon_constructions = ["*.txt", "*.json", "fixtures/**/*.json"]
+reckon_constructions = ["*.txt", "*.json", "fixtures/**/*.json", "desktop_icon/*.json", "workspace_sidebar/*.json", "constructions/**/*.json"]
