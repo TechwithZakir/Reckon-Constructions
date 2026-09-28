@@ -1,0 +1,116 @@
+{
+  "actions": [],
+  "allow_rename": 0,
+  "creation": "2026-09-28 00:00:00.000000",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "defaults_section",
+    "default_company",
+    "default_currency",
+    "quantity_precision",
+    "currency_precision",
+    "commercial_section",
+    "default_retention_percent",
+    "require_customer_variation_approval",
+    "feature_flags_section",
+    "enable_sales_handoff",
+    "enable_procurement_generation",
+    "enable_progress_billing"
+  ],
+  "fields": [
+    {
+      "fieldname": "defaults_section",
+      "fieldtype": "Section Break",
+      "label": "Defaults"
+    },
+    {
+      "fieldname": "default_company",
+      "fieldtype": "Link",
+      "label": "Default Company",
+      "options": "Company"
+    },
+    {
+      "fieldname": "default_currency",
+      "fieldtype": "Link",
+      "label": "Default Currency",
+      "options": "Currency"
+    },
+    {
+      "default": "3",
+      "fieldname": "quantity_precision",
+      "fieldtype": "Int",
+      "label": "Quantity Precision"
+    },
+    {
+      "default": "2",
+      "fieldname": "currency_precision",
+      "fieldtype": "Int",
+      "label": "Currency Precision"
+    },
+    {
+      "fieldname": "commercial_section",
+      "fieldtype": "Section Break",
+      "label": "Commercial Controls"
+    },
+    {
+      "default": "0",
+      "fieldname": "default_retention_percent",
+      "fieldtype": "Percent",
+      "label": "Default Retention Percent"
+    },
+    {
+      "default": "1",
+      "fieldname": "require_customer_variation_approval",
+      "fieldtype": "Check",
+      "label": "Require Customer Variation Approval"
+    },
+    {
+      "fieldname": "feature_flags_section",
+      "fieldtype": "Section Break",
+      "label": "Feature Flags"
+    },
+    {
+      "default": "0",
+      "fieldname": "enable_sales_handoff",
+      "fieldtype": "Check",
+      "label": "Enable Sales Handoff"
+    },
+    {
+      "default": "0",
+      "fieldname": "enable_procurement_generation",
+      "fieldtype": "Check",
+      "label": "Enable Procurement Generation"
+    },
+    {
+      "default": "0",
+      "fieldname": "enable_progress_billing",
+      "fieldtype": "Check",
+      "label": "Enable Progress Billing"
+    }
+  ],
+  "index_web_pages_for_search": 1,
+  "issingle": 1,
+  "links": [],
+  "modified": "2026-09-28 00:00:00.000000",
+  "modified_by": "Administrator",
+  "module": "Constructions",
+  "name": "Construction Settings",
+  "owner": "Administrator",
+  "permissions": [
+    {
+      "create": 1,
+      "delete": 1,
+      "email": 1,
+      "print": 1,
+      "read": 1,
+      "role": "System Manager",
+      "share": 1,
+      "write": 1
+    }
+  ],
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "states": []
+}

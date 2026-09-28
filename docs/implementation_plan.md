@@ -17,6 +17,8 @@ Exit condition: `docs/bench_audit.md` is completed for the target bench.
 - Installable app package `reckon_constructions`.
 - Module and Desk workspace named `Constructions`.
 - Hooks, fixtures, role strategy and project documentation.
+- Construction Settings singleton for default company, precision, commercial controls and feature flags.
+- Construction Project profile linked uniquely to ERPNext Project with project/company/customer boundary checks.
 - No core patches and no optional app hard dependency.
 
 Exit condition: clean install, migrate and workspace visibility on a v16 site.
