@@ -18,7 +18,7 @@ Exit condition: `docs/bench_audit.md` is completed for the target bench.
 - Module and Desk workspace named `Constructions`.
 - Hooks, fixtures, role strategy and project documentation.
 - Construction Settings singleton for default company, precision, commercial controls and feature flags.
-- Construction Project profile linked uniquely to ERPNext Project with project/company/customer boundary checks.
+- Construction Controls fields on the standard ERPNext Project with project/company/customer boundary checks.
 - No core patches and no optional app hard dependency.
 
 Exit condition: clean install, migrate and workspace visibility on a v16 site.
@@ -26,7 +26,7 @@ Exit condition: clean install, migrate and workspace visibility on a v16 site.
 ## Stage 2 - Estimation
 
 - Construction Settings.
-- Construction Project profile linked uniquely to ERPNext Project.
+- Standard ERPNext Project extended with construction controls and commercial baseline fields.
 - BOQ, sections and items with stable line keys, calculated totals and immutable approved revisions.
 - Measurement calculator with safe formulas, declared variables, signed rows and deterministic tests.
 - Rate analysis and assemblies with component quantities, wastage, overhead, markup and accepted-rate snapshots.
@@ -36,10 +36,10 @@ Exit condition: approved BOQ revision is reproducible after source rates change.
 ## Stage 3 - Sales And Award
 
 - Approved BOQ to draft ERPNext Quotation through a whitelisted server action.
-- Accepted Sales Order to linked or created ERPNext Project and Construction Project profile.
+- Accepted Sales Order to linked or created ERPNext Project with construction controls populated.
 - Idempotent creation using source keys, replay keys where available and company/customer validation.
 
-Exit condition: retries do not create duplicate Quotations, Projects or Construction Project profiles.
+Exit condition: retries do not create duplicate Quotations, Projects or construction records.
 
 ## Stage 4 - Planning
 

@@ -1,6 +1,6 @@
 # UAT Scenarios
 
-1. Create a Construction Project linked to an ERPNext Project and confirm company and customer boundaries.
+1. Create an ERPNext Project with the Construction Controls section and confirm company and customer boundaries.
 2. Create and approve a BOQ revision, then verify its calculated total and stable line keys.
 3. Add a measurement sheet and rate analysis, submit both, and confirm the BOQ quantity and rate snapshots.
 4. Convert the approved BOQ to a Quotation and retry the action with the same source.

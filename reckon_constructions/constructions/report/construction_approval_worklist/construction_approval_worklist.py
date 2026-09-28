@@ -5,7 +5,7 @@ def execute(filters=None):
     columns = [
         {"label": "Record Type", "fieldname": "record_type", "fieldtype": "Data", "width": 180},
         {"label": "Record", "fieldname": "record", "fieldtype": "Dynamic Link", "options": "record_type", "width": 180},
-        {"label": "Project", "fieldname": "project", "fieldtype": "Link", "options": "Construction Project", "width": 180},
+        {"label": "Project", "fieldname": "project", "fieldtype": "Link", "options": "Project", "width": 180},
         {"label": "Status", "fieldname": "status", "fieldtype": "Data", "width": 120},
         {"label": "Value", "fieldname": "value", "fieldtype": "Currency", "width": 130},
         {"label": "Modified", "fieldname": "modified", "fieldtype": "Datetime", "width": 160},

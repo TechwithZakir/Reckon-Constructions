@@ -43,7 +43,7 @@ class BOQWorkbench {
             if (context.boq) {
                 this.load_boq(context.boq);
             } else {
-                const selected = route_options.construction_project || (this.state.projects[0] && this.state.projects[0].name);
+                const selected = route_options.project || route_options.construction_project || (this.state.projects[0] && this.state.projects[0].name);
                 this.select_project(selected);
                 this.state.sections = [{ section_code: "01", section_name: __("General Works"), description: "" }];
             }
@@ -71,7 +71,7 @@ class BOQWorkbench {
         this.state.project = name || "";
         this.state.customer = project ? project.customer || "" : "";
         this.state.company = project ? project.company || "" : "";
-        this.state.currency = project ? project.currency || "" : "";
+        this.state.currency = project ? project.construction_currency || "" : "";
     }
 
     render() {
@@ -98,7 +98,7 @@ class BOQWorkbench {
                 </div>
 
                 <div class="frappe-card p-4 mb-4">
-                    <div class="boq-section-heading"><h5>${__("Project and commercial details")}</h5><span class="text-muted small">${__("These values are copied from the Construction Project.")}</span></div>
+                    <div class="boq-section-heading"><h5>${__("Project and commercial details")}</h5><span class="text-muted small">${__("These values are copied from the ERPNext Project.")}</span></div>
                     <div class="row">
                         ${this.field("project", __("Project"), this.project_options(), "select", true)}
                         ${this.field("customer", __("Customer"), s.customer, "text", false, true)}
@@ -288,7 +288,7 @@ class BOQWorkbench {
 
     save() {
         if (!this.state.project) {
-            frappe.msgprint(__("Select a Construction Project before saving."));
+            frappe.msgprint(__("Select a Project before saving."));
             return;
         }
         frappe.call({
@@ -346,7 +346,7 @@ class BOQWorkbench {
         return `<div class="col-md-4"><label class="control-label">${label}${required ? " *" : ""}</label>${control}</div>`;
     }
 
-    project_options() { return this.state.projects.map((project) => `<option value="${this.escape(project.name)}" ${project.name === this.state.project ? "selected" : ""}>${this.escape(project.project || project.name)}</option>`).join("") || `<option value="">${__("No projects available")}</option>`; }
+    project_options() { return this.state.projects.map((project) => `<option value="${this.escape(project.name)}" ${project.name === this.state.project ? "selected" : ""}>${this.escape(project.project_name || project.name)}</option>`).join("") || `<option value="">${__("No projects available")}</option>`; }
     select_options(values, selected) { return values.map((value) => `<option value="${this.escape(value)}" ${value === selected ? "selected" : ""}>${this.escape(value)}</option>`).join(""); }
     item_options(selected) { return `<option value="">${__("Select item or describe below")}</option>` + this.state.items.map((item) => `<option value="${this.escape(item.name)}" ${item.name === selected ? "selected" : ""}>${this.escape(item.name + (item.item_name ? ` · ${item.item_name}` : ""))}</option>`).join(""); }
     uom_options(selected) { const values = [...new Set([selected, "m³", "m²", "m", "Nos", "kg", "lot", ...this.state.uoms.map((row) => row.name)].filter(Boolean))]; return this.select_options(values, selected); }

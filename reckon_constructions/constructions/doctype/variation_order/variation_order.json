@@ -36,8 +36,8 @@
       "fieldname": "project",
       "fieldtype": "Link",
       "in_list_view": 1,
-      "label": "Construction Project",
-      "options": "Construction Project",
+      "label": "Project",
+      "options": "Project",
       "reqd": 1
     },
     {

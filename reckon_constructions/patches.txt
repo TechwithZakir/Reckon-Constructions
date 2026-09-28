@@ -1,1 +1,6 @@
-# Patches are intentionally empty until target bench audit confirms schema work.
+[pre_model_sync]
+
+[post_model_sync]
+
+[post_fixture_sync]
+reckon_constructions.migrations.migrate_construction_project

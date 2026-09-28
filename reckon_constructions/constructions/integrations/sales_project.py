@@ -50,15 +50,15 @@ def link_or_create_project_from_sales_order(sales_order, existing_project=None, 
     sales_order_doc.check_permission("read")
 
     existing_profile = frappe.db.get_value(
-        "Construction Project",
-        {"sales_order": sales_order_doc.name},
-        ["name", "project"],
+        "Project",
+        {"construction_sales_order": sales_order_doc.name},
+        ["name"],
         as_dict=True,
     )
     if existing_profile:
         return {
             "construction_project": existing_profile.name,
-            "project": existing_profile.project,
+            "project": existing_profile.name,
             "created": False,
         }
 
@@ -70,20 +70,21 @@ def link_or_create_project_from_sales_order(sales_order, existing_project=None, 
 
     validate_sales_order_project_boundary(sales_order_doc, project)
 
-    construction_project = frappe.new_doc("Construction Project")
-    construction_project.project = project.name
-    construction_project.company = sales_order_doc.company
-    construction_project.customer = sales_order_doc.customer
-    construction_project.currency = sales_order_doc.currency
-    construction_project.sales_order = sales_order_doc.name
-    construction_project.contract_start_date = sales_order_doc.get("transaction_date")
-    construction_project.contract_value = sales_order_doc.get("base_grand_total") or sales_order_doc.get("grand_total")
-    construction_project.status = "Active"
-    set_if_field_exists(construction_project, "replay_key", replay_key)
-    construction_project.insert()
+    set_if_field_exists(project, "company", sales_order_doc.company)
+    set_if_field_exists(project, "customer", sales_order_doc.customer)
+    set_if_field_exists(project, "construction_currency", sales_order_doc.currency)
+    set_if_field_exists(project, "construction_sales_order", sales_order_doc.name)
+    set_if_field_exists(project, "construction_contract_start_date", sales_order_doc.get("transaction_date"))
+    set_if_field_exists(project, "construction_contract_value", sales_order_doc.get("base_grand_total") or sales_order_doc.get("grand_total"))
+    set_if_field_exists(project, "construction_status", "Active")
+    set_if_field_exists(project, "construction_replay_key", replay_key)
+    if project.is_new():
+        project.insert()
+    else:
+        project.save(ignore_permissions=True)
 
     return {
-        "construction_project": construction_project.name,
+        "construction_project": project.name,
         "project": project.name,
         "created": not bool(existing_project),
     }
@@ -108,7 +109,7 @@ def create_project_from_sales_order(sales_order):
     project.project_name = sales_order.name
     project.company = sales_order.company
     set_if_field_exists(project, "customer", sales_order.customer)
-    set_if_field_exists(project, "sales_order", sales_order.name)
+    set_if_field_exists(project, "construction_sales_order", sales_order.name)
     project.insert()
     return project
 

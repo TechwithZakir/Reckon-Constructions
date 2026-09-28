@@ -69,7 +69,6 @@ def demo_plan():
     return {
         "custom_doctypes": [
             "Construction Settings",
-            "Construction Project",
             "Construction BOQ",
             "Construction BOQ Section",
             "Construction BOQ Item",
@@ -151,6 +150,13 @@ def seed_demo_data(reset=False):
             "status": "Open",
             "company": company,
             "customer": customer.name,
+            "construction_status": "Active",
+            "construction_currency": currency,
+            "construction_contract_start_date": dates["start"],
+            "construction_contract_end_date": dates["end"],
+            "construction_contract_value": 1983380,
+            "construction_site_name": "Riverside Apartment Complex",
+            "construction_site_address": "Riverside Road, Dhaka - Demo Site",
         },
     )
 
@@ -171,22 +177,7 @@ def seed_demo_data(reset=False):
     settings.save(ignore_permissions=True)
     summary["names"].setdefault("Construction Settings", []).append("Construction Settings")
 
-    construction_project = ensure(
-        "Construction Project",
-        DEMO_NAMES["construction_project"],
-        {
-            "project": project.name,
-            "company": company,
-            "customer": customer.name,
-            "currency": currency,
-            "contract_start_date": dates["start"],
-            "contract_end_date": dates["end"],
-            "contract_value": 1983380,
-            "site_name": "Riverside Apartment Complex",
-            "site_address": "Riverside Road, Dhaka - Demo Site",
-            "status": "Active",
-        },
-    )
+    construction_project = project
 
     calculations = _ensure_calculations(frappe, currency, ensure)
     assemblies = _ensure_assemblies(frappe, items, ensure)
@@ -208,8 +199,8 @@ def seed_demo_data(reset=False):
     sales_order = _ensure_sales_order(
         frappe, company, customer, currency, project, quotation, items, dates, ensure
     )
-    if not construction_project.sales_order:
-        construction_project.sales_order = sales_order.name
+    if not construction_project.construction_sales_order:
+        construction_project.construction_sales_order = sales_order.name
         construction_project.save(ignore_permissions=True)
 
     tasks = _ensure_tasks(frappe, project, company, dates, ensure)
@@ -384,7 +375,6 @@ def clear_demo_data(confirm=False, dry_run=False):
         "Quotation",
         "Construction BOQ",
         "Material Requirement Preview",
-        "Construction Project",
         "Sales Order",
         "Task",
         "Project",
@@ -698,7 +688,7 @@ def _ensure_material_preview(frappe, baseline, assemblies, ensure):
 
     from reckon_constructions.constructions.site import build_material_requirement_preview
 
-    construction_project = frappe.get_doc("Construction Project", baseline.project)
+    construction_project = frappe.get_doc("Project", baseline.project)
     assembly_data = {
         row.assembly: frappe.get_doc("Construction Assembly", row.assembly).as_dict()
         for row in baseline.get("work_packages") or []
@@ -777,7 +767,6 @@ def _find_demo_targets(frappe):
         "Customer": [DEMO_NAMES["customer"]],
         "Project": [DEMO_NAMES["project"]],
         "Sales Order": [DEMO_NAMES["sales_order"]],
-        "Construction Project": [DEMO_NAMES["construction_project"]],
         "Construction BOQ": [DEMO_NAMES["boq"]],
         "Calculation Template": [DEMO_NAMES[key] for key in ("calculation_volume", "calculation_area", "calculation_count", "calculation_factor")],
         "Construction Assembly": [DEMO_NAMES[key] for key in ("assembly_excavation", "assembly_concrete", "assembly_masonry", "assembly_finishing")],

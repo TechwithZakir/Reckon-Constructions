@@ -10,7 +10,6 @@
     {"label": "Overview", "type": "Section Break", "icon": "dashboard", "collapsible": 0},
     {"label": "Project Dashboard", "type": "Link", "link_type": "Page", "link_to": "project-dashboard", "icon": "dashboard"},
     {"label": "Master Setup", "type": "Section Break", "icon": "settings-2", "collapsible": 1},
-    {"label": "Construction Projects", "type": "Link", "link_type": "DocType", "link_to": "Construction Project", "icon": "building-2"},
     {"label": "Projects", "type": "Link", "link_type": "DocType", "link_to": "Project", "icon": "folder-kanban"},
     {"label": "Customers", "type": "Link", "link_type": "DocType", "link_to": "Customer", "icon": "users"},
     {"label": "Construction Settings", "type": "Link", "link_type": "DocType", "link_to": "Construction Settings", "icon": "settings-2"},

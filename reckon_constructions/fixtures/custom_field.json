@@ -1,17 +1,51 @@
-[
+[{
+  "doctype": "Custom Field", "name": "Project-construction_section", "dt": "Project", "fieldname": "construction_section", "label": "Construction Controls", "fieldtype": "Section Break", "insert_after": "customer", "collapsible": 1, "module": "Constructions"
+}, {
+  "doctype": "Custom Field", "name": "Project-construction_status", "dt": "Project", "fieldname": "construction_status", "label": "Construction Status", "fieldtype": "Select", "options": "Draft\nActive\nOn Hold\nCompleted\nCancelled", "default": "Draft", "in_list_view": 1, "insert_after": "construction_section", "module": "Constructions"
+}, {
+  "doctype": "Custom Field", "name": "Project-construction_column_break_1", "dt": "Project", "fieldname": "construction_column_break_1", "fieldtype": "Column Break", "insert_after": "construction_status", "module": "Constructions"
+}, {
+  "doctype": "Custom Field", "name": "Project-construction_currency", "dt": "Project", "fieldname": "construction_currency", "label": "Construction Currency", "fieldtype": "Link", "options": "Currency", "insert_after": "construction_column_break_1", "module": "Constructions"
+}, {
+  "doctype": "Custom Field", "name": "Project-construction_column_break_2", "dt": "Project", "fieldname": "construction_column_break_2", "fieldtype": "Column Break", "insert_after": "construction_currency", "module": "Constructions"
+}, {
+  "doctype": "Custom Field", "name": "Project-construction_sales_order", "dt": "Project", "fieldname": "construction_sales_order", "label": "Construction Sales Order", "fieldtype": "Link", "options": "Sales Order", "insert_after": "construction_column_break_2", "module": "Constructions"
+}, {
+  "doctype": "Custom Field", "name": "Project-construction_commercial_section", "dt": "Project", "fieldname": "construction_commercial_section", "label": "Construction Commercial Baseline", "fieldtype": "Section Break", "insert_after": "construction_sales_order", "collapsible": 1, "module": "Constructions"
+}, {
+  "doctype": "Custom Field", "name": "Project-construction_accepted_boq", "dt": "Project", "fieldname": "construction_accepted_boq", "label": "Accepted BOQ", "fieldtype": "Data", "read_only": 1, "insert_after": "construction_commercial_section", "module": "Constructions"
+}, {
+  "doctype": "Custom Field", "name": "Project-construction_column_break_3", "dt": "Project", "fieldname": "construction_column_break_3", "fieldtype": "Column Break", "insert_after": "construction_accepted_boq", "module": "Constructions"
+}, {
+  "doctype": "Custom Field", "name": "Project-construction_contract_start_date", "dt": "Project", "fieldname": "construction_contract_start_date", "label": "Contract Start Date", "fieldtype": "Date", "insert_after": "construction_column_break_3", "module": "Constructions"
+}, {
+  "doctype": "Custom Field", "name": "Project-construction_column_break_4", "dt": "Project", "fieldname": "construction_column_break_4", "fieldtype": "Column Break", "insert_after": "construction_contract_start_date", "module": "Constructions"
+}, {
+  "doctype": "Custom Field", "name": "Project-construction_contract_end_date", "dt": "Project", "fieldname": "construction_contract_end_date", "label": "Contract End Date", "fieldtype": "Date", "insert_after": "construction_column_break_4", "module": "Constructions"
+}, {
+  "doctype": "Custom Field", "name": "Project-construction_contract_value", "dt": "Project", "fieldname": "construction_contract_value", "label": "Contract Value", "fieldtype": "Currency", "options": "construction_currency", "insert_after": "construction_contract_end_date", "module": "Constructions"
+}, {
+  "doctype": "Custom Field", "name": "Project-construction_site_section", "dt": "Project", "fieldname": "construction_site_section", "label": "Construction Site", "fieldtype": "Section Break", "insert_after": "construction_contract_value", "collapsible": 1, "module": "Constructions"
+}, {
+  "doctype": "Custom Field", "name": "Project-construction_site_name", "dt": "Project", "fieldname": "construction_site_name", "label": "Site Name", "fieldtype": "Data", "insert_after": "construction_site_section", "module": "Constructions"
+}, {
+  "doctype": "Custom Field", "name": "Project-construction_column_break_5", "dt": "Project", "fieldname": "construction_column_break_5", "fieldtype": "Column Break", "insert_after": "construction_site_name", "module": "Constructions"
+}, {
+  "doctype": "Custom Field", "name": "Project-construction_site_address", "dt": "Project", "fieldname": "construction_site_address", "label": "Site Address", "fieldtype": "Small Text", "insert_after": "construction_column_break_5", "module": "Constructions"
+},
   {"doctype": "Custom Field", "name": "Quotation-construction_boq", "dt": "Quotation", "fieldname": "construction_boq", "label": "Construction BOQ", "fieldtype": "Link", "options": "Construction BOQ", "insert_after": "company", "module": "Constructions"},
   {"doctype": "Custom Field", "name": "Quotation-replay_key", "dt": "Quotation", "fieldname": "replay_key", "label": "Replay Key", "fieldtype": "Data", "insert_after": "construction_boq", "module": "Constructions"},
   {"doctype": "Custom Field", "name": "Quotation Item-construction_boq", "dt": "Quotation Item", "fieldname": "construction_boq", "label": "Construction BOQ", "fieldtype": "Link", "options": "Construction BOQ", "insert_after": "item_code", "module": "Constructions"},
   {"doctype": "Custom Field", "name": "Quotation Item-construction_boq_line_key", "dt": "Quotation Item", "fieldname": "construction_boq_line_key", "label": "Construction BOQ Line Key", "fieldtype": "Data", "insert_after": "construction_boq", "module": "Constructions"},
-  {"doctype": "Custom Field", "name": "Material Request-construction_project", "dt": "Material Request", "fieldname": "construction_project", "label": "Construction Project", "fieldtype": "Link", "options": "Construction Project", "insert_after": "company", "module": "Constructions"},
+  {"doctype": "Custom Field", "name": "Material Request-construction_project", "dt": "Material Request", "fieldname": "construction_project", "label": "Project", "fieldtype": "Link", "options": "Project", "insert_after": "company", "module": "Constructions"},
   {"doctype": "Custom Field", "name": "Material Request-construction_baseline", "dt": "Material Request", "fieldname": "construction_baseline", "label": "Construction Baseline", "fieldtype": "Link", "options": "Project Baseline", "insert_after": "construction_project", "module": "Constructions"},
   {"doctype": "Custom Field", "name": "Material Request-material_requirement_preview", "dt": "Material Request", "fieldname": "material_requirement_preview", "label": "Material Requirement Preview", "fieldtype": "Link", "options": "Material Requirement Preview", "insert_after": "construction_baseline", "module": "Constructions"},
   {"doctype": "Custom Field", "name": "Material Request-replay_key", "dt": "Material Request", "fieldname": "replay_key", "label": "Replay Key", "fieldtype": "Data", "insert_after": "material_requirement_preview", "module": "Constructions"},
   {"doctype": "Custom Field", "name": "Material Request Item-construction_baseline", "dt": "Material Request Item", "fieldname": "construction_baseline", "label": "Construction Baseline", "fieldtype": "Link", "options": "Project Baseline", "insert_after": "project", "module": "Constructions"},
   {"doctype": "Custom Field", "name": "Material Request Item-construction_boq_line_key", "dt": "Material Request Item", "fieldname": "construction_boq_line_key", "label": "Construction BOQ Line Key", "fieldtype": "Data", "insert_after": "construction_baseline", "module": "Constructions"},
-  {"doctype": "Custom Field", "name": "Sales Invoice-construction_project", "dt": "Sales Invoice", "fieldname": "construction_project", "label": "Construction Project", "fieldtype": "Link", "options": "Construction Project", "insert_after": "company", "module": "Constructions"},
+  {"doctype": "Custom Field", "name": "Sales Invoice-construction_project", "dt": "Sales Invoice", "fieldname": "construction_project", "label": "Project", "fieldtype": "Link", "options": "Project", "insert_after": "company", "module": "Constructions"},
   {"doctype": "Custom Field", "name": "Sales Invoice-progress_certificate", "dt": "Sales Invoice", "fieldname": "progress_certificate", "label": "Progress Certificate", "fieldtype": "Link", "options": "Progress Certificate", "insert_after": "construction_project", "module": "Constructions"},
-  {"doctype": "Custom Field", "name": "Sales Invoice Item-construction_project", "dt": "Sales Invoice Item", "fieldname": "construction_project", "label": "Construction Project", "fieldtype": "Link", "options": "Construction Project", "insert_after": "project", "module": "Constructions"},
+  {"doctype": "Custom Field", "name": "Sales Invoice Item-construction_project", "dt": "Sales Invoice Item", "fieldname": "construction_project", "label": "Project", "fieldtype": "Link", "options": "Project", "insert_after": "project", "module": "Constructions"},
   {"doctype": "Custom Field", "name": "Sales Invoice Item-progress_certificate", "dt": "Sales Invoice Item", "fieldname": "progress_certificate", "label": "Progress Certificate", "fieldtype": "Link", "options": "Progress Certificate", "insert_after": "construction_project", "module": "Constructions"},
   {"doctype": "Custom Field", "name": "Sales Invoice Item-construction_boq_line_key", "dt": "Sales Invoice Item", "fieldname": "construction_boq_line_key", "label": "Construction BOQ Line Key", "fieldtype": "Data", "insert_after": "progress_certificate", "module": "Constructions"}
 ]

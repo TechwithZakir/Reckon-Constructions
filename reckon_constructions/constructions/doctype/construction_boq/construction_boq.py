@@ -37,7 +37,7 @@ class ConstructionBOQ(Document):
         if self.prior_revision:
             prior_project = frappe.db.get_value("Construction BOQ", self.prior_revision, "project")
             if prior_project and self.project and prior_project != self.project:
-                frappe.throw("Prior Revision must belong to the same Construction Project.")
+                frappe.throw("Prior Revision must belong to the same Project.")
 
     def validate_unique_line_keys(self):
         seen = set()

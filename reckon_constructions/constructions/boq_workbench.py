@@ -15,8 +15,8 @@ def get_boq_workbench_context(boq=None):
 
     context = {
         "projects": frappe.get_all(
-            "Construction Project",
-            fields=["name", "project", "customer", "company", "currency", "status"],
+            "Project",
+            fields=["name", "project_name", "customer", "company", "construction_currency", "construction_status"],
             order_by="modified desc",
             limit=100,
         ),
@@ -55,9 +55,9 @@ def save_boq_draft(payload):
 
     project_name = payload.get("project")
     if not project_name:
-        frappe.throw("Select a Construction Project before saving the BOQ.")
+        frappe.throw("Select a Project before saving the BOQ.")
 
-    project = frappe.get_doc("Construction Project", project_name)
+    project = frappe.get_doc("Project", project_name)
     project.check_permission("read")
 
     boq_name = payload.get("name")
@@ -73,7 +73,7 @@ def save_boq_draft(payload):
     doc.project = project_name
     doc.customer = payload.get("customer") or project.customer
     doc.company = payload.get("company") or project.company
-    doc.currency = payload.get("currency") or project.currency
+    doc.currency = payload.get("currency") or project.get("construction_currency")
     doc.boq_type = payload.get("boq_type") or "Construction"
     doc.revision_no = int(payload.get("revision_no") or 1)
     doc.revision_reason = payload.get("revision_reason") or None

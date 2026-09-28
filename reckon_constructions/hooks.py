@@ -12,6 +12,7 @@ doctype_list_js = {
 }
 
 doctype_js = {
+    "Project": "public/js/construction_forms.js",
     "Construction BOQ": "public/js/construction_forms.js",
     "Rate Analysis": "public/js/construction_forms.js",
 }
@@ -32,6 +33,23 @@ fixtures = [
     {
         "dt": "Custom Field",
         "filters": [["name", "in", [
+            "Project-construction_section",
+            "Project-construction_status",
+            "Project-construction_column_break_1",
+            "Project-construction_currency",
+            "Project-construction_column_break_2",
+            "Project-construction_sales_order",
+            "Project-construction_commercial_section",
+            "Project-construction_accepted_boq",
+            "Project-construction_column_break_3",
+            "Project-construction_contract_start_date",
+            "Project-construction_column_break_4",
+            "Project-construction_contract_end_date",
+            "Project-construction_contract_value",
+            "Project-construction_site_section",
+            "Project-construction_site_name",
+            "Project-construction_column_break_5",
+            "Project-construction_site_address",
             "Quotation-construction_boq",
             "Quotation-replay_key",
             "Quotation Item-construction_boq",
@@ -53,9 +71,13 @@ fixtures = [
 
 doc_events = {
     "Project": {
-        "validate": "reckon_constructions.constructions.doctype.construction_project.construction_project.validate_linked_project_boundaries"
+        "validate": "reckon_constructions.constructions.project.validate_project_boundaries"
     }
 }
+
+never_skip_patches = [
+    "reckon_constructions.migrations.migrate_construction_project",
+]
 
 website_context = {
     "favicon": "/assets/reckon_constructions/images/favicon.png",

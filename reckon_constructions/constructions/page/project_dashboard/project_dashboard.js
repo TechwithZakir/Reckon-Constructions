@@ -6,7 +6,7 @@ frappe.pages["project-dashboard"].on_page_load = function (wrapper) {
     });
 
     const route_options = frappe.route_options || {};
-    const initial_project = route_options.construction_project || "";
+    const initial_project = route_options.project || route_options.construction_project || "";
     $(page.body).html(`<div class="construction-dashboard text-muted">${__("Loading projects...")}</div>`);
 
     frappe.call({
@@ -23,15 +23,15 @@ frappe.pages["project-dashboard"].on_page_load = function (wrapper) {
 
 function render_dashboard_shell(page, projects, selected) {
     const project_options = projects.map((project) => {
-        const label = [project.project || project.name, project.customer].filter(Boolean).join(" · ");
+        const label = [project.project_name || project.name, project.customer].filter(Boolean).join(" · ");
         return `<option value="${frappe.utils.escape_html(project.name)}" ${project.name === selected ? "selected" : ""}>${frappe.utils.escape_html(label)}</option>`;
     }).join("");
-    const empty_state = projects.length ? "" : `<div class="text-muted">${__("Create a Construction Project to start using the dashboard.")}</div>`;
+    const empty_state = projects.length ? "" : `<div class="text-muted">${__("Create a Project to start using the dashboard.")}</div>`;
     $(page.body).html(`
         <div class="frappe-card p-4 mb-4">
             <div class="row align-items-end">
                 <div class="col-md-8">
-                    <label class="control-label">${__("Construction Project")}</label>
+                    <label class="control-label">${__("Project")}</label>
                     <select class="form-control" data-dashboard-project ${projects.length ? "" : "disabled"}>
                         ${project_options || `<option value="">${__("No projects available")}</option>`}
                     </select>
@@ -52,7 +52,7 @@ function load_dashboard(page, project) {
     $(page.body).find("[data-dashboard-content]").html(`<div class="text-muted">${__("Loading dashboard...")}</div>`);
     frappe.call({
         method: "reckon_constructions.constructions.dashboard.get_project_dashboard",
-        args: { construction_project: project },
+        args: { project },
     }).then((response) => {
         const data = response.message;
         const metrics = data.metrics;

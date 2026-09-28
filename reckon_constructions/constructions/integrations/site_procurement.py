@@ -25,7 +25,7 @@ def create_material_requirement_preview(baseline, replay_key=None):
 
     already_requested = collect_existing_material_demand(baseline_doc.name)
     requirements = build_material_requirement_preview(work_packages, assemblies, already_requested)
-    construction_project = frappe.get_doc("Construction Project", baseline_doc.project)
+    construction_project = frappe.get_doc("Project", baseline_doc.project)
     preview = frappe.new_doc("Material Requirement Preview")
     preview.project = baseline_doc.project
     preview.baseline = baseline_doc.name
@@ -64,8 +64,8 @@ def create_material_request_from_preview(preview, replay_key=None):
     request.material_request_type = "Purchase"
     request.transaction_date = nowdate()
     set_if_field_exists(request, "company", preview_doc.company)
-    construction_project = frappe.get_doc("Construction Project", preview_doc.project)
-    set_if_field_exists(request, "project", construction_project.project)
+    construction_project = frappe.get_doc("Project", preview_doc.project)
+    set_if_field_exists(request, "project", construction_project.name)
     set_if_field_exists(request, "construction_project", preview_doc.project)
     set_if_field_exists(request, "construction_baseline", preview_doc.baseline)
     set_if_field_exists(request, "material_requirement_preview", preview_doc.name)
@@ -79,7 +79,7 @@ def create_material_request_from_preview(preview, replay_key=None):
         item.qty = row.outstanding_qty
         item.uom = row.uom
         item.schedule_date = preview_doc.as_of_date
-        set_if_field_exists(item, "project", construction_project.project)
+        set_if_field_exists(item, "project", construction_project.name)
         set_if_field_exists(item, "construction_baseline", preview_doc.baseline)
         set_if_field_exists(item, "construction_boq_line_key", row.source_boq_line_key)
 

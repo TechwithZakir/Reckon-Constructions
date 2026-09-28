@@ -46,7 +46,7 @@ Record these values on the development bench before adding DocTypes:
 | Domain | Standard ERPNext authority | Construction extension |
 | --- | --- | --- |
 | Sales | Customer, Opportunity, Quotation, Sales Order | Tender context, BOQ source mapping and accepted estimate reference |
-| Projects | Project, Task, Timesheet | Construction Project profile, baseline, work package and progress quantity rules |
+| Projects | Project, Task, Timesheet | Construction fields on the standard Project, baseline, work package and progress quantity rules |
 | Estimating | Item, UOM, price lists where applicable | BOQ revisions, sections, line keys, measurement calculator and rate analysis |
 | Procurement | Material Request, RFQ, Purchase Order, Stock Entry | Requirement preview, source traceability and duplicate demand protection |
 | Commercial | Sales Invoice, Payment Entry, GL Entry | Variation Order and Progress Certificate proposals |
@@ -66,7 +66,7 @@ Record these values on the development bench before adding DocTypes:
 
 1. Confirm bench inventory and standard DocType field map.
 2. Keep the `Constructions` workspace available with standard links.
-3. Review the initial Construction Settings and Construction Project fields against the target bench.
+3. Review the initial Construction Settings and standard Project Construction Controls fields against the target bench.
 4. Review the initial BOQ, section and item model against company estimating requirements.
 5. Review the measurement template grammar, UOM policy and BOQ quantity update rule.
 6. Review rate component kinds, UOM conversion policy, overhead and markup approval policy.

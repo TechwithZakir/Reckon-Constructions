@@ -13,16 +13,16 @@ def create_sales_invoice_proposal(certificate):
     if certificate_doc.generated_sales_invoice:
         return certificate_doc.generated_sales_invoice
 
-    construction_project = frappe.get_doc("Construction Project", certificate_doc.project)
+    construction_project = frappe.get_doc("Project", certificate_doc.project)
     boq = frappe.get_doc("Construction BOQ", certificate_doc.boq)
     boq_items = {row.line_key: row for row in boq.get("items") or []}
 
     invoice = frappe.new_doc("Sales Invoice")
     invoice.customer = construction_project.customer
     invoice.company = construction_project.company
-    invoice.currency = construction_project.currency
+    invoice.currency = construction_project.construction_currency
     invoice.posting_date = nowdate()
-    set_if_field_exists(invoice, "project", construction_project.project)
+    set_if_field_exists(invoice, "project", construction_project.name)
     set_if_field_exists(invoice, "construction_project", certificate_doc.project)
     set_if_field_exists(invoice, "progress_certificate", certificate_doc.name)
 
@@ -35,7 +35,7 @@ def create_sales_invoice_proposal(certificate):
         invoice_row.qty = row["qty"]
         invoice_row.uom = row["uom"]
         invoice_row.rate = row["rate"]
-        set_if_field_exists(invoice_row, "project", construction_project.project)
+        set_if_field_exists(invoice_row, "project", construction_project.name)
         set_if_field_exists(invoice_row, "construction_project", certificate_doc.project)
         set_if_field_exists(invoice_row, "progress_certificate", certificate_doc.name)
         set_if_field_exists(invoice_row, "construction_boq_line_key", row["boq_line_key"])

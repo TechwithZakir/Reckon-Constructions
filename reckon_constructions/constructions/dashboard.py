@@ -50,8 +50,8 @@ def get_dashboard_projects():
         raise RuntimeError("Frappe is required for dashboard queries.")
 
     projects = frappe.get_all(
-        "Construction Project",
-        fields=["name", "project", "customer", "company", "currency", "status", "contract_value"],
+        "Project",
+        fields=["name", "project_name", "customer", "company", "construction_currency", "construction_status", "construction_contract_value"],
         order_by="modified desc",
         limit=50,
     )
@@ -59,41 +59,45 @@ def get_dashboard_projects():
 
 
 @_whitelist
-def get_project_dashboard(construction_project):
+def get_project_dashboard(project=None, construction_project=None):
     if frappe is None:
         raise RuntimeError("Frappe is required for dashboard queries.")
 
-    project = frappe.get_doc("Construction Project", construction_project)
-    project.check_permission("read")
+    project_name = project or construction_project
+    if not project_name:
+        frappe.throw("Select a Project before opening the dashboard.")
 
-    boq = latest_submitted("Construction BOQ", construction_project, "project")
-    baseline = latest_submitted("Project Baseline", construction_project, "project")
+    project_doc = frappe.get_doc("Project", project_name)
+    project_doc.check_permission("read")
+
+    boq = latest_submitted("Construction BOQ", project_name, "project")
+    baseline = latest_submitted("Project Baseline", project_name, "project")
     variations = frappe.get_all(
         "Variation Order",
-        filters={"project": construction_project, "docstatus": 1},
+        filters={"project": project_name, "docstatus": 1},
         fields=["net_amount"],
     )
     certificates = frappe.get_all(
         "Progress Certificate",
-        filters={"project": construction_project, "docstatus": 1},
+        filters={"project": project_name, "docstatus": 1},
         fields=["gross_value"],
     )
 
-    open_issues = frappe.db.count("Site Issue", {"project": construction_project, "status": ["in", ["Open", "In Progress"]]})
-    open_rfis = frappe.db.count("Request For Information", {"project": construction_project, "status": ["in", ["Open"]]})
+    open_issues = frappe.db.count("Site Issue", {"project": project_name, "status": ["in", ["Open", "In Progress"]]})
+    open_rfis = frappe.db.count("Request For Information", {"project": project_name, "status": ["in", ["Open"]]})
     variation_value = sum((row.net_amount or 0) for row in variations)
     certified_value = sum((row.gross_value or 0) for row in certificates)
     metrics = calculate_dashboard_metrics(
-        contract_value=project.contract_value,
+        contract_value=project_doc.construction_contract_value,
         boq_value=boq.total_amount if boq else 0,
         planned_value=baseline.planned_value if baseline else 0,
         variation_value=variation_value,
         certified_value=certified_value,
     )
     return {
-        "project": construction_project,
-        "erpnext_project": project.project,
-        "status": project.status,
+        "project": project_name,
+        "erpnext_project": project_doc.name,
+        "status": project_doc.construction_status or project_doc.status,
         "metrics": metrics,
         "approvals": {
             "boq": boq.status if boq else "Missing",
