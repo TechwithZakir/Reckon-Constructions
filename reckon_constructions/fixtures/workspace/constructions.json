@@ -98,7 +98,13 @@
             "label": "Rate Analysis",
             "type": "DocType",
             "name": "Rate Analysis",
-            "description": "Planned custom DocType after bench audit"
+            "description": "Direct cost, overhead, markup and proposed rate"
+          },
+          {
+            "label": "Construction Assembly",
+            "type": "DocType",
+            "name": "Construction Assembly",
+            "description": "Reusable component recipe for construction rates"
           }
         ]
       }

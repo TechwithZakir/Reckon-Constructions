@@ -1,0 +1,40 @@
+{
+  "actions": [],
+  "creation": "2026-09-28 00:00:00.000000",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "component_kind",
+    "item",
+    "description",
+    "quantity_factor",
+    "uom",
+    "wastage_percent",
+    "unit_rate",
+    "rate_source",
+    "amount"
+  ],
+  "fields": [
+    {"fieldname": "component_kind", "fieldtype": "Select", "in_list_view": 1, "label": "Component Kind", "options": "Material\nLabour\nEquipment\nService\nOther", "reqd": 1},
+    {"fieldname": "item", "fieldtype": "Link", "in_list_view": 1, "label": "Item", "options": "Item"},
+    {"fieldname": "description", "fieldtype": "Small Text", "label": "Description"},
+    {"default": "1", "fieldname": "quantity_factor", "fieldtype": "Float", "in_list_view": 1, "label": "Quantity Factor"},
+    {"fieldname": "uom", "fieldtype": "Link", "label": "UOM", "options": "UOM"},
+    {"default": "0", "fieldname": "wastage_percent", "fieldtype": "Percent", "label": "Wastage Percent"},
+    {"default": "0", "fieldname": "unit_rate", "fieldtype": "Currency", "in_list_view": 1, "label": "Unit Rate"},
+    {"fieldname": "rate_source", "fieldtype": "Data", "label": "Rate Source"},
+    {"fieldname": "amount", "fieldtype": "Currency", "in_list_view": 1, "label": "Amount", "read_only": 1}
+  ],
+  "istable": 1,
+  "links": [],
+  "modified": "2026-09-28 00:00:00.000000",
+  "modified_by": "Administrator",
+  "module": "Constructions",
+  "name": "Rate Analysis Component",
+  "owner": "Administrator",
+  "permissions": [],
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "states": []
+}
