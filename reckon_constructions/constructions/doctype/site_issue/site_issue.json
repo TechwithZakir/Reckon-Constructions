@@ -1,0 +1,37 @@
+{
+  "actions": [],
+  "allow_rename": 1,
+  "autoname": "format:SI-.YYYY.-.#####",
+  "creation": "2026-09-28 00:00:00.000000",
+  "doctype": "DocType",
+  "field_order": ["identity_section", "project", "site_report", "issue_type", "severity", "title", "description", "owner", "due_date", "status", "resolution", "resolved_on"],
+  "fields": [
+    {"fieldname": "identity_section", "fieldtype": "Section Break", "label": "Identity"},
+    {"fieldname": "project", "fieldtype": "Link", "in_list_view": 1, "label": "Construction Project", "options": "Construction Project", "reqd": 1},
+    {"fieldname": "site_report", "fieldtype": "Link", "label": "Daily Site Report", "options": "Daily Site Report"},
+    {"fieldname": "issue_type", "fieldtype": "Select", "in_list_view": 1, "label": "Issue Type", "options": "Safety\nQuality\nDesign\nMaterial\nLabour\nAccess\nOther", "reqd": 1},
+    {"fieldname": "severity", "fieldtype": "Select", "in_list_view": 1, "label": "Severity", "options": "Low\nMedium\nHigh\nCritical", "reqd": 1},
+    {"fieldname": "title", "fieldtype": "Data", "in_list_view": 1, "label": "Title", "reqd": 1},
+    {"fieldname": "description", "fieldtype": "Text Editor", "label": "Description", "reqd": 1},
+    {"fieldname": "owner", "fieldtype": "Link", "label": "Owner", "options": "User"},
+    {"fieldname": "due_date", "fieldtype": "Date", "label": "Due Date"},
+    {"default": "Open", "fieldname": "status", "fieldtype": "Select", "in_list_view": 1, "label": "Status", "options": "Open\nIn Progress\nResolved\nClosed"},
+    {"fieldname": "resolution", "fieldtype": "Text Editor", "label": "Resolution"},
+    {"fieldname": "resolved_on", "fieldtype": "Datetime", "label": "Resolved On", "read_only": 1}
+  ],
+  "index_web_pages_for_search": 1,
+  "links": [],
+  "modified": "2026-09-28 00:00:00.000000",
+  "modified_by": "Administrator",
+  "module": "Constructions",
+  "name": "Site Issue",
+  "owner": "Administrator",
+  "permissions": [
+    {"create": 1, "delete": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "write": 1, "role": "System Manager"},
+    {"create": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "write": 1, "role": "Projects Manager"},
+    {"create": 1, "export": 1, "print": 1, "read": 1, "report": 1, "write": 1, "role": "Projects User"}
+  ],
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "states": []
+}

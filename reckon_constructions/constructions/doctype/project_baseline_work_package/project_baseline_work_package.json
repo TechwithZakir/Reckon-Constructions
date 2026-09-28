@@ -6,6 +6,7 @@
   "engine": "InnoDB",
   "field_order": [
     "work_package",
+    "assembly",
     "task",
     "boq_line_key",
     "planned_start",
@@ -19,6 +20,7 @@
   ],
   "fields": [
     {"fieldname": "work_package", "fieldtype": "Data", "in_list_view": 1, "label": "Work Package", "reqd": 1},
+    {"fieldname": "assembly", "fieldtype": "Link", "in_list_view": 1, "label": "Material Assembly", "options": "Construction Assembly"},
     {"fieldname": "task", "fieldtype": "Link", "in_list_view": 1, "label": "ERPNext Task", "options": "Task"},
     {"fieldname": "boq_line_key", "fieldtype": "Data", "in_list_view": 1, "label": "BOQ Line Key"},
     {"fieldname": "planned_start", "fieldtype": "Date", "in_list_view": 1, "label": "Planned Start"},
