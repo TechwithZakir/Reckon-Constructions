@@ -70,4 +70,5 @@ Record these values on the development bench before adding DocTypes:
 4. Review the initial BOQ, section and item model against company estimating requirements.
 5. Review the measurement template grammar, UOM policy and BOQ quantity update rule.
 6. Review rate component kinds, UOM conversion policy, overhead and markup approval policy.
-7. Add ERPNext integrations only after target document requirements are verified.
+7. Verify ERPNext Quotation and Sales Order custom field strategy for BOQ source references.
+8. Add remaining ERPNext integrations only after target document requirements are verified.

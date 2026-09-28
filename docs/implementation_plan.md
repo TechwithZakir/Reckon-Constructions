@@ -35,9 +35,9 @@ Exit condition: approved BOQ revision is reproducible after source rates change.
 
 ## Stage 3 - Sales And Award
 
-- Approved BOQ to draft ERPNext Quotation.
-- Accepted Sales Order to linked or created ERPNext Project.
-- Idempotent creation using source keys and company/customer validation.
+- Approved BOQ to draft ERPNext Quotation through a whitelisted server action.
+- Accepted Sales Order to linked or created ERPNext Project and Construction Project profile.
+- Idempotent creation using source keys, replay keys where available and company/customer validation.
 
 Exit condition: retries do not create duplicate Quotations, Projects or Construction Project profiles.
 
