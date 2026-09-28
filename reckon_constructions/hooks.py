@@ -11,6 +11,11 @@ doctype_list_js = {
     "Construction BOQ": "public/js/construction_boq_list.js",
 }
 
+doctype_js = {
+    "Construction BOQ": "public/js/construction_forms.js",
+    "Rate Analysis": "public/js/construction_forms.js",
+}
+
 fixtures = [
     {
         "dt": "Workspace",
