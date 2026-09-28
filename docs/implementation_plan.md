@@ -28,7 +28,7 @@ Exit condition: clean install, migrate and workspace visibility on a v16 site.
 - Construction Settings.
 - Construction Project profile linked uniquely to ERPNext Project.
 - BOQ, sections and items with stable line keys, calculated totals and immutable approved revisions.
-- Measurement calculator with safe formulas and deterministic tests.
+- Measurement calculator with safe formulas, declared variables, signed rows and deterministic tests.
 - Rate analysis and assemblies with accepted-rate snapshots.
 
 Exit condition: approved BOQ revision is reproducible after source rates change.

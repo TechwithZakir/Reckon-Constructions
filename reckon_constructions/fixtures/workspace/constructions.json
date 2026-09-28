@@ -86,7 +86,13 @@
             "label": "Measurement Sheet",
             "type": "DocType",
             "name": "Measurement Sheet",
-            "description": "Planned custom DocType after bench audit"
+            "description": "Signed measurement rows and calculated BOQ quantity"
+          },
+          {
+            "label": "Calculation Template",
+            "type": "DocType",
+            "name": "Calculation Template",
+            "description": "Reusable deterministic measurement formulas"
           },
           {
             "label": "Rate Analysis",
