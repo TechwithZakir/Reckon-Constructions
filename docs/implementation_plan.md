@@ -43,8 +43,8 @@ Exit condition: retries do not create duplicate Quotations, Projects or Construc
 
 ## Stage 4 - Planning
 
-- Project Baseline and Work Package mapping.
-- ERPNext Task creation or linking with dates, dependencies and BOQ quantities.
+- Project Baseline and Work Package mapping with planned cost and value totals.
+- ERPNext Task linking with dates, dependencies and BOQ quantities.
 - Cycle and date validation.
 
 Exit condition: baseline scope, schedule and ownership are traceable from the project workspace.

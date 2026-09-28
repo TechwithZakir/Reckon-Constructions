@@ -1,0 +1,53 @@
+{
+  "actions": [],
+  "allow_rename": 1,
+  "autoname": "format:PB-.YYYY.-.#####",
+  "creation": "2026-09-28 00:00:00.000000",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "identity_section",
+    "project",
+    "boq_revision",
+    "sales_order",
+    "baseline_version",
+    "prior_baseline",
+    "status",
+    "work_packages_section",
+    "work_packages",
+    "totals_section",
+    "planned_cost",
+    "planned_value"
+  ],
+  "fields": [
+    {"fieldname": "identity_section", "fieldtype": "Section Break", "label": "Identity"},
+    {"fieldname": "project", "fieldtype": "Link", "in_list_view": 1, "label": "Construction Project", "options": "Construction Project", "reqd": 1},
+    {"fieldname": "boq_revision", "fieldtype": "Link", "in_list_view": 1, "label": "BOQ Revision", "options": "Construction BOQ", "reqd": 1},
+    {"fieldname": "sales_order", "fieldtype": "Link", "label": "Sales Order", "options": "Sales Order"},
+    {"default": "1", "fieldname": "baseline_version", "fieldtype": "Int", "in_list_view": 1, "label": "Baseline Version", "reqd": 1},
+    {"fieldname": "prior_baseline", "fieldtype": "Link", "label": "Prior Baseline", "options": "Project Baseline"},
+    {"default": "Draft", "fieldname": "status", "fieldtype": "Select", "in_list_view": 1, "label": "Status", "options": "Draft\nApproved\nSuperseded\nCancelled"},
+    {"fieldname": "work_packages_section", "fieldtype": "Section Break", "label": "Work Packages"},
+    {"fieldname": "work_packages", "fieldtype": "Table", "label": "Work Packages", "options": "Project Baseline Work Package"},
+    {"fieldname": "totals_section", "fieldtype": "Section Break", "label": "Totals"},
+    {"fieldname": "planned_cost", "fieldtype": "Currency", "label": "Planned Cost", "read_only": 1},
+    {"fieldname": "planned_value", "fieldtype": "Currency", "label": "Planned Value", "read_only": 1}
+  ],
+  "index_web_pages_for_search": 1,
+  "is_submittable": 1,
+  "links": [],
+  "modified": "2026-09-28 00:00:00.000000",
+  "modified_by": "Administrator",
+  "module": "Constructions",
+  "name": "Project Baseline",
+  "owner": "Administrator",
+  "permissions": [
+    {"create": 1, "delete": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "role": "System Manager", "share": 1, "submit": 1, "write": 1},
+    {"create": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "role": "Projects Manager", "share": 1, "submit": 1, "write": 1},
+    {"email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "role": "Projects User", "share": 1}
+  ],
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "states": []
+}
