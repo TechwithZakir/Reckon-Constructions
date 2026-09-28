@@ -32,7 +32,7 @@ No Frappe or ERPNext core files should be patched.
 From a bench that already has Frappe and ERPNext v16 installed:
 
 ```bash
-bench get-app /path/to/Reckon-Constructions
+bench get-app https://github.com/TechwithZakir/Reckon-Constructions.git
 bench --site your-site.local install-app reckon_constructions
 bench --site your-site.local migrate
 bench build
