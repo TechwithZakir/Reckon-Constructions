@@ -13,8 +13,15 @@ function flatten_project_tabs(frm) {
     });
 }
 
+function hide_retired_project_fields(frm) {
+    if (frm.fields_dict.construction_sales_order) {
+        frm.toggle_display("construction_sales_order", false);
+    }
+}
+
 frappe.ui.form.on("Project", {
     refresh(frm) {
+        hide_retired_project_fields(frm);
         flatten_project_tabs(frm);
         if (!frm.doc.construction_status) return;
         frm.add_custom_button(__("Open Project Dashboard"), () => {

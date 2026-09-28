@@ -6,7 +6,7 @@ CONSTRUCTION_FIELDS = [
         "fieldname": "construction_section",
         "label": "Construction Controls",
         "fieldtype": "Section Break",
-        "insert_after": "actual_end_date",
+        "insert_after": "is_active",
         "collapsible": 1,
     },
     {

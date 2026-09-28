@@ -69,6 +69,10 @@ fixtures = [
         "dt": "DocType Layout",
         "filters": [["name", "in", ["Constructions Project Single Page"]]],
     },
+    {
+        "dt": "Property Setter",
+        "filters": [["name", "in", ["Project-field_order"]]],
+    },
 ]
 
 doc_events = {
@@ -81,6 +85,12 @@ never_skip_patches = [
     "reckon_constructions.migrations.migrate_construction_project",
     "reckon_constructions.migrations.replace_project_sales_order",
 ]
+
+after_migrate = [
+    "reckon_constructions.migrations.replace_project_sales_order.execute",
+]
+
+before_uninstall = "reckon_constructions.migrations.cleanup_project_customizations.before_uninstall"
 
 website_context = {
     "favicon": "/assets/reckon_constructions/images/favicon.png",

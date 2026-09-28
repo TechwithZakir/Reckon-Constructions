@@ -1,5 +1,5 @@
 [{
-  "doctype": "Custom Field", "name": "Project-construction_section", "dt": "Project", "fieldname": "construction_section", "label": "Construction Controls", "fieldtype": "Section Break", "insert_after": "actual_end_date", "collapsible": 1, "module": "Constructions"
+  "doctype": "Custom Field", "name": "Project-construction_section", "dt": "Project", "fieldname": "construction_section", "label": "Construction Controls", "fieldtype": "Section Break", "insert_after": "is_active", "collapsible": 1, "module": "Constructions"
 }, {
   "doctype": "Custom Field", "name": "Project-construction_status", "dt": "Project", "fieldname": "construction_status", "label": "Construction Status", "fieldtype": "Select", "options": "Draft\nActive\nOn Hold\nCompleted\nCancelled", "default": "Draft", "reqd": 1, "in_list_view": 1, "insert_after": "construction_section", "module": "Constructions"
 }, {
