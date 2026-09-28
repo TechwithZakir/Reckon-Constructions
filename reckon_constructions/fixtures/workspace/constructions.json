@@ -80,7 +80,7 @@
             "label": "Construction BOQ",
             "type": "DocType",
             "name": "Construction BOQ",
-            "description": "Planned custom DocType after bench audit"
+            "description": "BOQ revisions, sections and line items"
           },
           {
             "label": "Measurement Sheet",

@@ -1,0 +1,187 @@
+{
+  "actions": [],
+  "allow_rename": 1,
+  "autoname": "format:BOQ-.YYYY.-.#####",
+  "creation": "2026-09-28 00:00:00.000000",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "identity_section",
+    "project",
+    "customer",
+    "company",
+    "currency",
+    "boq_type",
+    "revision_section",
+    "revision_no",
+    "prior_revision",
+    "status",
+    "revision_reason",
+    "sections_section",
+    "sections",
+    "items_section",
+    "items",
+    "totals_section",
+    "total_amount"
+  ],
+  "fields": [
+    {
+      "fieldname": "identity_section",
+      "fieldtype": "Section Break",
+      "label": "Identity"
+    },
+    {
+      "fieldname": "project",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Construction Project",
+      "options": "Construction Project"
+    },
+    {
+      "fieldname": "customer",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Customer",
+      "options": "Customer"
+    },
+    {
+      "fieldname": "company",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Company",
+      "options": "Company",
+      "reqd": 1
+    },
+    {
+      "fieldname": "currency",
+      "fieldtype": "Link",
+      "label": "Currency",
+      "options": "Currency",
+      "reqd": 1
+    },
+    {
+      "default": "Construction",
+      "fieldname": "boq_type",
+      "fieldtype": "Select",
+      "label": "BOQ Type",
+      "options": "Construction\nTender\nVariation"
+    },
+    {
+      "fieldname": "revision_section",
+      "fieldtype": "Section Break",
+      "label": "Revision"
+    },
+    {
+      "default": "1",
+      "fieldname": "revision_no",
+      "fieldtype": "Int",
+      "in_list_view": 1,
+      "label": "Revision No",
+      "reqd": 1
+    },
+    {
+      "fieldname": "prior_revision",
+      "fieldtype": "Link",
+      "label": "Prior Revision",
+      "options": "Construction BOQ"
+    },
+    {
+      "default": "Draft",
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "label": "Status",
+      "options": "Draft\nUnder Review\nApproved\nSuperseded\nCancelled"
+    },
+    {
+      "fieldname": "revision_reason",
+      "fieldtype": "Small Text",
+      "label": "Revision Reason"
+    },
+    {
+      "fieldname": "sections_section",
+      "fieldtype": "Section Break",
+      "label": "Sections"
+    },
+    {
+      "fieldname": "sections",
+      "fieldtype": "Table",
+      "label": "Sections",
+      "options": "Construction BOQ Section"
+    },
+    {
+      "fieldname": "items_section",
+      "fieldtype": "Section Break",
+      "label": "Items"
+    },
+    {
+      "fieldname": "items",
+      "fieldtype": "Table",
+      "label": "Items",
+      "options": "Construction BOQ Item"
+    },
+    {
+      "fieldname": "totals_section",
+      "fieldtype": "Section Break",
+      "label": "Totals"
+    },
+    {
+      "fieldname": "total_amount",
+      "fieldtype": "Currency",
+      "label": "Total Amount",
+      "options": "currency",
+      "read_only": 1
+    }
+  ],
+  "index_web_pages_for_search": 1,
+  "is_submittable": 1,
+  "links": [],
+  "modified": "2026-09-28 00:00:00.000000",
+  "modified_by": "Administrator",
+  "module": "Constructions",
+  "name": "Construction BOQ",
+  "owner": "Administrator",
+  "permissions": [
+    {
+      "create": 1,
+      "delete": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "role": "System Manager",
+      "share": 1,
+      "submit": 1,
+      "write": 1
+    },
+    {
+      "create": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "role": "Projects Manager",
+      "share": 1,
+      "submit": 1,
+      "write": 1
+    },
+    {
+      "create": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "role": "Projects User",
+      "share": 1,
+      "write": 1
+    }
+  ],
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "states": [],
+  "title_field": "project"
+}

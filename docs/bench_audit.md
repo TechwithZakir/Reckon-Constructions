@@ -67,5 +67,5 @@ Record these values on the development bench before adding DocTypes:
 1. Confirm bench inventory and standard DocType field map.
 2. Keep the `Constructions` workspace available with standard links.
 3. Review the initial Construction Settings and Construction Project fields against the target bench.
-4. Implement BOQ, measurement and rate models with deterministic tests.
+4. Review the initial BOQ, section and item model against company estimating requirements.
 5. Add ERPNext integrations only after target document requirements are verified.
