@@ -40,14 +40,6 @@ fixtures = [
             "Sales Invoice Item-construction_boq_line_key",
         ]]],
     },
-    {
-        "dt": "Workspace Sidebar",
-        "filters": [["name", "in", ["Constructions"]]],
-    },
-    {
-        "dt": "Desktop Icon",
-        "filters": [["name", "in", ["Constructions"]]],
-    },
 ]
 
 doc_events = {

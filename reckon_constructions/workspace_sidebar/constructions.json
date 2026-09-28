@@ -5,6 +5,7 @@
   "module": "Constructions",
   "app": "reckon_constructions",
   "standard": 1,
+  "header_icon": "building-2",
   "items": [
     {"label": "Overview", "type": "Section Break", "icon": "dashboard", "collapsible": 0},
     {"label": "Project Dashboard", "type": "Link", "link_type": "Page", "link_to": "project-dashboard", "icon": "dashboard"},
