@@ -9,9 +9,9 @@ description = "Construction project management app for Frappe and ERPNext"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [{ name = "Reckon Technologies Ltd." }]
-dependencies = [
-    "frappe",
-]
+# Frappe is supplied by the target bench. Declaring it as a PyPI dependency
+# makes uv resolve a second Frappe distribution during `bench get-app`.
+dependencies = []
 classifiers = [
     "Framework :: Frappe",
     "Programming Language :: Python :: 3",
