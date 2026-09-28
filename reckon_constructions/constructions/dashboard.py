@@ -44,6 +44,21 @@ def forecast_margin_percent(contract_value, forecast_cost):
 
 
 @_whitelist
+def get_dashboard_projects():
+    """Return projects that can be selected when the dashboard is opened directly."""
+    if frappe is None:
+        raise RuntimeError("Frappe is required for dashboard queries.")
+
+    projects = frappe.get_all(
+        "Construction Project",
+        fields=["name", "project", "customer", "company", "currency", "status", "contract_value"],
+        order_by="modified desc",
+        limit=50,
+    )
+    return {"projects": projects}
+
+
+@_whitelist
 def get_project_dashboard(construction_project):
     if frappe is None:
         raise RuntimeError("Frappe is required for dashboard queries.")

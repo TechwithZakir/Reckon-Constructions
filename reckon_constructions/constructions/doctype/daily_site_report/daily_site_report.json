@@ -6,21 +6,113 @@
   "doctype": "DocType",
   "editable_grid": 1,
   "engine": "InnoDB",
-  "field_order": ["identity_section", "project", "boq_revision", "report_date", "site_engineer", "status", "progress_section", "progress", "total_verified_quantity", "notes", "verification_section", "verified_by", "verified_on"],
+  "field_order": [
+    "identity_section",
+    "project",
+    "boq_revision",
+    "layout_column_break_1_1",
+    "report_date",
+    "site_engineer",
+    "layout_column_break_1_2",
+    "status",
+    "progress_section",
+    "progress",
+    "total_verified_quantity",
+    "notes",
+    "verification_section",
+    "verified_by",
+    "verified_on"
+  ],
   "fields": [
-    {"fieldname": "identity_section", "fieldtype": "Section Break", "label": "Identity"},
-    {"fieldname": "project", "fieldtype": "Link", "in_list_view": 1, "label": "Construction Project", "options": "Construction Project", "reqd": 1},
-    {"fieldname": "boq_revision", "fieldtype": "Link", "in_list_view": 1, "label": "Approved BOQ Revision", "options": "Construction BOQ"},
-    {"fieldname": "report_date", "fieldtype": "Date", "in_list_view": 1, "label": "Report Date", "reqd": 1},
-    {"fieldname": "site_engineer", "fieldtype": "Link", "label": "Site Engineer", "options": "User"},
-    {"default": "Draft", "fieldname": "status", "fieldtype": "Select", "in_list_view": 1, "label": "Status", "options": "Draft\nVerified\nCancelled"},
-    {"fieldname": "progress_section", "fieldtype": "Section Break", "label": "Verified Progress"},
-    {"fieldname": "progress", "fieldtype": "Table", "label": "Progress", "options": "Daily Site Report Progress"},
-    {"fieldname": "total_verified_quantity", "fieldtype": "Float", "label": "Total Verified Quantity", "read_only": 1},
-    {"fieldname": "notes", "fieldtype": "Small Text", "label": "Notes"},
-    {"fieldname": "verification_section", "fieldtype": "Section Break", "label": "Verification"},
-    {"fieldname": "verified_by", "fieldtype": "Link", "label": "Verified By", "options": "User", "read_only": 1},
-    {"fieldname": "verified_on", "fieldtype": "Datetime", "label": "Verified On", "read_only": 1}
+    {
+      "fieldname": "identity_section",
+      "fieldtype": "Section Break",
+      "label": "Identity"
+    },
+    {
+      "fieldname": "project",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Construction Project",
+      "options": "Construction Project",
+      "reqd": 1
+    },
+    {
+      "fieldname": "boq_revision",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Approved BOQ Revision",
+      "options": "Construction BOQ"
+    },
+    {
+      "fieldname": "report_date",
+      "fieldtype": "Date",
+      "in_list_view": 1,
+      "label": "Report Date",
+      "reqd": 1
+    },
+    {
+      "fieldname": "site_engineer",
+      "fieldtype": "Link",
+      "label": "Site Engineer",
+      "options": "User"
+    },
+    {
+      "default": "Draft",
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "label": "Status",
+      "options": "Draft\nVerified\nCancelled"
+    },
+    {
+      "fieldname": "progress_section",
+      "fieldtype": "Section Break",
+      "label": "Verified Progress"
+    },
+    {
+      "fieldname": "progress",
+      "fieldtype": "Table",
+      "label": "Progress",
+      "options": "Daily Site Report Progress"
+    },
+    {
+      "fieldname": "total_verified_quantity",
+      "fieldtype": "Float",
+      "label": "Total Verified Quantity",
+      "read_only": 1
+    },
+    {
+      "fieldname": "notes",
+      "fieldtype": "Small Text",
+      "label": "Notes"
+    },
+    {
+      "fieldname": "verification_section",
+      "fieldtype": "Section Break",
+      "label": "Verification"
+    },
+    {
+      "fieldname": "verified_by",
+      "fieldtype": "Link",
+      "label": "Verified By",
+      "options": "User",
+      "read_only": 1
+    },
+    {
+      "fieldname": "verified_on",
+      "fieldtype": "Datetime",
+      "label": "Verified On",
+      "read_only": 1
+    },
+    {
+      "fieldname": "layout_column_break_1_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "layout_column_break_1_2",
+      "fieldtype": "Column Break"
+    }
   ],
   "index_web_pages_for_search": 1,
   "is_submittable": 1,
@@ -31,9 +123,39 @@
   "name": "Daily Site Report",
   "owner": "Administrator",
   "permissions": [
-    {"create": 1, "delete": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "submit": 1, "write": 1, "role": "System Manager"},
-    {"create": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "submit": 1, "write": 1, "role": "Projects Manager"},
-    {"create": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "write": 1, "role": "Projects User"}
+    {
+      "create": 1,
+      "delete": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "submit": 1,
+      "write": 1,
+      "role": "System Manager"
+    },
+    {
+      "create": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "submit": 1,
+      "write": 1,
+      "role": "Projects Manager"
+    },
+    {
+      "create": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "write": 1,
+      "role": "Projects User"
+    }
   ],
   "sort_field": "report_date",
   "sort_order": "DESC",

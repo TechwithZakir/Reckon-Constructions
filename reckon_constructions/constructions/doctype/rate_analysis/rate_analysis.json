@@ -11,8 +11,11 @@
     "project",
     "boq",
     "boq_line_key",
+    "layout_column_break_1_1",
+    "purpose",
     "output_uom",
     "assembly",
+    "layout_column_break_1_2",
     "effective_date",
     "status",
     "components_section",
@@ -20,29 +23,142 @@
     "totals_section",
     "direct_cost",
     "overhead_percent",
+    "layout_column_break_3_1",
     "overhead_amount",
     "markup_percent",
+    "layout_column_break_3_2",
     "markup_amount",
     "proposed_rate"
   ],
   "fields": [
-    {"fieldname": "identity_section", "fieldtype": "Section Break", "label": "Identity"},
-    {"fieldname": "project", "fieldtype": "Link", "in_list_view": 1, "label": "Construction Project", "options": "Construction Project"},
-    {"fieldname": "boq", "fieldtype": "Link", "in_list_view": 1, "label": "Construction BOQ", "options": "Construction BOQ"},
-    {"fieldname": "boq_line_key", "fieldtype": "Data", "in_list_view": 1, "label": "BOQ Line Key"},
-    {"fieldname": "output_uom", "fieldtype": "Link", "label": "Output UOM", "options": "UOM"},
-    {"fieldname": "assembly", "fieldtype": "Link", "label": "Construction Assembly", "options": "Construction Assembly"},
-    {"fieldname": "effective_date", "fieldtype": "Date", "label": "Effective Date"},
-    {"default": "Draft", "fieldname": "status", "fieldtype": "Select", "in_list_view": 1, "label": "Status", "options": "Draft\nUnder Review\nApproved\nCancelled"},
-    {"fieldname": "components_section", "fieldtype": "Section Break", "label": "Components"},
-    {"fieldname": "components", "fieldtype": "Table", "label": "Components", "options": "Rate Analysis Component"},
-    {"fieldname": "totals_section", "fieldtype": "Section Break", "label": "Totals"},
-    {"fieldname": "direct_cost", "fieldtype": "Currency", "label": "Direct Cost", "read_only": 1},
-    {"default": "0", "fieldname": "overhead_percent", "fieldtype": "Percent", "label": "Overhead Percent"},
-    {"fieldname": "overhead_amount", "fieldtype": "Currency", "label": "Overhead Amount", "read_only": 1},
-    {"default": "0", "fieldname": "markup_percent", "fieldtype": "Percent", "label": "Markup Percent"},
-    {"fieldname": "markup_amount", "fieldtype": "Currency", "label": "Markup Amount", "read_only": 1},
-    {"fieldname": "proposed_rate", "fieldtype": "Currency", "in_list_view": 1, "label": "Proposed Rate", "read_only": 1}
+    {
+      "fieldname": "identity_section",
+      "fieldtype": "Section Break",
+      "label": "Identity"
+    },
+    {
+      "fieldname": "project",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Construction Project",
+      "options": "Construction Project"
+    },
+    {
+      "fieldname": "boq",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Construction BOQ",
+      "options": "Construction BOQ"
+    },
+    {
+      "fieldname": "boq_line_key",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "BOQ Line Key"
+    },
+    {
+      "description": "State the cost basis this analysis is intended to price, such as RCC M20 per m3 or blockwork per m2.",
+      "fieldname": "purpose",
+      "fieldtype": "Small Text",
+      "label": "Purpose / Cost Basis"
+    },
+    {
+      "description": "The unit that the calculated rate will price.",
+      "fieldname": "output_uom",
+      "fieldtype": "Link",
+      "label": "Output UOM",
+      "options": "UOM"
+    },
+    {
+      "description": "A reusable recipe of materials, labour, and equipment that provides the starting cost build-up.",
+      "fieldname": "assembly",
+      "fieldtype": "Link",
+      "label": "Construction Assembly",
+      "options": "Construction Assembly"
+    },
+    {
+      "fieldname": "effective_date",
+      "fieldtype": "Date",
+      "label": "Effective Date"
+    },
+    {
+      "default": "Draft",
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "label": "Status",
+      "options": "Draft\nUnder Review\nApproved\nCancelled"
+    },
+    {
+      "fieldname": "components_section",
+      "fieldtype": "Section Break",
+      "label": "Components"
+    },
+    {
+      "description": "Break the rate into measurable materials, labour, equipment, waste, overhead, and markup so the BOQ rate can be explained and updated.",
+      "fieldname": "components",
+      "fieldtype": "Table",
+      "label": "Cost Components",
+      "options": "Rate Analysis Component"
+    },
+    {
+      "fieldname": "totals_section",
+      "fieldtype": "Section Break",
+      "label": "Totals"
+    },
+    {
+      "fieldname": "direct_cost",
+      "fieldtype": "Currency",
+      "label": "Direct Cost",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "overhead_percent",
+      "fieldtype": "Percent",
+      "label": "Overhead Percent"
+    },
+    {
+      "fieldname": "overhead_amount",
+      "fieldtype": "Currency",
+      "label": "Overhead Amount",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "markup_percent",
+      "fieldtype": "Percent",
+      "label": "Markup Percent"
+    },
+    {
+      "fieldname": "markup_amount",
+      "fieldtype": "Currency",
+      "label": "Markup Amount",
+      "read_only": 1
+    },
+    {
+      "fieldname": "proposed_rate",
+      "fieldtype": "Currency",
+      "in_list_view": 1,
+      "label": "Proposed Rate",
+      "read_only": 1
+    },
+    {
+      "fieldname": "layout_column_break_1_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "layout_column_break_1_2",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "layout_column_break_3_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "layout_column_break_3_2",
+      "fieldtype": "Column Break"
+    }
   ],
   "index_web_pages_for_search": 1,
   "is_submittable": 1,
@@ -53,9 +169,42 @@
   "name": "Rate Analysis",
   "owner": "Administrator",
   "permissions": [
-    {"create": 1, "delete": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "role": "System Manager", "share": 1, "submit": 1, "write": 1},
-    {"create": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "role": "Projects Manager", "share": 1, "submit": 1, "write": 1},
-    {"create": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "role": "Projects User", "share": 1, "write": 1}
+    {
+      "create": 1,
+      "delete": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "role": "System Manager",
+      "share": 1,
+      "submit": 1,
+      "write": 1
+    },
+    {
+      "create": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "role": "Projects Manager",
+      "share": 1,
+      "submit": 1,
+      "write": 1
+    },
+    {
+      "create": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "role": "Projects User",
+      "share": 1,
+      "write": 1
+    }
   ],
   "sort_field": "modified",
   "sort_order": "DESC",

@@ -9,14 +9,18 @@
     "defaults_section",
     "default_company",
     "default_currency",
+    "layout_column_break_1_1",
     "quantity_precision",
+    "layout_column_break_1_2",
     "currency_precision",
     "commercial_section",
     "default_retention_percent",
     "require_customer_variation_approval",
     "feature_flags_section",
     "enable_sales_handoff",
+    "layout_column_break_3_1",
     "enable_procurement_generation",
+    "layout_column_break_3_2",
     "enable_progress_billing"
   ],
   "fields": [
@@ -88,6 +92,22 @@
       "fieldname": "enable_progress_billing",
       "fieldtype": "Check",
       "label": "Enable Progress Billing"
+    },
+    {
+      "fieldname": "layout_column_break_1_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "layout_column_break_1_2",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "layout_column_break_3_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "layout_column_break_3_2",
+      "fieldtype": "Column Break"
     }
   ],
   "index_web_pages_for_search": 1,

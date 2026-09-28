@@ -4,20 +4,105 @@
   "autoname": "format:RFI-.YYYY.-.#####",
   "creation": "2026-09-28 00:00:00.000000",
   "doctype": "DocType",
-  "field_order": ["identity_section", "project", "document", "raised_by", "assigned_to", "raised_on", "due_date", "status", "subject", "question", "response", "responded_on"],
+  "field_order": [
+    "identity_section",
+    "project",
+    "document",
+    "raised_by",
+    "assigned_to",
+    "layout_column_break_1_1",
+    "raised_on",
+    "due_date",
+    "status",
+    "subject",
+    "layout_column_break_1_2",
+    "question",
+    "response",
+    "responded_on"
+  ],
   "fields": [
-    {"fieldname": "identity_section", "fieldtype": "Section Break", "label": "Identity"},
-    {"fieldname": "project", "fieldtype": "Link", "in_list_view": 1, "label": "Construction Project", "options": "Construction Project", "reqd": 1},
-    {"fieldname": "document", "fieldtype": "Link", "label": "Engineering Document", "options": "Engineering Document"},
-    {"fieldname": "raised_by", "fieldtype": "Link", "label": "Raised By", "options": "User"},
-    {"fieldname": "assigned_to", "fieldtype": "Link", "label": "Assigned To", "options": "User"},
-    {"fieldname": "raised_on", "fieldtype": "Date", "in_list_view": 1, "label": "Raised On", "reqd": 1},
-    {"fieldname": "due_date", "fieldtype": "Date", "label": "Due Date"},
-    {"default": "Open", "fieldname": "status", "fieldtype": "Select", "in_list_view": 1, "label": "Status", "options": "Open\nAnswered\nClosed"},
-    {"fieldname": "subject", "fieldtype": "Data", "in_list_view": 1, "label": "Subject", "reqd": 1},
-    {"fieldname": "question", "fieldtype": "Text Editor", "label": "Question", "reqd": 1},
-    {"fieldname": "response", "fieldtype": "Text Editor", "label": "Response"},
-    {"fieldname": "responded_on", "fieldtype": "Date", "label": "Responded On"}
+    {
+      "fieldname": "identity_section",
+      "fieldtype": "Section Break",
+      "label": "Identity"
+    },
+    {
+      "fieldname": "project",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Construction Project",
+      "options": "Construction Project",
+      "reqd": 1
+    },
+    {
+      "fieldname": "document",
+      "fieldtype": "Link",
+      "label": "Engineering Document",
+      "options": "Engineering Document"
+    },
+    {
+      "fieldname": "raised_by",
+      "fieldtype": "Link",
+      "label": "Raised By",
+      "options": "User"
+    },
+    {
+      "fieldname": "assigned_to",
+      "fieldtype": "Link",
+      "label": "Assigned To",
+      "options": "User"
+    },
+    {
+      "fieldname": "raised_on",
+      "fieldtype": "Date",
+      "in_list_view": 1,
+      "label": "Raised On",
+      "reqd": 1
+    },
+    {
+      "fieldname": "due_date",
+      "fieldtype": "Date",
+      "label": "Due Date"
+    },
+    {
+      "default": "Open",
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "label": "Status",
+      "options": "Open\nAnswered\nClosed"
+    },
+    {
+      "fieldname": "subject",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "Subject",
+      "reqd": 1
+    },
+    {
+      "fieldname": "question",
+      "fieldtype": "Text Editor",
+      "label": "Question",
+      "reqd": 1
+    },
+    {
+      "fieldname": "response",
+      "fieldtype": "Text Editor",
+      "label": "Response"
+    },
+    {
+      "fieldname": "responded_on",
+      "fieldtype": "Date",
+      "label": "Responded On"
+    },
+    {
+      "fieldname": "layout_column_break_1_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "layout_column_break_1_2",
+      "fieldtype": "Column Break"
+    }
   ],
   "index_web_pages_for_search": 1,
   "links": [],
@@ -27,9 +112,36 @@
   "name": "Request For Information",
   "owner": "Administrator",
   "permissions": [
-    {"create": 1, "delete": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "write": 1, "role": "System Manager"},
-    {"create": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "write": 1, "role": "Projects Manager"},
-    {"create": 1, "export": 1, "print": 1, "read": 1, "report": 1, "write": 1, "role": "Projects User"}
+    {
+      "create": 1,
+      "delete": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "write": 1,
+      "role": "System Manager"
+    },
+    {
+      "create": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "write": 1,
+      "role": "Projects Manager"
+    },
+    {
+      "create": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "write": 1,
+      "role": "Projects User"
+    }
   ],
   "sort_field": "raised_on",
   "sort_order": "DESC",

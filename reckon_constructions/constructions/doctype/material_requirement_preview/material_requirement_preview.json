@@ -6,20 +6,108 @@
   "doctype": "DocType",
   "editable_grid": 1,
   "engine": "InnoDB",
-  "field_order": ["identity_section", "project", "baseline", "company", "as_of_date", "source_replay_key", "status", "requirements_section", "requirements", "total_outstanding_qty", "generation_section", "generated_material_request"],
+  "field_order": [
+    "identity_section",
+    "project",
+    "baseline",
+    "layout_column_break_1_1",
+    "company",
+    "as_of_date",
+    "layout_column_break_1_2",
+    "source_replay_key",
+    "status",
+    "requirements_section",
+    "requirements",
+    "total_outstanding_qty",
+    "generation_section",
+    "generated_material_request"
+  ],
   "fields": [
-    {"fieldname": "identity_section", "fieldtype": "Section Break", "label": "Identity"},
-    {"fieldname": "project", "fieldtype": "Link", "in_list_view": 1, "label": "Construction Project", "options": "Construction Project", "reqd": 1},
-    {"fieldname": "baseline", "fieldtype": "Link", "in_list_view": 1, "label": "Approved Project Baseline", "options": "Project Baseline", "reqd": 1},
-    {"fieldname": "company", "fieldtype": "Link", "label": "Company", "options": "Company"},
-    {"fieldname": "as_of_date", "fieldtype": "Date", "in_list_view": 1, "label": "As Of Date", "reqd": 1},
-    {"fieldname": "source_replay_key", "fieldtype": "Data", "label": "Source Replay Key", "unique": 1},
-    {"default": "Draft", "fieldname": "status", "fieldtype": "Select", "in_list_view": 1, "label": "Status", "options": "Draft\nReviewed\nGenerated\nCancelled"},
-    {"fieldname": "requirements_section", "fieldtype": "Section Break", "label": "Material Requirements"},
-    {"fieldname": "requirements", "fieldtype": "Table", "label": "Requirements", "options": "Material Requirement Preview Item"},
-    {"fieldname": "total_outstanding_qty", "fieldtype": "Float", "label": "Total Outstanding Quantity", "read_only": 1},
-    {"fieldname": "generation_section", "fieldtype": "Section Break", "label": "Generation"},
-    {"fieldname": "generated_material_request", "fieldtype": "Link", "label": "Generated Material Request", "options": "Material Request", "read_only": 1}
+    {
+      "fieldname": "identity_section",
+      "fieldtype": "Section Break",
+      "label": "Identity"
+    },
+    {
+      "fieldname": "project",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Construction Project",
+      "options": "Construction Project",
+      "reqd": 1
+    },
+    {
+      "fieldname": "baseline",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Approved Project Baseline",
+      "options": "Project Baseline",
+      "reqd": 1
+    },
+    {
+      "fieldname": "company",
+      "fieldtype": "Link",
+      "label": "Company",
+      "options": "Company"
+    },
+    {
+      "fieldname": "as_of_date",
+      "fieldtype": "Date",
+      "in_list_view": 1,
+      "label": "As Of Date",
+      "reqd": 1
+    },
+    {
+      "fieldname": "source_replay_key",
+      "fieldtype": "Data",
+      "label": "Source Replay Key",
+      "unique": 1
+    },
+    {
+      "default": "Draft",
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "label": "Status",
+      "options": "Draft\nReviewed\nGenerated\nCancelled"
+    },
+    {
+      "fieldname": "requirements_section",
+      "fieldtype": "Section Break",
+      "label": "Material Requirements"
+    },
+    {
+      "fieldname": "requirements",
+      "fieldtype": "Table",
+      "label": "Requirements",
+      "options": "Material Requirement Preview Item"
+    },
+    {
+      "fieldname": "total_outstanding_qty",
+      "fieldtype": "Float",
+      "label": "Total Outstanding Quantity",
+      "read_only": 1
+    },
+    {
+      "fieldname": "generation_section",
+      "fieldtype": "Section Break",
+      "label": "Generation"
+    },
+    {
+      "fieldname": "generated_material_request",
+      "fieldtype": "Link",
+      "label": "Generated Material Request",
+      "options": "Material Request",
+      "read_only": 1
+    },
+    {
+      "fieldname": "layout_column_break_1_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "layout_column_break_1_2",
+      "fieldtype": "Column Break"
+    }
   ],
   "index_web_pages_for_search": 1,
   "is_submittable": 1,
@@ -30,9 +118,38 @@
   "name": "Material Requirement Preview",
   "owner": "Administrator",
   "permissions": [
-    {"create": 1, "delete": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "submit": 1, "write": 1, "role": "System Manager"},
-    {"create": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "submit": 1, "write": 1, "role": "Projects Manager"},
-    {"create": 1, "export": 1, "print": 1, "read": 1, "report": 1, "write": 1, "role": "Projects User"}
+    {
+      "create": 1,
+      "delete": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "submit": 1,
+      "write": 1,
+      "role": "System Manager"
+    },
+    {
+      "create": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "submit": 1,
+      "write": 1,
+      "role": "Projects Manager"
+    },
+    {
+      "create": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "write": 1,
+      "role": "Projects User"
+    }
   ],
   "sort_field": "as_of_date",
   "sort_order": "DESC",

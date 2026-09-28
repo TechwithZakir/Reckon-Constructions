@@ -10,17 +10,23 @@
     "identity_section",
     "project",
     "company",
+    "layout_column_break_1_1",
     "customer",
     "currency",
+    "layout_column_break_1_2",
     "sales_order",
     "commercial_section",
     "accepted_boq",
     "contract_start_date",
+    "layout_column_break_2_1",
     "contract_end_date",
+    "layout_column_break_2_2",
     "contract_value",
     "site_section",
     "site_name",
+    "layout_column_break_3_1",
     "site_address",
+    "layout_column_break_3_2",
     "status"
   ],
   "fields": [
@@ -114,6 +120,30 @@
       "in_list_view": 1,
       "label": "Status",
       "options": "Draft\nActive\nOn Hold\nCompleted\nCancelled"
+    },
+    {
+      "fieldname": "layout_column_break_1_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "layout_column_break_1_2",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "layout_column_break_2_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "layout_column_break_2_2",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "layout_column_break_3_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "layout_column_break_3_2",
+      "fieldtype": "Column Break"
     }
   ],
   "index_web_pages_for_search": 1,

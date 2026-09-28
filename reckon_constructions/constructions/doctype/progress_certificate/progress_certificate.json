@@ -6,27 +6,171 @@
   "doctype": "DocType",
   "editable_grid": 1,
   "engine": "InnoDB",
-  "field_order": ["identity_section", "project", "boq", "baseline", "certificate_no", "period_start", "period_end", "status", "retention_percent", "items_section", "items", "gross_value", "retention_amount", "net_value", "approval_section", "approved_by", "approved_on", "invoice_section", "generated_sales_invoice"],
+  "field_order": [
+    "identity_section",
+    "project",
+    "boq",
+    "baseline",
+    "layout_column_break_1_1",
+    "certificate_no",
+    "period_start",
+    "period_end",
+    "layout_column_break_1_2",
+    "status",
+    "retention_percent",
+    "items_section",
+    "items",
+    "gross_value",
+    "layout_column_break_2_1",
+    "retention_amount",
+    "layout_column_break_2_2",
+    "net_value",
+    "approval_section",
+    "approved_by",
+    "approved_on",
+    "invoice_section",
+    "generated_sales_invoice"
+  ],
   "fields": [
-    {"fieldname": "identity_section", "fieldtype": "Section Break", "label": "Identity"},
-    {"fieldname": "project", "fieldtype": "Link", "in_list_view": 1, "label": "Construction Project", "options": "Construction Project", "reqd": 1},
-    {"fieldname": "boq", "fieldtype": "Link", "in_list_view": 1, "label": "Approved BOQ Revision", "options": "Construction BOQ", "reqd": 1},
-    {"fieldname": "baseline", "fieldtype": "Link", "label": "Project Baseline", "options": "Project Baseline"},
-    {"fieldname": "certificate_no", "fieldtype": "Int", "in_list_view": 1, "label": "Certificate No", "reqd": 1},
-    {"fieldname": "period_start", "fieldtype": "Date", "in_list_view": 1, "label": "Period Start", "reqd": 1},
-    {"fieldname": "period_end", "fieldtype": "Date", "in_list_view": 1, "label": "Period End", "reqd": 1},
-    {"default": "Draft", "fieldname": "status", "fieldtype": "Select", "in_list_view": 1, "label": "Status", "options": "Draft\nUnder Review\nApproved\nRejected\nCancelled"},
-    {"default": "0", "fieldname": "retention_percent", "fieldtype": "Percent", "label": "Retention Percent"},
-    {"fieldname": "items_section", "fieldtype": "Section Break", "label": "Certified Work"},
-    {"fieldname": "items", "fieldtype": "Table", "label": "Items", "options": "Progress Certificate Item"},
-    {"fieldname": "gross_value", "fieldtype": "Currency", "in_list_view": 1, "label": "Gross Value", "read_only": 1},
-    {"fieldname": "retention_amount", "fieldtype": "Currency", "label": "Retention Amount", "read_only": 1},
-    {"fieldname": "net_value", "fieldtype": "Currency", "in_list_view": 1, "label": "Net Value", "read_only": 1},
-    {"fieldname": "approval_section", "fieldtype": "Section Break", "label": "Approval"},
-    {"fieldname": "approved_by", "fieldtype": "Link", "label": "Approved By", "options": "User", "read_only": 1},
-    {"fieldname": "approved_on", "fieldtype": "Datetime", "label": "Approved On", "read_only": 1},
-    {"fieldname": "invoice_section", "fieldtype": "Section Break", "label": "Invoice Proposal"},
-    {"fieldname": "generated_sales_invoice", "fieldtype": "Link", "label": "Generated Sales Invoice", "options": "Sales Invoice", "read_only": 1}
+    {
+      "fieldname": "identity_section",
+      "fieldtype": "Section Break",
+      "label": "Identity"
+    },
+    {
+      "fieldname": "project",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Construction Project",
+      "options": "Construction Project",
+      "reqd": 1
+    },
+    {
+      "fieldname": "boq",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Approved BOQ Revision",
+      "options": "Construction BOQ",
+      "reqd": 1
+    },
+    {
+      "fieldname": "baseline",
+      "fieldtype": "Link",
+      "label": "Project Baseline",
+      "options": "Project Baseline"
+    },
+    {
+      "fieldname": "certificate_no",
+      "fieldtype": "Int",
+      "in_list_view": 1,
+      "label": "Certificate No",
+      "reqd": 1
+    },
+    {
+      "fieldname": "period_start",
+      "fieldtype": "Date",
+      "in_list_view": 1,
+      "label": "Period Start",
+      "reqd": 1
+    },
+    {
+      "fieldname": "period_end",
+      "fieldtype": "Date",
+      "in_list_view": 1,
+      "label": "Period End",
+      "reqd": 1
+    },
+    {
+      "default": "Draft",
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "label": "Status",
+      "options": "Draft\nUnder Review\nApproved\nRejected\nCancelled"
+    },
+    {
+      "default": "0",
+      "fieldname": "retention_percent",
+      "fieldtype": "Percent",
+      "label": "Retention Percent"
+    },
+    {
+      "fieldname": "items_section",
+      "fieldtype": "Section Break",
+      "label": "Certified Work"
+    },
+    {
+      "fieldname": "items",
+      "fieldtype": "Table",
+      "label": "Items",
+      "options": "Progress Certificate Item"
+    },
+    {
+      "fieldname": "gross_value",
+      "fieldtype": "Currency",
+      "in_list_view": 1,
+      "label": "Gross Value",
+      "read_only": 1
+    },
+    {
+      "fieldname": "retention_amount",
+      "fieldtype": "Currency",
+      "label": "Retention Amount",
+      "read_only": 1
+    },
+    {
+      "fieldname": "net_value",
+      "fieldtype": "Currency",
+      "in_list_view": 1,
+      "label": "Net Value",
+      "read_only": 1
+    },
+    {
+      "fieldname": "approval_section",
+      "fieldtype": "Section Break",
+      "label": "Approval"
+    },
+    {
+      "fieldname": "approved_by",
+      "fieldtype": "Link",
+      "label": "Approved By",
+      "options": "User",
+      "read_only": 1
+    },
+    {
+      "fieldname": "approved_on",
+      "fieldtype": "Datetime",
+      "label": "Approved On",
+      "read_only": 1
+    },
+    {
+      "fieldname": "invoice_section",
+      "fieldtype": "Section Break",
+      "label": "Invoice Proposal"
+    },
+    {
+      "fieldname": "generated_sales_invoice",
+      "fieldtype": "Link",
+      "label": "Generated Sales Invoice",
+      "options": "Sales Invoice",
+      "read_only": 1
+    },
+    {
+      "fieldname": "layout_column_break_1_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "layout_column_break_1_2",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "layout_column_break_2_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "layout_column_break_2_2",
+      "fieldtype": "Column Break"
+    }
   ],
   "index_web_pages_for_search": 1,
   "is_submittable": 1,
@@ -37,9 +181,39 @@
   "name": "Progress Certificate",
   "owner": "Administrator",
   "permissions": [
-    {"create": 1, "delete": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "submit": 1, "write": 1, "role": "System Manager"},
-    {"create": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "submit": 1, "write": 1, "role": "Projects Manager"},
-    {"create": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "write": 1, "role": "Projects User"}
+    {
+      "create": 1,
+      "delete": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "submit": 1,
+      "write": 1,
+      "role": "System Manager"
+    },
+    {
+      "create": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "submit": 1,
+      "write": 1,
+      "role": "Projects Manager"
+    },
+    {
+      "create": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "write": 1,
+      "role": "Projects User"
+    }
   ],
   "sort_field": "period_end",
   "sort_order": "DESC",

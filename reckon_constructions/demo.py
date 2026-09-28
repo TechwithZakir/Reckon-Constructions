@@ -550,25 +550,25 @@ def _ensure_calculations(frappe, currency, ensure):
         "volume": ensure(
             "Calculation Template",
             DEMO_NAMES["calculation_volume"],
-            {"template_name": DEMO_NAMES["calculation_volume"], "measurement_type": "Volume", "output_uom": "m3", "formula_version": 1, "formula": "length * width * height"},
+            {"template_name": DEMO_NAMES["calculation_volume"], "description": "Calculate concrete, excavation, and other three-dimensional work from length x width x height.", "measurement_type": "Volume", "output_uom": "m3", "formula_version": 1, "formula": "length * width * height"},
             {"variables": [{"variable": "length", "label": "Length", "required": 1}, {"variable": "width", "label": "Width", "required": 1}, {"variable": "height", "label": "Height", "required": 1}]},
         ),
         "area": ensure(
             "Calculation Template",
             DEMO_NAMES["calculation_area"],
-            {"template_name": DEMO_NAMES["calculation_area"], "measurement_type": "Area", "output_uom": "m2", "formula_version": 1, "formula": "length * width"},
+            {"template_name": DEMO_NAMES["calculation_area"], "description": "Calculate floor, wall, ceiling, and other surface areas from length x width.", "measurement_type": "Area", "output_uom": "m2", "formula_version": 1, "formula": "length * width"},
             {"variables": [{"variable": "length", "label": "Length", "required": 1}, {"variable": "width", "label": "Width", "required": 1}]},
         ),
         "count": ensure(
             "Calculation Template",
             DEMO_NAMES["calculation_count"],
-            {"template_name": DEMO_NAMES["calculation_count"], "measurement_type": "Count", "output_uom": "Nos", "formula_version": 1, "formula": "count"},
+            {"template_name": DEMO_NAMES["calculation_count"], "description": "Calculate repeated units such as doors, fixtures, or inspection points.", "measurement_type": "Count", "output_uom": "Nos", "formula_version": 1, "formula": "count"},
             {"variables": [{"variable": "count", "label": "Count", "required": 1}]},
         ),
         "factor": ensure(
             "Calculation Template",
             DEMO_NAMES["calculation_factor"],
-            {"template_name": DEMO_NAMES["calculation_factor"], "measurement_type": "Factor", "output_uom": "Nos", "formula_version": 1, "formula": "count * factor"},
+            {"template_name": DEMO_NAMES["calculation_factor"], "description": "Apply a multiplier to repeated work, allowances, or productivity factors.", "measurement_type": "Factor", "output_uom": "Nos", "formula_version": 1, "formula": "count * factor"},
             {"variables": [{"variable": "count", "label": "Count", "required": 1}, {"variable": "factor", "label": "Factor", "required": 1}]},
         ),
     }
@@ -633,7 +633,7 @@ def _ensure_rates(frappe, project, boq, assemblies, items, dates, ensure):
     ]
     result = []
     for key, line_key, assembly_key, uom, components, overhead, markup in specs:
-        result.append(ensure("Rate Analysis", DEMO_NAMES[key], {"project": project.name, "boq": boq.name, "boq_line_key": line_key, "output_uom": uom, "assembly": assemblies[assembly_key].name, "effective_date": dates["start"], "status": "Draft", "overhead_percent": overhead, "markup_percent": markup}, {"components": components}))
+        result.append(ensure("Rate Analysis", DEMO_NAMES[key], {"project": project.name, "boq": boq.name, "boq_line_key": line_key, "purpose": f"Price {line_key} work per {uom} for the construction BOQ.", "output_uom": uom, "assembly": assemblies[assembly_key].name, "effective_date": dates["start"], "status": "Draft", "overhead_percent": overhead, "markup_percent": markup}, {"components": components}))
     return result
 
 

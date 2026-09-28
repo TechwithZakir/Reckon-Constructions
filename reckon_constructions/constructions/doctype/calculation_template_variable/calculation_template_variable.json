@@ -6,7 +6,9 @@
   "engine": "InnoDB",
   "field_order": [
     "variable",
+    "layout_column_break_0_1",
     "label",
+    "layout_column_break_0_2",
     "required"
   ],
   "fields": [
@@ -28,6 +30,14 @@
       "fieldname": "required",
       "fieldtype": "Check",
       "label": "Required"
+    },
+    {
+      "fieldname": "layout_column_break_0_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "layout_column_break_0_2",
+      "fieldtype": "Column Break"
     }
   ],
   "istable": 1,

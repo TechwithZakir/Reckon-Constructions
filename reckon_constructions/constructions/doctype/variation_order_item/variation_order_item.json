@@ -4,15 +4,74 @@
   "doctype": "DocType",
   "editable_grid": 1,
   "engine": "InnoDB",
-  "field_order": ["boq_line_key", "description", "quantity_delta", "uom", "rate", "amount", "measurement_ref"],
+  "field_order": [
+    "boq_line_key",
+    "description",
+    "quantity_delta",
+    "layout_column_break_0_1",
+    "uom",
+    "rate",
+    "layout_column_break_0_2",
+    "amount",
+    "measurement_ref"
+  ],
   "fields": [
-    {"fieldname": "boq_line_key", "fieldtype": "Data", "in_list_view": 1, "label": "BOQ Line Key", "reqd": 1},
-    {"fieldname": "description", "fieldtype": "Small Text", "in_list_view": 1, "label": "Description", "reqd": 1},
-    {"default": "0", "fieldname": "quantity_delta", "fieldtype": "Float", "in_list_view": 1, "label": "Quantity Delta", "reqd": 1},
-    {"fieldname": "uom", "fieldtype": "Link", "label": "UOM", "options": "UOM"},
-    {"default": "0", "fieldname": "rate", "fieldtype": "Currency", "in_list_view": 1, "label": "Rate", "reqd": 1},
-    {"fieldname": "amount", "fieldtype": "Currency", "in_list_view": 1, "label": "Amount", "read_only": 1},
-    {"fieldname": "measurement_ref", "fieldtype": "Data", "label": "Measurement Reference"}
+    {
+      "fieldname": "boq_line_key",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "BOQ Line Key",
+      "reqd": 1
+    },
+    {
+      "fieldname": "description",
+      "fieldtype": "Small Text",
+      "in_list_view": 1,
+      "label": "Description",
+      "reqd": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "quantity_delta",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Quantity Delta",
+      "reqd": 1
+    },
+    {
+      "fieldname": "uom",
+      "fieldtype": "Link",
+      "label": "UOM",
+      "options": "UOM"
+    },
+    {
+      "default": "0",
+      "fieldname": "rate",
+      "fieldtype": "Currency",
+      "in_list_view": 1,
+      "label": "Rate",
+      "reqd": 1
+    },
+    {
+      "fieldname": "amount",
+      "fieldtype": "Currency",
+      "in_list_view": 1,
+      "label": "Amount",
+      "read_only": 1
+    },
+    {
+      "fieldname": "measurement_ref",
+      "fieldtype": "Data",
+      "label": "Measurement Reference"
+    },
+    {
+      "fieldname": "layout_column_break_0_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "layout_column_break_0_2",
+      "fieldtype": "Column Break"
+    }
   ],
   "istable": 1,
   "links": [],

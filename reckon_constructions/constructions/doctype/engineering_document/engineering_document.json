@@ -4,20 +4,107 @@
   "autoname": "format:ED-.YYYY.-.#####",
   "creation": "2026-09-28 00:00:00.000000",
   "doctype": "DocType",
-  "field_order": ["identity_section", "project", "document_number", "title", "document_type", "revision", "status", "issue_date", "approval_date", "supersedes", "file_url", "notes"],
+  "field_order": [
+    "identity_section",
+    "project",
+    "document_number",
+    "title",
+    "document_type",
+    "layout_column_break_1_1",
+    "revision",
+    "status",
+    "issue_date",
+    "approval_date",
+    "layout_column_break_1_2",
+    "supersedes",
+    "file_url",
+    "notes"
+  ],
   "fields": [
-    {"fieldname": "identity_section", "fieldtype": "Section Break", "label": "Identity"},
-    {"fieldname": "project", "fieldtype": "Link", "in_list_view": 1, "label": "Construction Project", "options": "Construction Project", "reqd": 1},
-    {"fieldname": "document_number", "fieldtype": "Data", "in_list_view": 1, "label": "Document Number", "reqd": 1},
-    {"fieldname": "title", "fieldtype": "Data", "in_list_view": 1, "label": "Title", "reqd": 1},
-    {"fieldname": "document_type", "fieldtype": "Select", "in_list_view": 1, "label": "Document Type", "options": "Drawing\nSpecification\nMethod Statement\nInspection Test Plan\nReport\nOther", "reqd": 1},
-    {"default": "0", "fieldname": "revision", "fieldtype": "Int", "in_list_view": 1, "label": "Revision"},
-    {"default": "Draft", "fieldname": "status", "fieldtype": "Select", "in_list_view": 1, "label": "Status", "options": "Draft\nSubmitted\nApproved\nSuperseded\nRejected"},
-    {"fieldname": "issue_date", "fieldtype": "Date", "label": "Issue Date"},
-    {"fieldname": "approval_date", "fieldtype": "Date", "label": "Approval Date"},
-    {"fieldname": "supersedes", "fieldtype": "Link", "label": "Supersedes", "options": "Engineering Document"},
-    {"fieldname": "file_url", "fieldtype": "Data", "label": "File URL"},
-    {"fieldname": "notes", "fieldtype": "Small Text", "label": "Notes"}
+    {
+      "fieldname": "identity_section",
+      "fieldtype": "Section Break",
+      "label": "Identity"
+    },
+    {
+      "fieldname": "project",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Construction Project",
+      "options": "Construction Project",
+      "reqd": 1
+    },
+    {
+      "fieldname": "document_number",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "Document Number",
+      "reqd": 1
+    },
+    {
+      "fieldname": "title",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "Title",
+      "reqd": 1
+    },
+    {
+      "fieldname": "document_type",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "label": "Document Type",
+      "options": "Drawing\nSpecification\nMethod Statement\nInspection Test Plan\nReport\nOther",
+      "reqd": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "revision",
+      "fieldtype": "Int",
+      "in_list_view": 1,
+      "label": "Revision"
+    },
+    {
+      "default": "Draft",
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "label": "Status",
+      "options": "Draft\nSubmitted\nApproved\nSuperseded\nRejected"
+    },
+    {
+      "fieldname": "issue_date",
+      "fieldtype": "Date",
+      "label": "Issue Date"
+    },
+    {
+      "fieldname": "approval_date",
+      "fieldtype": "Date",
+      "label": "Approval Date"
+    },
+    {
+      "fieldname": "supersedes",
+      "fieldtype": "Link",
+      "label": "Supersedes",
+      "options": "Engineering Document"
+    },
+    {
+      "fieldname": "file_url",
+      "fieldtype": "Data",
+      "label": "File URL"
+    },
+    {
+      "fieldname": "notes",
+      "fieldtype": "Small Text",
+      "label": "Notes"
+    },
+    {
+      "fieldname": "layout_column_break_1_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "layout_column_break_1_2",
+      "fieldtype": "Column Break"
+    }
   ],
   "index_web_pages_for_search": 1,
   "links": [],
@@ -27,9 +114,36 @@
   "name": "Engineering Document",
   "owner": "Administrator",
   "permissions": [
-    {"create": 1, "delete": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "write": 1, "role": "System Manager"},
-    {"create": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "write": 1, "role": "Projects Manager"},
-    {"create": 1, "export": 1, "print": 1, "read": 1, "report": 1, "write": 1, "role": "Projects User"}
+    {
+      "create": 1,
+      "delete": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "write": 1,
+      "role": "System Manager"
+    },
+    {
+      "create": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "write": 1,
+      "role": "Projects Manager"
+    },
+    {
+      "create": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "report": 1,
+      "write": 1,
+      "role": "Projects User"
+    }
   ],
   "sort_field": "modified",
   "sort_order": "DESC",

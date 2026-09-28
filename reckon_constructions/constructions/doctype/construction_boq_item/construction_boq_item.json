@@ -9,9 +9,11 @@
     "section",
     "item_code",
     "description",
+    "layout_column_break_0_1",
     "quantity",
     "uom",
     "rate",
+    "layout_column_break_0_2",
     "amount",
     "measurement_ref",
     "assembly_ref"
@@ -82,6 +84,14 @@
       "fieldtype": "Data",
       "label": "Assembly Reference",
       "read_only": 1
+    },
+    {
+      "fieldname": "layout_column_break_0_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "layout_column_break_0_2",
+      "fieldtype": "Column Break"
     }
   ],
   "istable": 1,

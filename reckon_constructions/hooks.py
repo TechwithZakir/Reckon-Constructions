@@ -7,6 +7,10 @@ app_license = "License pending confirmation"
 
 required_apps = ["erpnext"]
 
+doctype_list_js = {
+    "Construction BOQ": "public/js/construction_boq_list.js",
+}
+
 fixtures = [
     {
         "dt": "Workspace",

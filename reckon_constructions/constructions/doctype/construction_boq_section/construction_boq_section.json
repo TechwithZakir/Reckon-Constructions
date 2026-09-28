@@ -7,7 +7,9 @@
   "field_order": [
     "section_code",
     "section_name",
+    "layout_column_break_0_1",
     "description",
+    "layout_column_break_0_2",
     "amount"
   ],
   "fields": [
@@ -35,6 +37,14 @@
       "in_list_view": 1,
       "label": "Amount",
       "read_only": 1
+    },
+    {
+      "fieldname": "layout_column_break_0_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "layout_column_break_0_2",
+      "fieldtype": "Column Break"
     }
   ],
   "istable": 1,

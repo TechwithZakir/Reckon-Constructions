@@ -10,8 +10,10 @@
     "identity_section",
     "project",
     "boq",
+    "layout_column_break_1_1",
     "boq_line_key",
     "output_uom",
+    "layout_column_break_1_2",
     "source_drawing",
     "status",
     "rows_section",
@@ -85,6 +87,14 @@
       "fieldtype": "Float",
       "label": "Total Result",
       "read_only": 1
+    },
+    {
+      "fieldname": "layout_column_break_1_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "layout_column_break_1_2",
+      "fieldtype": "Column Break"
     }
   ],
   "index_web_pages_for_search": 1,

@@ -10,13 +10,17 @@
     "identity_section",
     "project",
     "customer",
+    "layout_column_break_1_1",
     "company",
     "currency",
+    "layout_column_break_1_2",
     "boq_type",
     "revision_section",
     "revision_no",
     "prior_revision",
+    "layout_column_break_2_1",
     "status",
+    "layout_column_break_2_2",
     "revision_reason",
     "sections_section",
     "sections",
@@ -132,6 +136,22 @@
       "label": "Total Amount",
       "options": "currency",
       "read_only": 1
+    },
+    {
+      "fieldname": "layout_column_break_1_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "layout_column_break_1_2",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "layout_column_break_2_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "layout_column_break_2_2",
+      "fieldtype": "Column Break"
     }
   ],
   "index_web_pages_for_search": 1,

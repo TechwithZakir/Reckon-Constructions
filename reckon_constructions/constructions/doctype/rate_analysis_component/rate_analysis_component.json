@@ -8,23 +8,82 @@
     "component_kind",
     "item",
     "description",
+    "layout_column_break_0_1",
     "quantity_factor",
     "uom",
     "wastage_percent",
+    "layout_column_break_0_2",
     "unit_rate",
     "rate_source",
     "amount"
   ],
   "fields": [
-    {"fieldname": "component_kind", "fieldtype": "Select", "in_list_view": 1, "label": "Component Kind", "options": "Material\nLabour\nEquipment\nService\nOther", "reqd": 1},
-    {"fieldname": "item", "fieldtype": "Link", "in_list_view": 1, "label": "Item", "options": "Item"},
-    {"fieldname": "description", "fieldtype": "Small Text", "label": "Description"},
-    {"default": "1", "fieldname": "quantity_factor", "fieldtype": "Float", "in_list_view": 1, "label": "Quantity Factor"},
-    {"fieldname": "uom", "fieldtype": "Link", "label": "UOM", "options": "UOM"},
-    {"default": "0", "fieldname": "wastage_percent", "fieldtype": "Percent", "label": "Wastage Percent"},
-    {"default": "0", "fieldname": "unit_rate", "fieldtype": "Currency", "in_list_view": 1, "label": "Unit Rate"},
-    {"fieldname": "rate_source", "fieldtype": "Data", "label": "Rate Source"},
-    {"fieldname": "amount", "fieldtype": "Currency", "in_list_view": 1, "label": "Amount", "read_only": 1}
+    {
+      "fieldname": "component_kind",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "label": "Component Kind",
+      "options": "Material\nLabour\nEquipment\nService\nOther",
+      "reqd": 1
+    },
+    {
+      "fieldname": "item",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Item",
+      "options": "Item"
+    },
+    {
+      "fieldname": "description",
+      "fieldtype": "Small Text",
+      "label": "Description"
+    },
+    {
+      "default": "1",
+      "fieldname": "quantity_factor",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Quantity Factor"
+    },
+    {
+      "fieldname": "uom",
+      "fieldtype": "Link",
+      "label": "UOM",
+      "options": "UOM"
+    },
+    {
+      "default": "0",
+      "fieldname": "wastage_percent",
+      "fieldtype": "Percent",
+      "label": "Wastage Percent"
+    },
+    {
+      "default": "0",
+      "fieldname": "unit_rate",
+      "fieldtype": "Currency",
+      "in_list_view": 1,
+      "label": "Unit Rate"
+    },
+    {
+      "fieldname": "rate_source",
+      "fieldtype": "Data",
+      "label": "Rate Source"
+    },
+    {
+      "fieldname": "amount",
+      "fieldtype": "Currency",
+      "in_list_view": 1,
+      "label": "Amount",
+      "read_only": 1
+    },
+    {
+      "fieldname": "layout_column_break_0_1",
+      "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "layout_column_break_0_2",
+      "fieldtype": "Column Break"
+    }
   ],
   "istable": 1,
   "links": [],

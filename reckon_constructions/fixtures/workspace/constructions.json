@@ -9,12 +9,18 @@
     "icon": "building-2",
     "public": 1,
     "is_hidden": 0,
-  "content": "[{\"id\":\"overview\",\"type\":\"header\",\"data\":{\"text\":\"Overview\",\"col\":12}},{\"id\":\"construction-projects\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Construction Projects\",\"col\":3}},{\"id\":\"project-dashboard\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Project Dashboard\",\"col\":3}},{\"id\":\"projects\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Projects\",\"col\":3}},{\"id\":\"sales-estimation\",\"type\":\"header\",\"data\":{\"text\":\"Sales and Estimation\",\"col\":12}},{\"id\":\"customers\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Customers\",\"col\":3}},{\"id\":\"quotations\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Quotations\",\"col\":3}},{\"id\":\"sales-orders\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Orders\",\"col\":3}},{\"id\":\"boq-placeholder\",\"type\":\"card\",\"data\":{\"card_name\":\"BOQ and Estimates\",\"col\":4}},{\"id\":\"planning\",\"type\":\"header\",\"data\":{\"text\":\"Project Planning\",\"col\":12}},{\"id\":\"project-baselines\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Project Baselines\",\"col\":3}},{\"id\":\"tasks\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Tasks\",\"col\":3}},{\"id\":\"engineering\",\"type\":\"header\",\"data\":{\"text\":\"Engineering\",\"col\":12}},{\"id\":\"engineering-documents\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Engineering Documents\",\"col\":3}},{\"id\":\"rfis\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"RFIs\",\"col\":3}},{\"id\":\"procurement-site\",\"type\":\"header\",\"data\":{\"text\":\"Procurement and Site\",\"col\":12}},{\"id\":\"daily-site-reports\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Daily Site Reports\",\"col\":3}},{\"id\":\"site-issues\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Site Issues\",\"col\":3}},{\"id\":\"material-previews\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Material Requirement Previews\",\"col\":3}},{\"id\":\"material-requests\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Material Requests\",\"col\":3}},{\"id\":\"commercial-finance\",\"type\":\"header\",\"data\":{\"text\":\"Commercial and Finance\",\"col\":12}},{\"id\":\"variations\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Variation Orders\",\"col\":3}},{\"id\":\"progress-certificates\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Progress Certificates\",\"col\":3}},{\"id\":\"sales-invoices\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Invoices\",\"col\":3}},{\"id\":\"reports-configuration\",\"type\":\"header\",\"data\":{\"text\":\"Reports and Configuration\",\"col\":12}},{\"id\":\"approval-worklist\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Construction Approval Worklist\",\"col\":3}},{\"id\":\"construction-settings\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Construction Settings\",\"col\":3}}]",
+  "content": "[{\"id\":\"overview\",\"type\":\"header\",\"data\":{\"text\":\"Overview\",\"col\":12}},{\"id\":\"project-dashboard\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Project Dashboard\",\"col\":3}},{\"id\":\"master-setup\",\"type\":\"header\",\"data\":{\"text\":\"Master Setup\",\"col\":12}},{\"id\":\"construction-projects\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Construction Projects\",\"col\":3}},{\"id\":\"projects\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Projects\",\"col\":3}},{\"id\":\"customers\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Customers\",\"col\":3}},{\"id\":\"construction-settings\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Construction Settings\",\"col\":3}},{\"id\":\"estimating-boq\",\"type\":\"header\",\"data\":{\"text\":\"Estimating and BOQ\",\"col\":12}},{\"id\":\"boq-workbench\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"BOQ Workbench\",\"col\":3}},{\"id\":\"boq-card\",\"type\":\"card\",\"data\":{\"card_name\":\"BOQ and Estimates\",\"col\":4}},{\"id\":\"quotations\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Quotations\",\"col\":3}},{\"id\":\"sales-orders\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Orders\",\"col\":3}},{\"id\":\"planning\",\"type\":\"header\",\"data\":{\"text\":\"Planning and Controls\",\"col\":12}},{\"id\":\"project-baselines\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Project Baselines\",\"col\":3}},{\"id\":\"tasks\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Tasks\",\"col\":3}},{\"id\":\"engineering\",\"type\":\"header\",\"data\":{\"text\":\"Engineering and RFIs\",\"col\":12}},{\"id\":\"engineering-documents\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Engineering Documents\",\"col\":3}},{\"id\":\"rfis\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"RFIs\",\"col\":3}},{\"id\":\"procurement-site\",\"type\":\"header\",\"data\":{\"text\":\"Procurement and Site\",\"col\":12}},{\"id\":\"daily-site-reports\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Daily Site Reports\",\"col\":3}},{\"id\":\"site-issues\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Site Issues\",\"col\":3}},{\"id\":\"material-previews\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Material Requirement Previews\",\"col\":3}},{\"id\":\"material-requests\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Material Requests\",\"col\":3}},{\"id\":\"commercial-billing\",\"type\":\"header\",\"data\":{\"text\":\"Commercial and Billing\",\"col\":12}},{\"id\":\"variations\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Variation Orders\",\"col\":3}},{\"id\":\"progress-certificates\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Progress Certificates\",\"col\":3}},{\"id\":\"sales-invoices\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Invoices\",\"col\":3}},{\"id\":\"reports\",\"type\":\"header\",\"data\":{\"text\":\"Reports\",\"col\":12}},{\"id\":\"approval-worklist\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Construction Approval Worklist\",\"col\":3}}]",
     "shortcuts": [
       {
         "label": "Project Dashboard",
         "type": "Page",
         "link_to": "project-dashboard",
+        "color": "Blue"
+      },
+      {
+        "label": "BOQ Workbench",
+        "type": "Page",
+        "link_to": "boq-workbench",
         "color": "Blue"
       },
       {
@@ -127,10 +133,16 @@
         "label": "BOQ and Estimates",
         "items": [
           {
+            "label": "BOQ Workbench",
+            "type": "Page",
+            "name": "boq-workbench",
+            "description": "Guided BOQ entry with sections and inline measurements"
+          },
+          {
             "label": "Construction BOQ",
             "type": "DocType",
             "name": "Construction BOQ",
-            "description": "BOQ revisions, sections and line items"
+            "description": "Saved BOQ revisions, sections and line items"
           },
           {
             "label": "Measurement Sheet",
