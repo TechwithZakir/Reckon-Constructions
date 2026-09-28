@@ -1,9 +1,6 @@
 frappe.ui.form.on("Project", {
     refresh(frm) {
         if (!frm.doc.construction_status) return;
-        frm.set_intro(
-            __("Construction controls are managed in this ERPNext Project record. BOQs, measurements, progress certificates, and billing all use this Project.")
-        );
         frm.add_custom_button(__("Open Project Dashboard"), () => {
             frappe.route_options = { project: frm.doc.name };
             frappe.set_route("project-dashboard");

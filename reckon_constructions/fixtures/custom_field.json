@@ -1,11 +1,11 @@
 [{
-  "doctype": "Custom Field", "name": "Project-construction_section", "dt": "Project", "fieldname": "construction_section", "label": "Construction Controls", "fieldtype": "Section Break", "insert_after": "customer", "collapsible": 1, "module": "Constructions"
+  "doctype": "Custom Field", "name": "Project-construction_section", "dt": "Project", "fieldname": "construction_section", "label": "Construction Controls", "fieldtype": "Section Break", "insert_after": "actual_end_date", "collapsible": 1, "module": "Constructions"
 }, {
-  "doctype": "Custom Field", "name": "Project-construction_status", "dt": "Project", "fieldname": "construction_status", "label": "Construction Status", "fieldtype": "Select", "options": "Draft\nActive\nOn Hold\nCompleted\nCancelled", "default": "Draft", "in_list_view": 1, "insert_after": "construction_section", "module": "Constructions"
+  "doctype": "Custom Field", "name": "Project-construction_status", "dt": "Project", "fieldname": "construction_status", "label": "Construction Status", "fieldtype": "Select", "options": "Draft\nActive\nOn Hold\nCompleted\nCancelled", "default": "Draft", "reqd": 1, "in_list_view": 1, "insert_after": "construction_section", "module": "Constructions"
 }, {
   "doctype": "Custom Field", "name": "Project-construction_column_break_1", "dt": "Project", "fieldname": "construction_column_break_1", "fieldtype": "Column Break", "insert_after": "construction_status", "module": "Constructions"
 }, {
-  "doctype": "Custom Field", "name": "Project-construction_currency", "dt": "Project", "fieldname": "construction_currency", "label": "Construction Currency", "fieldtype": "Link", "options": "Currency", "insert_after": "construction_column_break_1", "module": "Constructions"
+  "doctype": "Custom Field", "name": "Project-construction_currency", "dt": "Project", "fieldname": "construction_currency", "label": "Construction Currency", "fieldtype": "Link", "options": "Currency", "reqd": 1, "insert_after": "construction_column_break_1", "module": "Constructions"
 }, {
   "doctype": "Custom Field", "name": "Project-construction_column_break_2", "dt": "Project", "fieldname": "construction_column_break_2", "fieldtype": "Column Break", "insert_after": "construction_currency", "module": "Constructions"
 }, {
@@ -17,21 +17,21 @@
 }, {
   "doctype": "Custom Field", "name": "Project-construction_column_break_3", "dt": "Project", "fieldname": "construction_column_break_3", "fieldtype": "Column Break", "insert_after": "construction_accepted_boq", "module": "Constructions"
 }, {
-  "doctype": "Custom Field", "name": "Project-construction_contract_start_date", "dt": "Project", "fieldname": "construction_contract_start_date", "label": "Contract Start Date", "fieldtype": "Date", "insert_after": "construction_column_break_3", "module": "Constructions"
+  "doctype": "Custom Field", "name": "Project-construction_contract_start_date", "dt": "Project", "fieldname": "construction_contract_start_date", "label": "Contract Start Date", "fieldtype": "Date", "reqd": 1, "insert_after": "construction_column_break_3", "module": "Constructions"
 }, {
   "doctype": "Custom Field", "name": "Project-construction_column_break_4", "dt": "Project", "fieldname": "construction_column_break_4", "fieldtype": "Column Break", "insert_after": "construction_contract_start_date", "module": "Constructions"
 }, {
-  "doctype": "Custom Field", "name": "Project-construction_contract_end_date", "dt": "Project", "fieldname": "construction_contract_end_date", "label": "Contract End Date", "fieldtype": "Date", "insert_after": "construction_column_break_4", "module": "Constructions"
+  "doctype": "Custom Field", "name": "Project-construction_contract_end_date", "dt": "Project", "fieldname": "construction_contract_end_date", "label": "Contract End Date", "fieldtype": "Date", "reqd": 1, "insert_after": "construction_column_break_4", "module": "Constructions"
 }, {
-  "doctype": "Custom Field", "name": "Project-construction_contract_value", "dt": "Project", "fieldname": "construction_contract_value", "label": "Contract Value", "fieldtype": "Currency", "options": "construction_currency", "insert_after": "construction_contract_end_date", "module": "Constructions"
+  "doctype": "Custom Field", "name": "Project-construction_contract_value", "dt": "Project", "fieldname": "construction_contract_value", "label": "Contract Value", "fieldtype": "Currency", "options": "construction_currency", "reqd": 1, "insert_after": "construction_contract_end_date", "module": "Constructions"
 }, {
   "doctype": "Custom Field", "name": "Project-construction_site_section", "dt": "Project", "fieldname": "construction_site_section", "label": "Construction Site", "fieldtype": "Section Break", "insert_after": "construction_contract_value", "collapsible": 1, "module": "Constructions"
 }, {
-  "doctype": "Custom Field", "name": "Project-construction_site_name", "dt": "Project", "fieldname": "construction_site_name", "label": "Site Name", "fieldtype": "Data", "insert_after": "construction_site_section", "module": "Constructions"
+  "doctype": "Custom Field", "name": "Project-construction_site_name", "dt": "Project", "fieldname": "construction_site_name", "label": "Site Name", "fieldtype": "Data", "reqd": 1, "insert_after": "construction_site_section", "module": "Constructions"
 }, {
   "doctype": "Custom Field", "name": "Project-construction_column_break_5", "dt": "Project", "fieldname": "construction_column_break_5", "fieldtype": "Column Break", "insert_after": "construction_site_name", "module": "Constructions"
 }, {
-  "doctype": "Custom Field", "name": "Project-construction_site_address", "dt": "Project", "fieldname": "construction_site_address", "label": "Site Address", "fieldtype": "Small Text", "insert_after": "construction_column_break_5", "module": "Constructions"
+  "doctype": "Custom Field", "name": "Project-construction_site_address", "dt": "Project", "fieldname": "construction_site_address", "label": "Site Address", "fieldtype": "Small Text", "reqd": 1, "insert_after": "construction_column_break_5", "module": "Constructions"
 },
   {"doctype": "Custom Field", "name": "Quotation-construction_boq", "dt": "Quotation", "fieldname": "construction_boq", "label": "Construction BOQ", "fieldtype": "Link", "options": "Construction BOQ", "insert_after": "company", "module": "Constructions"},
   {"doctype": "Custom Field", "name": "Quotation-replay_key", "dt": "Quotation", "fieldname": "replay_key", "label": "Replay Key", "fieldtype": "Data", "insert_after": "construction_boq", "module": "Constructions"},
