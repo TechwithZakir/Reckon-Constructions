@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "reckon_constructions"
+version = "0.0.1"
+description = "Construction project management app for Frappe and ERPNext"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "Reckon Technologies Ltd." }]
+dependencies = [
+    "frappe",
+]
+classifiers = [
+    "Framework :: Frappe",
+    "Programming Language :: Python :: 3",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["reckon_constructions*"]
+
+[tool.setuptools.package-data]
+reckon_constructions = ["*.txt", "*.json", "fixtures/**/*.json"]

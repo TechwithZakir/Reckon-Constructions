@@ -1,0 +1,89 @@
+[
+  {
+    "doctype": "Workspace",
+    "name": "Constructions",
+    "label": "Constructions",
+    "title": "Constructions",
+    "module": "Constructions",
+    "public": 1,
+    "is_hidden": 0,
+    "content": "[{\"id\":\"overview\",\"type\":\"header\",\"data\":{\"text\":\"Overview\",\"col\":12}},{\"id\":\"project-dashboard\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Project Dashboard\",\"col\":3}},{\"id\":\"projects\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Projects\",\"col\":3}},{\"id\":\"sales-estimation\",\"type\":\"header\",\"data\":{\"text\":\"Sales and Estimation\",\"col\":12}},{\"id\":\"customers\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Customers\",\"col\":3}},{\"id\":\"quotations\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Quotations\",\"col\":3}},{\"id\":\"sales-orders\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Orders\",\"col\":3}},{\"id\":\"boq-placeholder\",\"type\":\"card\",\"data\":{\"card_name\":\"BOQ and Estimates\",\"col\":4}},{\"id\":\"planning\",\"type\":\"header\",\"data\":{\"text\":\"Project Planning\",\"col\":12}},{\"id\":\"tasks\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Tasks\",\"col\":3}},{\"id\":\"engineering\",\"type\":\"header\",\"data\":{\"text\":\"Engineering\",\"col\":12}},{\"id\":\"procurement-site\",\"type\":\"header\",\"data\":{\"text\":\"Procurement and Site\",\"col\":12}},{\"id\":\"material-requests\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Material Requests\",\"col\":3}},{\"id\":\"commercial-finance\",\"type\":\"header\",\"data\":{\"text\":\"Commercial and Finance\",\"col\":12}},{\"id\":\"sales-invoices\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Invoices\",\"col\":3}},{\"id\":\"reports-configuration\",\"type\":\"header\",\"data\":{\"text\":\"Reports and Configuration\",\"col\":12}}]",
+    "shortcuts": [
+      {
+        "label": "Project Dashboard",
+        "type": "Page",
+        "link_to": "project-dashboard",
+        "color": "Blue"
+      },
+      {
+        "label": "Projects",
+        "type": "DocType",
+        "link_to": "Project",
+        "color": "Blue"
+      },
+      {
+        "label": "Tasks",
+        "type": "DocType",
+        "link_to": "Task",
+        "color": "Blue"
+      },
+      {
+        "label": "Customers",
+        "type": "DocType",
+        "link_to": "Customer",
+        "color": "Blue"
+      },
+      {
+        "label": "Quotations",
+        "type": "DocType",
+        "link_to": "Quotation",
+        "color": "Blue"
+      },
+      {
+        "label": "Sales Orders",
+        "type": "DocType",
+        "link_to": "Sales Order",
+        "color": "Blue"
+      },
+      {
+        "label": "Material Requests",
+        "type": "DocType",
+        "link_to": "Material Request",
+        "color": "Blue"
+      },
+      {
+        "label": "Sales Invoices",
+        "type": "DocType",
+        "link_to": "Sales Invoice",
+        "color": "Blue"
+      }
+    ],
+    "links": [],
+    "charts": [],
+    "cards": [
+      {
+        "label": "BOQ and Estimates",
+        "items": [
+          {
+            "label": "Construction BOQ",
+            "type": "DocType",
+            "name": "Construction BOQ",
+            "description": "Planned custom DocType after bench audit"
+          },
+          {
+            "label": "Measurement Sheet",
+            "type": "DocType",
+            "name": "Measurement Sheet",
+            "description": "Planned custom DocType after bench audit"
+          },
+          {
+            "label": "Rate Analysis",
+            "type": "DocType",
+            "name": "Rate Analysis",
+            "description": "Planned custom DocType after bench audit"
+          }
+        ]
+      }
+    ]
+  }
+]
