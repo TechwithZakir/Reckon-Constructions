@@ -219,7 +219,7 @@ class BOQWorkbench {
         if (action === "measure") this.open_measurement(Number(button.dataset.lineIndex));
         if (action === "save") this.save();
         if (action === "new") this.new_boq();
-        if (action === "open-list") frappe.set_route("List", "Construction BOQ");
+        if (action === "open-list") frappe.set_route("boq-register");
         if (action === "templates") frappe.set_route("List", "Calculation Template");
     }
 

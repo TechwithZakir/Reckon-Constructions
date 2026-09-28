@@ -15,7 +15,7 @@
     {"label": "Customers", "type": "Link", "link_type": "DocType", "link_to": "Customer", "icon": "users"},
     {"label": "Construction Settings", "type": "Link", "link_type": "DocType", "link_to": "Construction Settings", "icon": "settings-2"},
     {"label": "Estimating and BOQ", "type": "Section Break", "icon": "calculator", "collapsible": 1},
-    {"label": "Construction BOQs", "type": "Link", "link_type": "DocType", "link_to": "Construction BOQ", "icon": "table-2"},
+    {"label": "Construction BOQs", "type": "Link", "link_type": "Page", "link_to": "boq-register", "icon": "table-2"},
     {"label": "Measurement Sheets", "type": "Link", "link_type": "DocType", "link_to": "Measurement Sheet", "icon": "ruler"},
     {"label": "Calculation Templates", "type": "Link", "link_type": "DocType", "link_to": "Calculation Template", "icon": "function-square"},
     {"label": "Rate Analysis", "type": "Link", "link_type": "DocType", "link_to": "Rate Analysis", "icon": "chart-no-axes-combined"},
