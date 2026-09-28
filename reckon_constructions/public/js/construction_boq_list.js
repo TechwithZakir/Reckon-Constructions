@@ -1,6 +1,8 @@
 frappe.listview_settings["Construction BOQ"] = {
+    primary_action() {
+        open_boq_workbench();
+    },
     onload(listview) {
-        listview.page.set_primary_action(__("New Construction BOQ"), () => open_boq_workbench());
 
         const result = listview.page.wrapper && listview.page.wrapper[0];
         if (result) {
