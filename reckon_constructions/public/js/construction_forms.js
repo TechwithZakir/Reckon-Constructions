@@ -7,16 +7,15 @@ frappe.ui.form.on("Rate Analysis", {
 });
 
 frappe.ui.form.on("Construction BOQ", {
+    onload(frm) {
+        if (frm.__opened_in_workbench) return;
+        frm.__opened_in_workbench = true;
+        frappe.route_options = frm.is_new() ? {} : { boq: frm.doc.name };
+        frappe.set_route("boq-workbench");
+    },
     refresh(frm) {
         frm.set_intro(
             __("This is the saved BOQ record used by approvals, revisions, measurements, progress certificates, quotations, and invoices. Use BOQ Workbench for faster engineer-friendly entry.")
         );
-
-        if (!frm.is_new()) {
-            frm.add_custom_button(__("Open in BOQ Workbench"), () => {
-                frappe.route_options = { boq: frm.doc.name };
-                frappe.set_route("boq-workbench");
-            });
-        }
     },
 });
