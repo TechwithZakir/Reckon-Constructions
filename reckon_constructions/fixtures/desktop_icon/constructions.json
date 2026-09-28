@@ -1,0 +1,16 @@
+{
+  "doctype": "Desktop Icon",
+  "name": "Constructions",
+  "label": "Constructions",
+  "link_type": "Workspace Sidebar",
+  "link_to": "Constructions",
+  "icon_type": "Link",
+  "icon": "building-2",
+  "standard": 1,
+  "app": "reckon_constructions",
+  "idx": 100,
+  "hidden": 0,
+  "restrict_removal": 1,
+  "bg_color": "blue",
+  "roles": []
+}
