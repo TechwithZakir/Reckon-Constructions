@@ -33,7 +33,7 @@
 }, {
   "doctype": "Custom Field", "name": "Project-construction_site_column_break_1", "dt": "Project", "fieldname": "construction_site_column_break_1", "fieldtype": "Column Break", "insert_after": "construction_site_address", "module": "Constructions"
 }, {
-  "doctype": "Custom Field", "name": "Project-construction_identity_column_break_1", "dt": "Project", "fieldname": "construction_identity_column_break_1", "fieldtype": "Column Break", "insert_after": "percent_complete_method", "module": "Constructions"
+  "doctype": "Custom Field", "name": "Project-construction_identity_column_break_1", "dt": "Project", "fieldname": "construction_identity_column_break_1", "fieldtype": "Column Break", "insert_after": "is_active", "module": "Constructions"
 }, {
   "doctype": "Custom Field", "name": "Project-construction_customer_column_break_1", "dt": "Project", "fieldname": "construction_customer_column_break_1", "fieldtype": "Column Break", "insert_after": "sales_order", "module": "Constructions"
 }, {

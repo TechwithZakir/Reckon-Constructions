@@ -83,7 +83,7 @@ CONSTRUCTION_FIELDS = [
         "insert_after": "construction_column_break_5",
     },
     {"fieldname": "construction_site_column_break_1", "fieldtype": "Column Break", "insert_after": "construction_site_address"},
-    {"fieldname": "construction_identity_column_break_1", "fieldtype": "Column Break", "insert_after": "percent_complete_method"},
+    {"fieldname": "construction_identity_column_break_1", "fieldtype": "Column Break", "insert_after": "is_active"},
     {"fieldname": "construction_customer_column_break_1", "fieldtype": "Column Break", "insert_after": "sales_order"},
     {"fieldname": "construction_timeline_column_break_1", "fieldtype": "Column Break", "insert_after": "expected_end_date"},
     {"fieldname": "construction_costing_column_break_1", "fieldtype": "Column Break", "insert_after": "total_billed_amount"},
