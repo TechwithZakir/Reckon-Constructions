@@ -4,3 +4,4 @@
 
 [post_fixture_sync]
 reckon_constructions.migrations.migrate_construction_project
+reckon_constructions.migrations.replace_project_sales_order

@@ -3,7 +3,7 @@ import frappe
 
 def validate_project_boundaries(doc, method=None):
     del method
-    sales_order_name = doc.get("construction_sales_order")
+    sales_order_name = doc.get("sales_order")
     if sales_order_name:
         sales_order = frappe.db.get_value(
             "Sales Order",
@@ -12,7 +12,7 @@ def validate_project_boundaries(doc, method=None):
             as_dict=True,
         )
         if not sales_order:
-            frappe.throw(f"Sales Order {doc.construction_sales_order} was not found.")
+            frappe.throw(f"Sales Order {sales_order_name} was not found.")
         validate_same_value("Company", doc.company, sales_order.company)
         validate_same_value("Customer", doc.customer, sales_order.customer)
         validate_same_value("Construction Currency", doc.construction_currency, sales_order.currency)

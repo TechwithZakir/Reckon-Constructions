@@ -37,8 +37,6 @@ fixtures = [
             "Project-construction_status",
             "Project-construction_column_break_1",
             "Project-construction_currency",
-            "Project-construction_column_break_2",
-            "Project-construction_sales_order",
             "Project-construction_commercial_section",
             "Project-construction_accepted_boq",
             "Project-construction_column_break_3",
@@ -67,6 +65,10 @@ fixtures = [
             "Sales Invoice Item-construction_boq_line_key",
         ]]],
     },
+    {
+        "dt": "DocType Layout",
+        "filters": [["name", "in", ["Constructions Project Single Page"]]],
+    },
 ]
 
 doc_events = {
@@ -77,6 +79,7 @@ doc_events = {
 
 never_skip_patches = [
     "reckon_constructions.migrations.migrate_construction_project",
+    "reckon_constructions.migrations.replace_project_sales_order",
 ]
 
 website_context = {

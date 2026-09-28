@@ -199,8 +199,8 @@ def seed_demo_data(reset=False):
     sales_order = _ensure_sales_order(
         frappe, company, customer, currency, project, quotation, items, dates, ensure
     )
-    if not construction_project.construction_sales_order:
-        construction_project.construction_sales_order = sales_order.name
+    if not construction_project.sales_order:
+        construction_project.sales_order = sales_order.name
         construction_project.save(ignore_permissions=True)
 
     tasks = _ensure_tasks(frappe, project, company, dates, ensure)

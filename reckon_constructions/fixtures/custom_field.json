@@ -7,11 +7,7 @@
 }, {
   "doctype": "Custom Field", "name": "Project-construction_currency", "dt": "Project", "fieldname": "construction_currency", "label": "Construction Currency", "fieldtype": "Link", "options": "Currency", "reqd": 1, "insert_after": "construction_column_break_1", "module": "Constructions"
 }, {
-  "doctype": "Custom Field", "name": "Project-construction_column_break_2", "dt": "Project", "fieldname": "construction_column_break_2", "fieldtype": "Column Break", "insert_after": "construction_currency", "module": "Constructions"
-}, {
-  "doctype": "Custom Field", "name": "Project-construction_sales_order", "dt": "Project", "fieldname": "construction_sales_order", "label": "Construction Sales Order", "fieldtype": "Link", "options": "Sales Order", "insert_after": "construction_column_break_2", "module": "Constructions"
-}, {
-  "doctype": "Custom Field", "name": "Project-construction_commercial_section", "dt": "Project", "fieldname": "construction_commercial_section", "label": "Construction Commercial Baseline", "fieldtype": "Section Break", "insert_after": "construction_sales_order", "collapsible": 1, "module": "Constructions"
+  "doctype": "Custom Field", "name": "Project-construction_commercial_section", "dt": "Project", "fieldname": "construction_commercial_section", "label": "Construction Commercial Baseline", "fieldtype": "Section Break", "insert_after": "construction_currency", "collapsible": 1, "module": "Constructions"
 }, {
   "doctype": "Custom Field", "name": "Project-construction_accepted_boq", "dt": "Project", "fieldname": "construction_accepted_boq", "label": "Accepted BOQ", "fieldtype": "Data", "read_only": 1, "insert_after": "construction_commercial_section", "module": "Constructions"
 }, {

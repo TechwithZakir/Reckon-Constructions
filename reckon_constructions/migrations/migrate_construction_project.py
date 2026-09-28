@@ -6,7 +6,7 @@ CONSTRUCTION_FIELDS = [
         "fieldname": "construction_section",
         "label": "Construction Controls",
         "fieldtype": "Section Break",
-        "insert_after": "customer",
+        "insert_after": "actual_end_date",
         "collapsible": 1,
     },
     {
@@ -26,19 +26,11 @@ CONSTRUCTION_FIELDS = [
         "options": "Currency",
         "insert_after": "construction_column_break_1",
     },
-    {"fieldname": "construction_column_break_2", "fieldtype": "Column Break", "insert_after": "construction_currency"},
-    {
-        "fieldname": "construction_sales_order",
-        "label": "Construction Sales Order",
-        "fieldtype": "Link",
-        "options": "Sales Order",
-        "insert_after": "construction_column_break_2",
-    },
     {
         "fieldname": "construction_commercial_section",
         "label": "Construction Commercial Baseline",
         "fieldtype": "Section Break",
-        "insert_after": "construction_sales_order",
+        "insert_after": "construction_currency",
         "collapsible": 1,
     },
     {
@@ -140,7 +132,7 @@ def execute():
         values = {
             "construction_status": legacy.status or "Draft",
             "construction_currency": legacy.currency,
-            "construction_sales_order": legacy.sales_order,
+            "sales_order": legacy.sales_order,
             "construction_accepted_boq": legacy.accepted_boq,
             "construction_contract_start_date": legacy.contract_start_date,
             "construction_contract_end_date": legacy.contract_end_date,

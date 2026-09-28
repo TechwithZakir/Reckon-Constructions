@@ -51,7 +51,7 @@ def link_or_create_project_from_sales_order(sales_order, existing_project=None, 
 
     existing_profile = frappe.db.get_value(
         "Project",
-        {"construction_sales_order": sales_order_doc.name},
+        {"sales_order": sales_order_doc.name},
         ["name"],
         as_dict=True,
     )
@@ -73,10 +73,17 @@ def link_or_create_project_from_sales_order(sales_order, existing_project=None, 
     set_if_field_exists(project, "company", sales_order_doc.company)
     set_if_field_exists(project, "customer", sales_order_doc.customer)
     set_if_field_exists(project, "construction_currency", sales_order_doc.currency)
-    set_if_field_exists(project, "construction_sales_order", sales_order_doc.name)
+    set_if_field_exists(project, "sales_order", sales_order_doc.name)
     set_if_field_exists(project, "construction_contract_start_date", sales_order_doc.get("transaction_date"))
+    set_if_field_exists(
+        project,
+        "construction_contract_end_date",
+        sales_order_doc.get("delivery_date") or sales_order_doc.get("transaction_date"),
+    )
     set_if_field_exists(project, "construction_contract_value", sales_order_doc.get("base_grand_total") or sales_order_doc.get("grand_total"))
     set_if_field_exists(project, "construction_status", "Active")
+    set_if_field_exists(project, "construction_site_name", project.project_name or project.name)
+    set_if_field_exists(project, "construction_site_address", "To be confirmed")
     set_if_field_exists(project, "construction_replay_key", replay_key)
     if project.is_new():
         project.insert()
@@ -109,7 +116,22 @@ def create_project_from_sales_order(sales_order):
     project.project_name = sales_order.name
     project.company = sales_order.company
     set_if_field_exists(project, "customer", sales_order.customer)
-    set_if_field_exists(project, "construction_sales_order", sales_order.name)
+    set_if_field_exists(project, "sales_order", sales_order.name)
+    set_if_field_exists(project, "construction_currency", sales_order.currency)
+    set_if_field_exists(project, "construction_status", "Active")
+    set_if_field_exists(project, "construction_contract_start_date", sales_order.get("transaction_date"))
+    set_if_field_exists(
+        project,
+        "construction_contract_end_date",
+        sales_order.get("delivery_date") or sales_order.get("transaction_date"),
+    )
+    set_if_field_exists(
+        project,
+        "construction_contract_value",
+        sales_order.get("base_grand_total") or sales_order.get("grand_total"),
+    )
+    set_if_field_exists(project, "construction_site_name", project.project_name)
+    set_if_field_exists(project, "construction_site_address", "To be confirmed")
     project.insert()
     return project
 
