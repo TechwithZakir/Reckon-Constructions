@@ -20,6 +20,26 @@ fixtures = [
             "Progress Certificate Approval",
         ]]],
     },
+    {
+        "dt": "Custom Field",
+        "filters": [["name", "in", [
+            "Quotation-construction_boq",
+            "Quotation-replay_key",
+            "Quotation Item-construction_boq",
+            "Quotation Item-construction_boq_line_key",
+            "Material Request-construction_project",
+            "Material Request-construction_baseline",
+            "Material Request-material_requirement_preview",
+            "Material Request-replay_key",
+            "Material Request Item-construction_baseline",
+            "Material Request Item-construction_boq_line_key",
+            "Sales Invoice-construction_project",
+            "Sales Invoice-progress_certificate",
+            "Sales Invoice Item-construction_project",
+            "Sales Invoice Item-progress_certificate",
+            "Sales Invoice Item-construction_boq_line_key",
+        ]]],
+    },
 ]
 
 doc_events = {

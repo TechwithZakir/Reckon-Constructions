@@ -25,6 +25,7 @@ bench --site <site> run-tests --app reckon_constructions
 ```
 
 Review workflow fixtures and role permissions after migration. Approved construction documents must remain immutable.
+The app also installs traceability Custom Fields on standard Quotation, Material Request, and Sales Invoice records so integration retries remain idempotent.
 
 ## Rollback
 
