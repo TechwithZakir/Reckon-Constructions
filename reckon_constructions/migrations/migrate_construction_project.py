@@ -26,26 +26,19 @@ CONSTRUCTION_FIELDS = [
         "options": "Currency",
         "insert_after": "construction_column_break_1",
     },
+    {"fieldname": "construction_column_break_2", "fieldtype": "Column Break", "insert_after": "construction_currency"},
     {
         "fieldname": "construction_commercial_section",
         "label": "Construction Commercial Baseline",
         "fieldtype": "Section Break",
-        "insert_after": "construction_currency",
+        "insert_after": "construction_column_break_2",
         "collapsible": 1,
     },
-    {
-        "fieldname": "construction_accepted_boq",
-        "label": "Accepted BOQ",
-        "fieldtype": "Data",
-        "read_only": 1,
-        "insert_after": "construction_commercial_section",
-    },
-    {"fieldname": "construction_column_break_3", "fieldtype": "Column Break", "insert_after": "construction_accepted_boq"},
     {
         "fieldname": "construction_contract_start_date",
         "label": "Contract Start Date",
         "fieldtype": "Date",
-        "insert_after": "construction_column_break_3",
+        "insert_after": "construction_commercial_section",
     },
     {"fieldname": "construction_column_break_4", "fieldtype": "Column Break", "insert_after": "construction_contract_start_date"},
     {
@@ -54,12 +47,20 @@ CONSTRUCTION_FIELDS = [
         "fieldtype": "Date",
         "insert_after": "construction_column_break_4",
     },
+    {"fieldname": "construction_column_break_3", "fieldtype": "Column Break", "insert_after": "construction_contract_end_date"},
     {
         "fieldname": "construction_contract_value",
         "label": "Contract Value",
         "fieldtype": "Currency",
         "options": "construction_currency",
-        "insert_after": "construction_contract_end_date",
+        "insert_after": "construction_column_break_3",
+    },
+    {
+        "fieldname": "construction_accepted_boq",
+        "label": "Accepted BOQ",
+        "fieldtype": "Data",
+        "read_only": 1,
+        "insert_after": "construction_contract_value",
     },
     {
         "fieldname": "construction_site_section",
@@ -81,6 +82,20 @@ CONSTRUCTION_FIELDS = [
         "fieldtype": "Small Text",
         "insert_after": "construction_column_break_5",
     },
+    {"fieldname": "construction_site_column_break_1", "fieldtype": "Column Break", "insert_after": "construction_site_address"},
+    {"fieldname": "construction_identity_column_break_1", "fieldtype": "Column Break", "insert_after": "percent_complete_method"},
+    {"fieldname": "construction_customer_column_break_1", "fieldtype": "Column Break", "insert_after": "sales_order"},
+    {"fieldname": "construction_timeline_column_break_1", "fieldtype": "Column Break", "insert_after": "expected_end_date"},
+    {"fieldname": "construction_costing_column_break_1", "fieldtype": "Column Break", "insert_after": "total_billed_amount"},
+    {"fieldname": "construction_margin_column_break_1", "fieldtype": "Column Break", "insert_after": "per_gross_margin"},
+    {
+        "fieldname": "construction_progress_section",
+        "label": "Progress Collection",
+        "fieldtype": "Section Break",
+        "insert_after": "construction_margin_column_break_1",
+        "collapsible": 1,
+    },
+    {"fieldname": "construction_progress_column_break_1", "fieldtype": "Column Break", "insert_after": "weekly_time_to_send"},
 ]
 
 

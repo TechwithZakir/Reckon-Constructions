@@ -26,13 +26,12 @@ def execute():
                 update_modified=False,
             )
 
-    for fieldname in ("construction_sales_order", "construction_column_break_2"):
-        custom_field = frappe.db.get_value(
-            "Custom Field",
-            {"dt": "Project", "fieldname": fieldname},
-            "name",
-        )
-        if custom_field:
-            frappe.delete_doc("Custom Field", custom_field, force=True)
+    custom_field = frappe.db.get_value(
+        "Custom Field",
+        {"dt": "Project", "fieldname": "construction_sales_order"},
+        "name",
+    )
+    if custom_field:
+        frappe.delete_doc("Custom Field", custom_field, force=True)
 
     frappe.clear_cache(doctype="Project")
