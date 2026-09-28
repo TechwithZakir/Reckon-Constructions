@@ -11,7 +11,15 @@ fixtures = [
     {
         "dt": "Workspace",
         "filters": [["name", "in", ["Constructions"]]],
-    }
+    },
+    {
+        "dt": "Workflow",
+        "filters": [["name", "in", [
+            "Construction BOQ Approval",
+            "Variation Order Approval",
+            "Progress Certificate Approval",
+        ]]],
+    },
 ]
 
 doc_events = {

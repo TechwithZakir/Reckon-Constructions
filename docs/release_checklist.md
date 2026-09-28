@@ -21,3 +21,6 @@
 - Confirm approved BOQ, baseline, variation, and certificate records cannot be edited in place.
 - Export and re-import a BOQ with one invalid row; confirm row errors are returned and the document is unchanged.
 - Confirm backup, restore, scheduler, and worker health before production enablement.
+- Confirm the approval worklist report returns BOQ, variation, and certificate records awaiting review.
+- Confirm Projects Users can prepare records but cannot approve BOQs, variations, or certificates.
+- Follow `docs/deployment.md` and record the deployed commit and migration evidence.

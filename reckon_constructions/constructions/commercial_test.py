@@ -1,6 +1,7 @@
 import unittest
 
 from reckon_constructions.constructions.commercial import (
+    build_invoice_proposal_rows,
     calculate_certificate_totals,
     calculate_variation_totals,
 )
@@ -37,6 +38,14 @@ class CommercialCalculationTest(unittest.TestCase):
         self.assertEqual(result["gross_value"], 2500)
         self.assertEqual(result["retention_amount"], 125)
         self.assertEqual(result["net_value"], 2375)
+
+    def test_invoice_proposal_uses_certificate_snapshot(self):
+        rows = build_invoice_proposal_rows(
+            [{"boq_line_key": "CIV-001", "description": "Concrete", "this_period_qty": 4, "uom": "m3", "rate": 250}],
+            {"CIV-001": {"item_code": "CONCRETE-M25"}},
+        )
+        self.assertEqual(rows[0]["item_code"], "CONCRETE-M25")
+        self.assertEqual(rows[0]["qty"], 4)
 
 
 if __name__ == "__main__":

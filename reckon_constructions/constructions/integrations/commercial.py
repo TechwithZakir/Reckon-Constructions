@@ -1,6 +1,8 @@
 import frappe
 from frappe.utils import nowdate
 
+from reckon_constructions.constructions.commercial import build_invoice_proposal_rows
+
 
 @frappe.whitelist()
 def create_sales_invoice_proposal(certificate):
@@ -24,21 +26,19 @@ def create_sales_invoice_proposal(certificate):
     set_if_field_exists(invoice, "construction_project", certificate_doc.project)
     set_if_field_exists(invoice, "progress_certificate", certificate_doc.name)
 
-    for row in certificate_doc.get("items") or []:
-        if not row.this_period_qty:
-            continue
-        boq_row = boq_items.get(row.boq_line_key)
+    certificate_items = [row.as_dict() for row in certificate_doc.get("items") or []]
+    for row in build_invoice_proposal_rows(certificate_items, {key: value.as_dict() for key, value in boq_items.items()}):
         invoice_row = invoice.append("items", {})
-        if boq_row and boq_row.item_code:
-            invoice_row.item_code = boq_row.item_code
-        invoice_row.description = row.description
-        invoice_row.qty = row.this_period_qty
-        invoice_row.uom = row.uom
-        invoice_row.rate = row.rate
+        if row["item_code"]:
+            invoice_row.item_code = row["item_code"]
+        invoice_row.description = row["description"]
+        invoice_row.qty = row["qty"]
+        invoice_row.uom = row["uom"]
+        invoice_row.rate = row["rate"]
         set_if_field_exists(invoice_row, "project", construction_project.project)
         set_if_field_exists(invoice_row, "construction_project", certificate_doc.project)
         set_if_field_exists(invoice_row, "progress_certificate", certificate_doc.name)
-        set_if_field_exists(invoice_row, "construction_boq_line_key", row.boq_line_key)
+        set_if_field_exists(invoice_row, "construction_boq_line_key", row["boq_line_key"])
 
     if not invoice.get("items"):
         frappe.throw("Progress Certificate has no billable quantity.")

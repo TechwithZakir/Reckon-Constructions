@@ -52,3 +52,24 @@ def calculate_certificate_totals(lines, retention_percent=0):
         "retention_amount": retention_amount,
         "net_value": gross_value - retention_amount,
     }
+
+
+def build_invoice_proposal_rows(certificate_items, boq_items):
+    """Build invoice rows from certificate quantities and immutable BOQ item snapshots."""
+    rows = []
+    for item in certificate_items or []:
+        quantity = float(item.get("this_period_qty") or 0)
+        if not quantity:
+            continue
+        boq_row = boq_items.get(item.get("boq_line_key"))
+        rows.append(
+            {
+                "item_code": boq_row.get("item_code") if boq_row else None,
+                "description": item.get("description"),
+                "qty": quantity,
+                "uom": item.get("uom"),
+                "rate": float(item.get("rate") or 0),
+                "boq_line_key": item.get("boq_line_key"),
+            }
+        )
+    return rows

@@ -15,7 +15,7 @@
     {"fieldname": "certificate_no", "fieldtype": "Int", "in_list_view": 1, "label": "Certificate No", "reqd": 1},
     {"fieldname": "period_start", "fieldtype": "Date", "in_list_view": 1, "label": "Period Start", "reqd": 1},
     {"fieldname": "period_end", "fieldtype": "Date", "in_list_view": 1, "label": "Period End", "reqd": 1},
-    {"default": "Draft", "fieldname": "status", "fieldtype": "Select", "in_list_view": 1, "label": "Status", "options": "Draft\nApproved\nRejected\nCancelled"},
+    {"default": "Draft", "fieldname": "status", "fieldtype": "Select", "in_list_view": 1, "label": "Status", "options": "Draft\nUnder Review\nApproved\nRejected\nCancelled"},
     {"default": "0", "fieldname": "retention_percent", "fieldtype": "Percent", "label": "Retention Percent"},
     {"fieldname": "items_section", "fieldtype": "Section Break", "label": "Certified Work"},
     {"fieldname": "items", "fieldtype": "Table", "label": "Items", "options": "Progress Certificate Item"},

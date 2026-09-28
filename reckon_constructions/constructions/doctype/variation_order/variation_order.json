@@ -15,7 +15,7 @@
     {"fieldname": "variation_type", "fieldtype": "Select", "in_list_view": 1, "label": "Variation Type", "options": "Addition\nOmission\nSubstitution\nExtension", "reqd": 1},
     {"default": "1", "fieldname": "variation_no", "fieldtype": "Int", "in_list_view": 1, "label": "Variation No", "reqd": 1},
     {"fieldname": "reason", "fieldtype": "Small Text", "label": "Reason", "reqd": 1},
-    {"default": "Draft", "fieldname": "status", "fieldtype": "Select", "in_list_view": 1, "label": "Status", "options": "Draft\nApproved\nRejected\nCancelled"},
+    {"default": "Draft", "fieldname": "status", "fieldtype": "Select", "in_list_view": 1, "label": "Status", "options": "Draft\nUnder Review\nApproved\nRejected\nCancelled"},
     {"default": "0", "fieldname": "customer_approved", "fieldtype": "Check", "label": "Customer Approved"},
     {"fieldname": "items_section", "fieldtype": "Section Break", "label": "Variation Items"},
     {"fieldname": "items", "fieldtype": "Table", "label": "Items", "options": "Variation Order Item"},
