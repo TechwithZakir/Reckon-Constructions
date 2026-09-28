@@ -14,6 +14,8 @@
     "boq_line_key",
     "output_uom",
     "layout_column_break_1_2",
+    "boq_item_description",
+    "boq_item_quantity",
     "source_drawing",
     "status",
     "rows_section",
@@ -32,26 +34,30 @@
       "fieldtype": "Link",
       "in_list_view": 1,
       "label": "Project",
-      "options": "Project"
+      "options": "Project",
+      "reqd": 1
     },
     {
       "fieldname": "boq",
       "fieldtype": "Link",
       "in_list_view": 1,
       "label": "Construction BOQ",
-      "options": "Construction BOQ"
+      "options": "Construction BOQ",
+      "reqd": 1
     },
     {
       "fieldname": "boq_line_key",
-      "fieldtype": "Data",
+      "fieldtype": "Select",
       "in_list_view": 1,
-      "label": "BOQ Line Key"
+      "label": "BOQ Line Key",
+      "reqd": 1
     },
     {
       "fieldname": "output_uom",
       "fieldtype": "Link",
       "label": "Output UOM",
-      "options": "UOM"
+      "options": "UOM",
+      "reqd": 1
     },
     {
       "fieldname": "source_drawing",
@@ -95,6 +101,18 @@
     {
       "fieldname": "layout_column_break_1_2",
       "fieldtype": "Column Break"
+    },
+    {
+      "fieldname": "boq_item_description",
+      "fieldtype": "Small Text",
+      "label": "BOQ Item Description",
+      "read_only": 1
+    },
+    {
+      "fieldname": "boq_item_quantity",
+      "fieldtype": "Float",
+      "label": "Approved BOQ Quantity",
+      "read_only": 1
     }
   ],
   "index_web_pages_for_search": 1,

@@ -14,6 +14,7 @@ doctype_list_js = {
 doctype_js = {
     "Project": "public/js/construction_forms.js",
     "Construction BOQ": "public/js/construction_forms.js",
+    "Measurement Sheet": "public/js/construction_forms.js",
     "Rate Analysis": "public/js/construction_forms.js",
 }
 

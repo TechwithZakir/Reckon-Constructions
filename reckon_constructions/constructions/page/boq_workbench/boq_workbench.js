@@ -258,40 +258,66 @@ class BOQWorkbench {
 
     open_measurement(index) {
         const line = this.state.lines[index];
-        if (!this.state.templates.length) {
-            frappe.msgprint(__("Create a Calculation Template first, then use Measure on a BOQ line."));
+        if (!line) return;
+        if (!this.state.project) {
+            frappe.msgprint(__("Select a Project before opening a Measurement Sheet."));
             return;
         }
-        const dialog = new frappe.ui.Dialog({
-            title: __("Measure quantity"),
-            fields: [
-                { fieldname: "template", label: __("Calculation Template"), fieldtype: "Select", options: this.state.templates.map((template) => template.name).join("\n"), reqd: 1 },
-                { fieldname: "length", label: __("Length"), fieldtype: "Float", default: 1 },
-                { fieldname: "width", label: __("Width"), fieldtype: "Float", default: 1 },
-                { fieldname: "height", label: __("Height"), fieldtype: "Float", default: 1 },
-                { fieldname: "count", label: __("Count"), fieldtype: "Float", default: 1 },
-                { fieldname: "factor", label: __("Factor"), fieldtype: "Float", default: 1 },
-            ],
-            primary_action_label: __("Apply measurement"),
-            primary_action: (values) => {
-                const template = this.state.templates.find((row) => row.name === values.template);
-                const quantity = calculate_measurement(template, values);
-                line.quantity = quantity;
-                line.uom = template.output_uom || line.uom;
-                line.measurement_ref = `${template.template_name}: ${[values.length, values.width, values.height, values.count, values.factor].filter((value) => Number(value) !== 1).join(" × ") || "1"}`;
-                dialog.hide();
-                this.render();
-            },
-        });
-        dialog.show();
+        if (!line.description && !line.item_code) {
+            frappe.msgprint(__("Add an item or description to this BOQ line before measuring it."));
+            return;
+        }
+        if (!line.uom) {
+            frappe.msgprint(__("Select a UOM on this BOQ line before measuring it."));
+            return;
+        }
+
+        const open_form = () => {
+            const current = this.state.lines[index];
+            if (!current?.line_key) {
+                frappe.msgprint(__("Save the BOQ line before opening its Measurement Sheet."));
+                return;
+            }
+            frappe.route_options = {
+                project: this.state.project,
+                boq: this.state.name,
+                boq_line_key: current.line_key,
+                output_uom: current.uom || "",
+                boq_item_description: current.description || "",
+                boq_item_quantity: current.quantity || 0,
+            };
+            frappe.set_route("Form", "Measurement Sheet", "new-measurement-sheet");
+        };
+
+        const existing = line.measurement_ref;
+        if (existing) {
+            frappe.db.exists("Measurement Sheet", existing).then((found) => {
+                if (found) {
+                    frappe.set_route("Form", "Measurement Sheet", existing);
+                    return;
+                }
+                if (!this.state.name || !line.line_key) {
+                    this.save().then((saved) => saved && open_form());
+                    return;
+                }
+                open_form();
+            });
+            return;
+        }
+
+        if (!this.state.name || !line.line_key) {
+            this.save().then((saved) => saved && open_form());
+            return;
+        }
+        open_form();
     }
 
     save() {
         if (!this.state.project) {
             frappe.msgprint(__("Select a Project before saving."));
-            return;
+            return Promise.resolve(null);
         }
-        frappe.call({
+        return frappe.call({
             method: "reckon_constructions.constructions.boq_workbench.save_boq_draft",
             args: { payload: JSON.stringify(this.build_payload()) },
             freeze: true,
@@ -299,9 +325,14 @@ class BOQWorkbench {
         }).then((response) => {
             const saved = response.message;
             this.state.name = saved.name;
+            if (Array.isArray(saved.items)) this.state.lines = saved.items;
             frappe.show_alert({ message: __("BOQ draft saved"), indicator: "green" });
             this.render();
-        }).catch((error) => frappe.msgprint({ title: __("Unable to save BOQ"), message: error.message || __("Please check the required fields.") }));
+            return saved;
+        }).catch((error) => {
+            frappe.msgprint({ title: __("Unable to save BOQ"), message: error.message || __("Please check the required fields.") });
+            return null;
+        });
     }
 
     new_boq() {

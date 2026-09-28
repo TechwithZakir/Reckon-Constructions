@@ -135,6 +135,7 @@ def save_boq_draft(payload):
         "status": doc.status,
         "revision_no": doc.revision_no,
         "total_amount": doc.total_amount,
+        "items": serialize_boq(doc)["items"],
     }
 
 
