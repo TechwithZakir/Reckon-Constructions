@@ -62,6 +62,121 @@ DEMO_CUSTOMER_COUNT = 30
 DEMO_SUPPLIER_COUNT = 8
 DEMO_WAREHOUSE_COUNT = 6
 
+DEMO_CUSTOMER_NAMES = (
+    "Eastern Developments Ltd.",
+    "Green Valley Developers Ltd.",
+    "Riverstone Holdings Ltd.",
+    "Summit Property Group Ltd.",
+    "Urban Habitat Developments Ltd.",
+    "Meridian Estates Ltd.",
+    "Blue Horizon Properties Ltd.",
+    "Bengal Housing Partners Ltd.",
+    "North Star Construction Ltd.",
+    "Capital View Developers Ltd.",
+    "Lakeside Residences Ltd.",
+    "Metroline Real Estate Ltd.",
+    "Crown Heights Development Ltd.",
+    "Sunrise Commercial Properties Ltd.",
+    "Delta Infrastructure Holdings Ltd.",
+    "Golden Brick Developers Ltd.",
+    "Evergreen Land Company Ltd.",
+    "Cityscape Developments Ltd.",
+    "Beacon Group Properties Ltd.",
+    "Harborview Builders Ltd.",
+    "Maple Leaf Estates Ltd.",
+    "Parkside Development Company Ltd.",
+    "Skyline Urban Ventures Ltd.",
+    "Ashoka Property Holdings Ltd.",
+    "Heritage Square Developers Ltd.",
+    "Vertex Infrastructure Ltd.",
+    "Elmwood Residential Group Ltd.",
+    "Landmark Commercial Ltd.",
+    "Eastern River Properties Ltd.",
+    "Prime Axis Developments Ltd.",
+)
+
+DEMO_SUPPLIER_NAMES = (
+    "Bengal Cement Industries Ltd.",
+    "Meghna Steel and Rebar Ltd.",
+    "Dhaka Ready Mix Concrete Ltd.",
+    "Delta Sand and Aggregates Ltd.",
+    "National Brick Works Ltd.",
+    "Prime Electrical Supplies Ltd.",
+    "United Sanitary Fittings Ltd.",
+    "Metro Construction Materials Ltd.",
+)
+
+DEMO_WAREHOUSE_NAMES = (
+    "Central Building Materials Warehouse",
+    "North Dhaka Materials Yard",
+    "South Dhaka Materials Yard",
+    "Eastern Aggregates Depot",
+    "Western Construction Store",
+    "Project Reserve Materials Yard",
+)
+
+DEMO_PROJECT_LOCATIONS = (
+    "Riverside",
+    "Uttara",
+    "Bashundhara",
+    "Gulshan",
+    "Banani",
+    "Dhanmondi",
+    "Mirpur",
+    "Purbachal",
+    "Mohammadpur",
+    "Tejgaon",
+    "Motijheel",
+    "Keraniganj",
+    "Narayanganj",
+    "Savar",
+    "Gazipur",
+    "Chattogram Bay",
+    "Sylhet Garden",
+    "Khulna Riverside",
+    "Rajshahi Central",
+    "Coxs Bazar Coastal",
+)
+
+DEMO_PROJECT_TYPES = (
+    "Residential Tower Development",
+    "Mixed Use Complex",
+    "Commercial Center",
+    "Industrial Facility",
+    "Community Housing Development",
+)
+
+DEMO_ITEM_NAMES = {
+    "excavation": "Foundation Excavation Soil",
+    "concrete": "Ready Mix Concrete M20",
+    "block": "Six Inch Concrete Block",
+    "tile": "600x600 Ceramic Floor Tile",
+    "cement": "Portland Cement 50kg",
+    "sand": "Washed Fine Aggregate Sand",
+    "aggregate": "20mm Crushed Stone Aggregate",
+}
+
+DEMO_CALCULATION_NAMES = {
+    "calculation_volume": "Concrete Volume Calculation",
+    "calculation_area": "Surface Area Calculation",
+    "calculation_count": "Unit Count Calculation",
+    "calculation_factor": "Productivity Factor Calculation",
+}
+
+DEMO_ASSEMBLY_NAMES = {
+    "assembly_excavation": "Earthwork and Excavation Assembly",
+    "assembly_concrete": "M20 Reinforced Concrete Assembly",
+    "assembly_masonry": "Concrete Block Masonry Assembly",
+    "assembly_finishing": "Ceramic Floor Tiling Assembly",
+}
+
+
+def _portfolio_project_name(index):
+    """Return a human-readable, deterministic name for a portfolio project."""
+    location = DEMO_PROJECT_LOCATIONS[(index - 1) % len(DEMO_PROJECT_LOCATIONS)]
+    project_type = DEMO_PROJECT_TYPES[(index - 1) // len(DEMO_PROJECT_LOCATIONS)]
+    return f"{location} {project_type}"
+
 
 def _frappe():
     import frappe
@@ -174,7 +289,7 @@ def seed_demo_data(
         "Customer",
         DEMO_NAMES["customer"],
         {
-            "customer_name": "Eastern Developments Ltd. (Demo)",
+            "customer_name": DEMO_CUSTOMER_NAMES[0],
             "customer_type": "Company",
             "customer_group": groups["customer_group"],
             "territory": groups["territory"],
@@ -188,7 +303,7 @@ def seed_demo_data(
         "Project",
         DEMO_NAMES["project"],
         {
-            "project_name": "Riverside Apartment Complex - Demo",
+            "project_name": "Riverside Apartment Complex",
             "status": "Open",
             "company": company,
             "customer": customer.name,
@@ -197,8 +312,8 @@ def seed_demo_data(
             "construction_contract_start_date": dates["start"],
             "construction_contract_end_date": dates["end"],
             "construction_contract_value": 1983380,
-            "construction_site_name": "Riverside Apartment Complex",
-            "construction_site_address": "Riverside Road, Dhaka - Demo Site",
+            "construction_site_name": "Riverside Apartment Complex Construction Site",
+            "construction_site_address": "Riverside Road, Dhaka",
         },
     )
     portfolio_projects = _ensure_portfolio_projects(
@@ -409,6 +524,7 @@ def seed_demo_data(
     )
 
     frappe.db.commit()
+    name_update = update_demo_names()
     summary["names"].update(
         {
             "Quotation": [quotation.name],
@@ -424,6 +540,7 @@ def seed_demo_data(
         }
     )
     summary["status"] = "seeded"
+    summary["display_name_updates"] = name_update["count"]
     summary["portfolio"] = {
         "projects": len(portfolio_projects) + 1,
         "generated_projects": len(portfolio_projects),
@@ -515,6 +632,133 @@ def clear_demo_data(confirm=False, dry_run=True, confirm_demo_site=False):
     return {"status": "cleared", "writes": True, "deleted": deleted, "count": len(deleted)}
 
 
+def update_demo_names():
+    """Update visible names on existing deterministic demo records.
+
+    Technical document IDs remain unchanged so links and cleanup continue to
+    work. Only records in the RC demo namespace are updated.
+    """
+    frappe = _frappe()
+    updated = []
+    missing = []
+    meta_cache = {}
+
+    def update_field(doctype, name, fieldname, value):
+        if not frappe.db.exists(doctype, name):
+            missing.append(f"{doctype}: {name}")
+            return
+        meta = meta_cache.setdefault(doctype, frappe.get_meta(doctype))
+        if not meta.has_field(fieldname):
+            return
+        if frappe.db.get_value(doctype, name, fieldname) == value:
+            return
+        frappe.db.set_value(doctype, name, fieldname, value, update_modified=False)
+        updated.append(f"{doctype}: {name}.{fieldname}")
+
+    for index, display_name in enumerate(DEMO_CUSTOMER_NAMES, start=1):
+        name = DEMO_NAMES["customer"] if index == 1 else f"RC-DEMO-CUSTOMER-{index:02d}"
+        update_field("Customer", name, "customer_name", display_name)
+
+    for index, display_name in enumerate(DEMO_SUPPLIER_NAMES, start=1):
+        update_field("Supplier", f"RC-DEMO-SUPPLIER-{index:02d}", "supplier_name", display_name)
+
+    update_field("Project", DEMO_NAMES["project"], "project_name", "Riverside Apartment Complex")
+    update_field(
+        "Project",
+        DEMO_NAMES["project"],
+        "construction_site_name",
+        "Riverside Apartment Complex Construction Site",
+    )
+    for index in range(1, DEMO_PROJECT_COUNT):
+        project_name = _portfolio_project_name(index)
+        project_id = f"RC-DEMO-PROJECT-{index:03d}"
+        update_field("Project", project_id, "project_name", project_name)
+        update_field(
+            "Project",
+            project_id,
+            "construction_site_name",
+            f"{project_name} Construction Site",
+        )
+
+    for index, display_name in enumerate(DEMO_WAREHOUSE_NAMES, start=1):
+        update_field(
+            "Warehouse",
+            f"RC Demo Warehouse {index:02d}",
+            "warehouse_name",
+            display_name,
+        )
+
+    for key, display_name in DEMO_ITEM_NAMES.items():
+        update_field("Item", ITEM_NAMES[key], "item_name", display_name)
+        update_field("Item", ITEM_NAMES[key], "description", f"Construction material: {display_name}")
+
+    for key, display_name in DEMO_CALCULATION_NAMES.items():
+        update_field("Calculation Template", DEMO_NAMES[key], "template_name", display_name)
+    for key, display_name in DEMO_ASSEMBLY_NAMES.items():
+        update_field("Construction Assembly", DEMO_NAMES[key], "assembly_name", display_name)
+
+    update_field(
+        "Engineering Document",
+        DEMO_NAMES["engineering"],
+        "title",
+        "Structural General Arrangement Drawing",
+    )
+    update_field(
+        "Request For Information",
+        DEMO_NAMES["rfi"],
+        "subject",
+        "Confirm concrete cover at transfer beam",
+    )
+    update_field(
+        "Request For Information",
+        DEMO_NAMES["rfi"],
+        "question",
+        "Please confirm the specified concrete cover at the transfer beam.",
+    )
+    update_field(
+        "Site Issue",
+        DEMO_NAMES["site_issue"],
+        "title",
+        "Concrete cube test certificate pending",
+    )
+    update_field(
+        "Site Issue",
+        DEMO_NAMES["site_issue"],
+        "description",
+        "The laboratory certificate for the latest concrete pour is pending upload.",
+    )
+
+    for index in range(1, DEMO_PROJECT_COUNT):
+        project_name = _portfolio_project_name(index)
+        update_field(
+            "Construction BOQ",
+            f"RC-DEMO-BOQ-{index:03d}",
+            "revision_reason",
+            f"Tender BOQ for {project_name}.",
+        )
+        update_field(
+            "Daily Site Report",
+            f"RC-DEMO-DSR-{index:03d}",
+            "notes",
+            f"Daily site progress report for {project_name}.",
+        )
+        update_field(
+            "Site Issue",
+            f"RC-DEMO-SI-{index:03d}",
+            "title",
+            f"{project_name} site coordination issue",
+        )
+        update_field(
+            "Site Issue",
+            f"RC-DEMO-SI-{index:03d}",
+            "description",
+            f"Construction coordination item recorded for {project_name}.",
+        )
+
+    frappe.db.commit()
+    return {"status": "updated", "updated": updated, "missing": missing, "count": len(updated)}
+
+
 def _ensure_portfolio_projects(frappe, company, currency, customers, dates, ensure, count):
     """Create a rolling one-year project portfolio with deterministic task progress."""
     projects = []
@@ -552,7 +796,7 @@ def _ensure_portfolio_projects(frappe, company, currency, customers, dates, ensu
             "Project",
             f"RC-DEMO-PROJECT-{index:03d}",
             {
-                "project_name": f"RC Portfolio Project {index:03d}",
+                "project_name": _portfolio_project_name(index),
                 "status": project_status,
                 "company": company,
                 "customer": customer.name,
@@ -567,7 +811,7 @@ def _ensure_portfolio_projects(frappe, company, currency, customers, dates, ensu
                 "construction_contract_start_date": start,
                 "construction_contract_end_date": end,
                 "construction_contract_value": 750000 + (index * 42850),
-                "construction_site_name": f"RC Portfolio Site {index:03d}",
+                "construction_site_name": f"{_portfolio_project_name(index)} Construction Site",
                 "construction_site_address": f"Project Zone {((index - 1) % 12) + 1}, Dhaka",
             },
         )
@@ -825,7 +1069,7 @@ def _ensure_demo_customers(frappe, primary, groups, ensure):
                 "Customer",
                 f"RC-DEMO-CUSTOMER-{index:02d}",
                 {
-                    "customer_name": f"RC Demo Customer {index:02d}",
+                    "customer_name": DEMO_CUSTOMER_NAMES[index - 1],
                     "customer_type": "Company",
                     "customer_group": groups["customer_group"],
                     "territory": groups["territory"],
@@ -843,7 +1087,7 @@ def _ensure_demo_suppliers(frappe, groups, ensure):
                 "Supplier",
                 f"RC-DEMO-SUPPLIER-{index:02d}",
                 {
-                    "supplier_name": f"RC Demo Materials Supplier {index:02d}",
+                    "supplier_name": DEMO_SUPPLIER_NAMES[index - 1],
                     "supplier_group": groups["supplier_group"],
                     "supplier_type": "Company",
                 },
@@ -874,7 +1118,7 @@ def _ensure_demo_warehouses(frappe, company, ensure):
         name = f"RC Demo Warehouse {index:02d}"
         if not frappe.db.exists("Warehouse", name):
             values = {
-                "warehouse_name": name,
+                "warehouse_name": DEMO_WAREHOUSE_NAMES[index - 1],
                 "company": company,
                 "is_group": 0,
             }
@@ -898,13 +1142,13 @@ def _ensure_uoms(frappe, names):
 
 def _ensure_items(frappe, company, item_group, ensure):
     specs = {
-        "excavation": (ITEM_NAMES["excavation"], "Excavation in soil", "m3"),
-        "concrete": (ITEM_NAMES["concrete"], "RCC concrete M20", "m3"),
-        "block": (ITEM_NAMES["block"], "6 inch concrete block wall", "m2"),
-        "tile": (ITEM_NAMES["tile"], "600 x 600 ceramic floor tiles", "m2"),
-        "cement": (ITEM_NAMES["cement"], "Portland cement", "Bag"),
-        "sand": (ITEM_NAMES["sand"], "Fine aggregate sand", "m3"),
-        "aggregate": (ITEM_NAMES["aggregate"], "20 mm coarse aggregate", "m3"),
+        "excavation": (ITEM_NAMES["excavation"], DEMO_ITEM_NAMES["excavation"], "m3"),
+        "concrete": (ITEM_NAMES["concrete"], DEMO_ITEM_NAMES["concrete"], "m3"),
+        "block": (ITEM_NAMES["block"], DEMO_ITEM_NAMES["block"], "m2"),
+        "tile": (ITEM_NAMES["tile"], DEMO_ITEM_NAMES["tile"], "m2"),
+        "cement": (ITEM_NAMES["cement"], DEMO_ITEM_NAMES["cement"], "Bag"),
+        "sand": (ITEM_NAMES["sand"], DEMO_ITEM_NAMES["sand"], "m3"),
+        "aggregate": (ITEM_NAMES["aggregate"], DEMO_ITEM_NAMES["aggregate"], "m3"),
     }
     result = {}
     for key, (item_code, item_name, stock_uom) in specs.items():
@@ -917,7 +1161,7 @@ def _ensure_items(frappe, company, item_group, ensure):
                 "item_group": item_group,
                 "stock_uom": stock_uom,
                 "is_stock_item": 1,
-                "description": f"Reckon Constructions demo item: {item_name}",
+                "description": f"Construction material: {item_name}",
             },
         )
         _ensure_item_defaults(frappe, result[key], company)
@@ -953,25 +1197,25 @@ def _ensure_calculations(frappe, currency, ensure):
         "volume": ensure(
             "Calculation Template",
             DEMO_NAMES["calculation_volume"],
-            {"template_name": DEMO_NAMES["calculation_volume"], "description": "Calculate concrete, excavation, and other three-dimensional work from length x width x height.", "measurement_type": "Volume", "output_uom": "m3", "formula_version": 1, "formula": "length * width * height"},
+            {"template_name": DEMO_CALCULATION_NAMES["calculation_volume"], "description": "Calculate concrete, excavation, and other three-dimensional work from length x width x height.", "measurement_type": "Volume", "output_uom": "m3", "formula_version": 1, "formula": "length * width * height"},
             {"variables": [{"variable": "length", "label": "Length", "required": 1}, {"variable": "width", "label": "Width", "required": 1}, {"variable": "height", "label": "Height", "required": 1}]},
         ),
         "area": ensure(
             "Calculation Template",
             DEMO_NAMES["calculation_area"],
-            {"template_name": DEMO_NAMES["calculation_area"], "description": "Calculate floor, wall, ceiling, and other surface areas from length x width.", "measurement_type": "Area", "output_uom": "m2", "formula_version": 1, "formula": "length * width"},
+            {"template_name": DEMO_CALCULATION_NAMES["calculation_area"], "description": "Calculate floor, wall, ceiling, and other surface areas from length x width.", "measurement_type": "Area", "output_uom": "m2", "formula_version": 1, "formula": "length * width"},
             {"variables": [{"variable": "length", "label": "Length", "required": 1}, {"variable": "width", "label": "Width", "required": 1}]},
         ),
         "count": ensure(
             "Calculation Template",
             DEMO_NAMES["calculation_count"],
-            {"template_name": DEMO_NAMES["calculation_count"], "description": "Calculate repeated units such as doors, fixtures, or inspection points.", "measurement_type": "Count", "output_uom": "Nos", "formula_version": 1, "formula": "count"},
+            {"template_name": DEMO_CALCULATION_NAMES["calculation_count"], "description": "Calculate repeated units such as doors, fixtures, or inspection points.", "measurement_type": "Count", "output_uom": "Nos", "formula_version": 1, "formula": "count"},
             {"variables": [{"variable": "count", "label": "Count", "required": 1}]},
         ),
         "factor": ensure(
             "Calculation Template",
             DEMO_NAMES["calculation_factor"],
-            {"template_name": DEMO_NAMES["calculation_factor"], "description": "Apply a multiplier to repeated work, allowances, or productivity factors.", "measurement_type": "Factor", "output_uom": "Nos", "formula_version": 1, "formula": "count * factor"},
+            {"template_name": DEMO_CALCULATION_NAMES["calculation_factor"], "description": "Apply a multiplier to repeated work, allowances, or productivity factors.", "measurement_type": "Factor", "output_uom": "Nos", "formula_version": 1, "formula": "count * factor"},
             {"variables": [{"variable": "count", "label": "Count", "required": 1}, {"variable": "factor", "label": "Factor", "required": 1}]},
         ),
     }
@@ -985,10 +1229,10 @@ def _ensure_assemblies(frappe, items, ensure):
         return {"component_kind": "Labour", "description": description, "quantity_factor": quantity_factor, "uom": "Hour", "unit_rate": unit_rate, "wastage_percent": 0, "rate_source": "Demo labour schedule"}
 
     return {
-        "excavation": ensure("Construction Assembly", DEMO_NAMES["assembly_excavation"], {"assembly_name": DEMO_NAMES["assembly_excavation"], "output_uom": "m3", "description": "Excavation production assembly", "overhead_percent": 0, "markup_percent": 0}, {"components": [labour("Excavator and operator", 1, 450)]}),
-        "concrete": ensure("Construction Assembly", DEMO_NAMES["assembly_concrete"], {"assembly_name": DEMO_NAMES["assembly_concrete"], "output_uom": "m3", "description": "M20 reinforced concrete assembly", "overhead_percent": 10, "markup_percent": 8}, {"components": [material("cement", "Cement", 5, "Bag", 100), material("sand", "Fine aggregate", 0.5, "m3", 2000), material("aggregate", "Coarse aggregate", 0.8, "m3", 5000), labour("Concrete placing crew", 1, 2500)]}),
-        "masonry": ensure("Construction Assembly", DEMO_NAMES["assembly_masonry"], {"assembly_name": DEMO_NAMES["assembly_masonry"], "output_uom": "m2", "description": "Concrete block masonry assembly", "overhead_percent": 5, "markup_percent": 10}, {"components": [material("block", "Concrete block", 1, "m2", 850), labour("Masonry crew", 1, 150)]}),
-        "finishing": ensure("Construction Assembly", DEMO_NAMES["assembly_finishing"], {"assembly_name": DEMO_NAMES["assembly_finishing"], "output_uom": "m2", "description": "Ceramic floor tile assembly", "overhead_percent": 5, "markup_percent": 7.2}, {"components": [material("tile", "Ceramic floor tile", 1, "m2", 1000), labour("Tiling crew", 1, 100)]}),
+        "excavation": ensure("Construction Assembly", DEMO_NAMES["assembly_excavation"], {"assembly_name": DEMO_ASSEMBLY_NAMES["assembly_excavation"], "output_uom": "m3", "description": "Excavation production assembly", "overhead_percent": 0, "markup_percent": 0}, {"components": [labour("Excavator and operator", 1, 450)]}),
+        "concrete": ensure("Construction Assembly", DEMO_NAMES["assembly_concrete"], {"assembly_name": DEMO_ASSEMBLY_NAMES["assembly_concrete"], "output_uom": "m3", "description": "M20 reinforced concrete assembly", "overhead_percent": 10, "markup_percent": 8}, {"components": [material("cement", "Cement", 5, "Bag", 100), material("sand", "Fine aggregate", 0.5, "m3", 2000), material("aggregate", "Coarse aggregate", 0.8, "m3", 5000), labour("Concrete placing crew", 1, 2500)]}),
+        "masonry": ensure("Construction Assembly", DEMO_NAMES["assembly_masonry"], {"assembly_name": DEMO_ASSEMBLY_NAMES["assembly_masonry"], "output_uom": "m2", "description": "Concrete block masonry assembly", "overhead_percent": 5, "markup_percent": 10}, {"components": [material("block", "Concrete block", 1, "m2", 850), labour("Masonry crew", 1, 150)]}),
+        "finishing": ensure("Construction Assembly", DEMO_NAMES["assembly_finishing"], {"assembly_name": DEMO_ASSEMBLY_NAMES["assembly_finishing"], "output_uom": "m2", "description": "Ceramic floor tile assembly", "overhead_percent": 5, "markup_percent": 7.2}, {"components": [material("tile", "Ceramic floor tile", 1, "m2", 1000), labour("Tiling crew", 1, 100)]}),
     }
 
 

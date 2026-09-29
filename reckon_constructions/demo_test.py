@@ -2,10 +2,19 @@ import unittest
 from inspect import signature
 
 from reckon_constructions.demo import (
+    DEMO_ASSEMBLY_NAMES,
+    DEMO_CALCULATION_NAMES,
+    DEMO_CUSTOMER_NAMES,
+    DEMO_ITEM_NAMES,
+    DEMO_PROJECT_LOCATIONS,
+    DEMO_PROJECT_TYPES,
+    DEMO_SUPPLIER_NAMES,
+    DEMO_WAREHOUSE_NAMES,
     DEMO_NAMES,
     ITEM_NAMES,
     _expected_seed_counts,
     _get_boq_line_keys,
+    _portfolio_project_name,
     _portfolio_progress_quantity,
     clear_demo_data,
     demo_plan,
@@ -32,6 +41,18 @@ class DemoDataPlanTest(unittest.TestCase):
         self.assertTrue(all(name.startswith("RC") for name in DEMO_NAMES.values()))
         self.assertTrue(all(name.startswith("RC") for name in ITEM_NAMES.values()))
         self.assertEqual(DEMO_NAMES["project"], DEMO_NAMES["construction_project"])
+
+    def test_display_name_catalog_is_complete_and_unique(self):
+        self.assertEqual(len(DEMO_CUSTOMER_NAMES), 30)
+        self.assertEqual(len(DEMO_SUPPLIER_NAMES), 8)
+        self.assertEqual(len(DEMO_WAREHOUSE_NAMES), 6)
+        self.assertEqual(len(DEMO_ITEM_NAMES), 7)
+        self.assertEqual(len(DEMO_CALCULATION_NAMES), 4)
+        self.assertEqual(len(DEMO_ASSEMBLY_NAMES), 4)
+        project_names = {_portfolio_project_name(index) for index in range(1, 100)}
+        self.assertEqual(len(project_names), 99)
+        self.assertEqual(len(DEMO_PROJECT_LOCATIONS), 20)
+        self.assertEqual(len(DEMO_PROJECT_TYPES), 5)
 
     def test_seed_and_clear_are_safe_by_default(self):
         self.assertTrue(signature(seed_demo_data).parameters["dry_run"].default)

@@ -54,6 +54,14 @@ bench --site <site> execute reckon_constructions.demo.clear_demo_data --kwargs "
 bench --site <site> execute reckon_constructions.demo.clear_demo_data --kwargs "{'dry_run': False, 'confirm_demo_site': True}"
 ```
 
+Visible demo names are maintained separately from deterministic document IDs. This keeps links and
+cleanup stable while showing realistic customer, project, supplier, warehouse, item, and construction
+record names. Update an existing seeded site with:
+
+```bash
+bench --site <site> execute reckon_constructions.demo.update_demo_names
+```
+
 Cleanup is limited to deterministic `RC-DEMO-*` records plus generated demo Suppliers, Warehouses,
 Quotation, Material Request, Purchase Order, and Sales Invoice records. It never removes existing
 Company, Currency, UOM, item groups, customer groups, territory, chart of accounts, or warehouses
