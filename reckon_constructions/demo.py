@@ -665,6 +665,7 @@ def _ensure_dynamic_doc(frappe, doctype, name, values, child_field, rows):
     doc = frappe.new_doc(doctype)
     if name:
         doc.name = name
+        doc.flags.name_set = True
     for fieldname, value in values.items():
         if value is not None and doc.meta.has_field(fieldname):
             doc.set(fieldname, value)
@@ -683,6 +684,7 @@ def _ensure_doc(frappe, doctype, name, values, children):
     doc = frappe.new_doc(doctype)
     if name:
         doc.name = name
+        doc.flags.name_set = True
     for fieldname, value in values.items():
         if doc.meta.has_field(fieldname):
             doc.set(fieldname, value)
@@ -1490,6 +1492,12 @@ def _find_demo_targets(frappe):
     }
     for doctype, names in exact.items():
         targets[doctype] = [name for name in names if frappe.db.exists(doctype, name)]
+    legacy_boq_name = "BOQ-.YYYY.-.#####"
+    if (
+        frappe.db.exists("Construction BOQ", legacy_boq_name)
+        and frappe.db.get_value("Construction BOQ", legacy_boq_name, "project") == DEMO_NAMES["project"]
+    ):
+        targets["Construction BOQ"].append(legacy_boq_name)
     for doctype, pattern in (
         ("Customer", "RC-DEMO-CUSTOMER-%"),
         ("Project", "RC-DEMO-PROJECT-%"),
