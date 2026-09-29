@@ -451,11 +451,12 @@ def clear_demo_data(confirm=False, dry_run=True, confirm_demo_site=False):
     frappe = _frappe()
     targets = _find_demo_targets(frappe)
     if dry_run:
+        populated_targets = {doctype: names for doctype, names in targets.items() if names}
         return {
             "status": "preview",
             "writes": False,
-            "targets": targets,
-            "count": sum(len(v) for v in targets.values()),
+            "targets": populated_targets,
+            "count": sum(len(v) for v in populated_targets.values()),
         }
     if not (confirm or confirm_demo_site):
         frappe.throw(
