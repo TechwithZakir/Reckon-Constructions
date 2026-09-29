@@ -1162,6 +1162,11 @@ def _ensure_portfolio_construction_records(
             boq.save(ignore_permissions=True)
         counts["boqs"] += 1
 
+        approved_quantities = {
+            row.line_key: float(row.quantity or 0)
+            for row in boq.get("items") or []
+        }
+
         duration = max(frappe.utils.date_diff(project_data["end"], project_data["start"]), 1)
         task_names = project_data["tasks"]
         work_packages = []
@@ -1207,7 +1212,9 @@ def _ensure_portfolio_construction_records(
                     {
                         "boq_line_key": line_keys[key],
                         "work_package": section,
-                        "quantity": quantity * project_data["progress"] / 100,
+                        "quantity": _portfolio_progress_quantity(
+                            approved_quantities[line_keys[key]], project_data["progress"]
+                        ),
                         "uom": uom,
                         "remarks": f"Portfolio progress update for {section.lower()}.",
                     }
@@ -1267,7 +1274,9 @@ def _ensure_portfolio_construction_records(
                         {
                             "boq_line_key": line_keys[key],
                             "description": description,
-                            "current_qty": quantity * project_data["progress"] / 100,
+                            "current_qty": _portfolio_progress_quantity(
+                                approved_quantities[line_keys[key]], project_data["progress"]
+                            ),
                             "previous_certified_qty": 0,
                             "uom": uom,
                             "rate": rate,
@@ -1490,6 +1499,15 @@ def _demo_transaction_dates(frappe, project_start, project_end):
         else today
     )
     return today, schedule_date
+
+
+def _portfolio_progress_quantity(approved_quantity, progress):
+    """Keep generated progress within the BOQ quantity after field normalization."""
+    approved_quantity = float(approved_quantity or 0)
+    progress = float(progress or 0)
+    if progress >= 100:
+        return approved_quantity
+    return min(approved_quantity, round(approved_quantity * progress / 100, 3))
 
 
 def _find_demo_targets(frappe):

@@ -1,7 +1,15 @@
 import unittest
 from inspect import signature
 
-from reckon_constructions.demo import DEMO_NAMES, ITEM_NAMES, _expected_seed_counts, clear_demo_data, demo_plan, seed_demo_data
+from reckon_constructions.demo import (
+    DEMO_NAMES,
+    ITEM_NAMES,
+    _expected_seed_counts,
+    _portfolio_progress_quantity,
+    clear_demo_data,
+    demo_plan,
+    seed_demo_data,
+)
 
 
 class DemoDataPlanTest(unittest.TestCase):
@@ -32,6 +40,10 @@ class DemoDataPlanTest(unittest.TestCase):
         self.assertEqual(counts["Customer"], 30)
         self.assertEqual(counts["Purchase Order"], 99)
         self.assertGreater(counts["Progress Certificate"], 1)
+
+    def test_portfolio_progress_quantity_does_not_exceed_approved_quantity(self):
+        self.assertEqual(_portfolio_progress_quantity(94.8, 100), 94.8)
+        self.assertLessEqual(_portfolio_progress_quantity(94.8, 100), 94.8)
 
 
 if __name__ == "__main__":
