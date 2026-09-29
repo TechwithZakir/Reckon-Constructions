@@ -1163,8 +1163,18 @@ def _ensure_portfolio_construction_records(
         counts["boqs"] += 1
 
         # Reuse the keys stored on an existing demo BOQ. This keeps reruns
-        # compatible with records created by an earlier seed revision.
-        line_keys = _get_boq_line_keys(boq)
+        # compatible with records created by an earlier seed revision. The
+        # portfolio calls the last two work types block/tile, while the
+        # shared BOQ helper names them masonry/finishing.
+        stored_line_keys = _get_boq_line_keys(boq)
+        line_keys.update(
+            {
+                "excavation": stored_line_keys["excavation"],
+                "concrete": stored_line_keys["concrete"],
+                "block": stored_line_keys["masonry"],
+                "tile": stored_line_keys["finishing"],
+            }
+        )
         approved_quantities = {
             row.line_key: float(row.quantity or 0)
             for row in boq.get("items") or []
