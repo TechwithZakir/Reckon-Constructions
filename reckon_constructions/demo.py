@@ -1075,19 +1075,22 @@ def _ensure_portfolio_sales_orders(frappe, company, currency, items, projects):
     for project_data in projects:
         index = project_data["index"]
         name = f"RC-DEMO-SO-PORT-{index:03d}"
+        transaction_date, schedule_date = _demo_transaction_dates(
+            frappe, project_data["start"], project_data["end"]
+        )
         values = {
             "customer": project_data["customer"],
             "company": company,
             "currency": currency,
-            "transaction_date": project_data["start"],
-            "delivery_date": project_data["end"],
+            "transaction_date": transaction_date,
+            "delivery_date": schedule_date,
             "project": project_data["project"],
             "selling_price_list": selling_price_list,
             "order_type": "Sales",
         }
         rows = [
-            {"item_code": items["excavation"].name, "qty": 200 + index * 3, "rate": 450, "uom": "m3", "schedule_date": project_data["end"]},
-            {"item_code": items["concrete"].name, "qty": 40 + index, "rate": 8500, "uom": "m3", "schedule_date": project_data["end"]},
+            {"item_code": items["excavation"].name, "qty": 200 + index * 3, "rate": 450, "uom": "m3", "schedule_date": schedule_date},
+            {"item_code": items["concrete"].name, "qty": 40 + index, "rate": 8500, "uom": "m3", "schedule_date": schedule_date},
         ]
         order = _ensure_dynamic_doc(frappe, "Sales Order", name, values, "items", rows)
         orders.append(order)
@@ -1289,14 +1292,17 @@ def _ensure_portfolio_material_requests(frappe, company, items, projects, wareho
         index = project_data["index"]
         warehouse = warehouses[(index - 1) % len(warehouses)]
         item_key = material_keys[(index - 1) % len(material_keys)]
+        transaction_date, schedule_date = _demo_transaction_dates(
+            frappe, project_data["start"], project_data["end"]
+        )
         request = _ensure_dynamic_doc(
             frappe,
             "Material Request",
             f"RC-DEMO-MR-{index:03d}",
             {
                 "material_request_type": "Purchase",
-                "transaction_date": project_data["start"],
-                "schedule_date": project_data["end"],
+                "transaction_date": transaction_date,
+                "schedule_date": schedule_date,
                 "company": company,
                 "set_warehouse": warehouse.name,
                 "project": project_data["project"],
@@ -1309,7 +1315,7 @@ def _ensure_portfolio_material_requests(frappe, company, items, projects, wareho
                     "item_code": items[item_key].name,
                     "qty": 80 + index * 2,
                     "uom": items[item_key].stock_uom,
-                    "schedule_date": project_data["end"],
+                    "schedule_date": schedule_date,
                     "warehouse": warehouse.name,
                     "project": project_data["project"],
                 }
@@ -1335,6 +1341,9 @@ def _ensure_portfolio_purchase_orders(
         index = project_data["index"]
         warehouse = warehouses[(index - 1) % len(warehouses)]
         item_key = item_keys[(index - 1) % len(item_keys)]
+        transaction_date, schedule_date = _demo_transaction_dates(
+            frappe, project_data["start"], project_data["end"]
+        )
         order = _ensure_dynamic_doc(
             frappe,
             "Purchase Order",
@@ -1343,8 +1352,8 @@ def _ensure_portfolio_purchase_orders(
                 "supplier": suppliers[(index - 1) % len(suppliers)].name,
                 "company": company,
                 "currency": currency,
-                "transaction_date": project_data["start"],
-                "schedule_date": project_data["end"],
+                "transaction_date": transaction_date,
+                "schedule_date": schedule_date,
                 "set_warehouse": warehouse.name,
                 "project": project_data["project"],
                 "construction_project": project_data["project"],
@@ -1356,7 +1365,7 @@ def _ensure_portfolio_purchase_orders(
                     "item_code": items[item_key].name,
                     "qty": 80 + index * 2,
                     "rate": 100 + index * 3,
-                    "schedule_date": project_data["end"],
+                    "schedule_date": schedule_date,
                     "warehouse": warehouse.name,
                     "project": project_data["project"],
                     "material_request": material_request.name,
@@ -1470,6 +1479,17 @@ def _demo_dates(frappe):
         "end": frappe.utils.add_days(now, 120),
         "rfi_due": frappe.utils.add_days(now, 7),
     }
+
+
+def _demo_transaction_dates(frappe, project_start, project_end):
+    """Keep ERPNext transactions inside the company's active fiscal year."""
+    today = frappe.utils.nowdate()
+    schedule_date = (
+        project_end
+        if frappe.utils.getdate(project_end) >= frappe.utils.getdate(today)
+        else today
+    )
+    return today, schedule_date
 
 
 def _find_demo_targets(frappe):
