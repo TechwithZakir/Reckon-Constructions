@@ -12,6 +12,7 @@ class DashboardCalculationTest(unittest.TestCase):
             sorted(values, key=_date_sort_key),
             [datetime(2026, 1, 1, 12, 30), date(2026, 1, 2), "2026-01-03"],
         )
+        self.assertTrue(all(isinstance(_date_sort_key(value), str) for value in values))
 
     def test_dashboard_calculates_progress_and_margin(self):
         result = calculate_dashboard_metrics(
