@@ -43,8 +43,15 @@ def create_sales_invoice_proposal(certificate):
     if not invoice.get("items"):
         frappe.throw("Progress Certificate has no billable quantity.")
     invoice.insert()
-    certificate_doc.generated_sales_invoice = invoice.name
-    certificate_doc.save(ignore_permissions=True)
+    # The certificate is submitted and immutable at this point. Store the
+    # generated proposal link without reopening it for a normal save.
+    frappe.db.set_value(
+        "Progress Certificate",
+        certificate_doc.name,
+        "generated_sales_invoice",
+        invoice.name,
+        update_modified=False,
+    )
     return invoice.name
 
 
