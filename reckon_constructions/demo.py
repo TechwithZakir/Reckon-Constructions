@@ -58,6 +58,9 @@ LINE_KEYS = {
 }
 
 DEMO_PROJECT_COUNT = 100
+DEMO_CUSTOMER_COUNT = 30
+DEMO_SUPPLIER_COUNT = 8
+DEMO_WAREHOUSE_COUNT = 6
 
 
 def _frappe():
@@ -70,6 +73,9 @@ def demo_plan():
     """Return the deterministic records covered by the seed and clear actions."""
     return {
         "portfolio_project_count": DEMO_PROJECT_COUNT,
+        "portfolio_customer_count": DEMO_CUSTOMER_COUNT,
+        "portfolio_supplier_count": DEMO_SUPPLIER_COUNT,
+        "portfolio_warehouse_count": DEMO_WAREHOUSE_COUNT,
         "custom_doctypes": [
             "Construction Settings",
             "Construction BOQ",
@@ -105,6 +111,9 @@ def demo_plan():
             "Sales Order",
             "Task",
             "Material Request",
+            "Supplier",
+            "Warehouse",
+            "Purchase Order",
             "Sales Invoice",
         ],
     }
@@ -147,6 +156,9 @@ def seed_demo_data(reset=False, project_count=DEMO_PROJECT_COUNT):
             "territory": groups["territory"],
         },
     )
+    customers = _ensure_demo_customers(frappe, customer, groups, ensure)
+    suppliers = _ensure_demo_suppliers(frappe, groups, ensure)
+    warehouses = _ensure_demo_warehouses(frappe, company, ensure)
     items = _ensure_items(frappe, company, groups["item_group"], ensure)
     project = ensure(
         "Project",
@@ -166,7 +178,7 @@ def seed_demo_data(reset=False, project_count=DEMO_PROJECT_COUNT):
         },
     )
     portfolio_projects = _ensure_portfolio_projects(
-        frappe, company, currency, customer, dates, ensure, project_count
+        frappe, company, currency, customers, dates, ensure, project_count
     )
 
     settings = frappe.get_single("Construction Settings")
@@ -343,6 +355,35 @@ def seed_demo_data(reset=False, project_count=DEMO_PROJECT_COUNT):
     _submit_if_needed(certificate)
     invoice = _ensure_invoice(frappe, certificate, ensure)
 
+    portfolio_sales_orders = _ensure_portfolio_sales_orders(
+        frappe, company, currency, items, portfolio_projects
+    )
+    portfolio_records = _ensure_portfolio_construction_records(
+        frappe,
+        company,
+        currency,
+        items,
+        assemblies,
+        portfolio_projects,
+        portfolio_sales_orders,
+        warehouses,
+        user,
+        ensure,
+    )
+    portfolio_material_requests = _ensure_portfolio_material_requests(
+        frappe, company, items, portfolio_projects, warehouses
+    )
+    portfolio_purchase_orders = _ensure_portfolio_purchase_orders(
+        frappe,
+        company,
+        currency,
+        items,
+        suppliers,
+        portfolio_projects,
+        portfolio_material_requests,
+        warehouses,
+    )
+
     frappe.db.commit()
     summary["names"].update(
         {
@@ -350,6 +391,12 @@ def seed_demo_data(reset=False, project_count=DEMO_PROJECT_COUNT):
             "Sales Order": [sales_order.name],
             "Material Request": [material_request.name],
             "Sales Invoice": [invoice.name] if invoice else [],
+            "Customer": [customer.name] + [item.name for item in customers[1:]],
+            "Supplier": [item.name for item in suppliers],
+            "Warehouse": [item.name for item in warehouses],
+            "Portfolio Sales Order": [item.name for item in portfolio_sales_orders],
+            "Portfolio Material Request": [item.name for item in portfolio_material_requests],
+            "Portfolio Purchase Order": [item.name for item in portfolio_purchase_orders],
         }
     )
     summary["status"] = "seeded"
@@ -358,6 +405,13 @@ def seed_demo_data(reset=False, project_count=DEMO_PROJECT_COUNT):
         "generated_projects": len(portfolio_projects),
         "tasks": len(tasks) + sum(len(project.get("tasks", [])) for project in portfolio_projects),
         "progress_values": [project["progress"] for project in portfolio_projects],
+        "customers": len(customers),
+        "suppliers": len(suppliers),
+        "warehouses": len(warehouses),
+        "sales_orders": len(portfolio_sales_orders) + 1,
+        "material_requests": len(portfolio_material_requests) + 1,
+        "purchase_orders": len(portfolio_purchase_orders),
+        "construction_records": portfolio_records,
     }
     return summary
 
@@ -379,22 +433,25 @@ def clear_demo_data(confirm=False, dry_run=False):
     deleted = []
     order = [
         "Sales Invoice",
-        "Material Request",
         "Progress Certificate",
         "Variation Order",
         "Site Issue",
         "Daily Site Report",
+        "Purchase Order",
+        "Material Request",
         "Request For Information",
         "Engineering Document",
+        "Material Requirement Preview",
         "Project Baseline",
         "Measurement Sheet",
         "Rate Analysis",
         "Quotation",
         "Construction BOQ",
-        "Material Requirement Preview",
         "Sales Order",
         "Task",
         "Project",
+        "Warehouse",
+        "Supplier",
         "Construction Assembly",
         "Calculation Template",
         "Item",
@@ -424,13 +481,14 @@ def clear_demo_data(confirm=False, dry_run=False):
     return {"status": "cleared", "deleted": deleted, "count": len(deleted)}
 
 
-def _ensure_portfolio_projects(frappe, company, currency, customer, dates, ensure, count):
+def _ensure_portfolio_projects(frappe, company, currency, customers, dates, ensure, count):
     """Create a rolling one-year project portfolio with deterministic task progress."""
     projects = []
     today = dates["start"]
     project_status_field = frappe.get_meta("Project").get_field("status")
     project_status_options = set((project_status_field.options or "").splitlines()) if project_status_field else set()
     for index in range(1, count):
+        customer = customers[index % len(customers)]
         progress = (index * 17 + 7) % 101
         if index % 17 == 0:
             progress = 100
@@ -479,6 +537,9 @@ def _ensure_portfolio_projects(frappe, company, currency, customer, dates, ensur
                 "construction_site_address": f"Project Zone {((index - 1) % 12) + 1}, Dhaka",
             },
         )
+        if project.meta.has_field("customer") and project.customer != customer.name:
+            frappe.db.set_value("Project", project.name, "customer", customer.name, update_modified=False)
+            project.customer = customer.name
         tasks = _ensure_portfolio_tasks(
             frappe,
             project.name,
@@ -491,7 +552,18 @@ def _ensure_portfolio_projects(frappe, company, currency, customer, dates, ensur
         )
         if project.meta.has_field("percent_complete"):
             frappe.db.set_value("Project", project.name, "percent_complete", progress, update_modified=False)
-        projects.append({"project": project.name, "progress": progress, "tasks": tasks})
+        projects.append(
+            {
+                "project": project.name,
+                "progress": progress,
+                "tasks": tasks,
+                "customer": customer.name,
+                "start": start,
+                "end": end,
+                "construction_status": construction_status,
+                "index": index,
+            }
+        )
     return projects
 
 
@@ -551,6 +623,24 @@ def _get_boq_line_keys(boq):
         key: items[index].line_key or LINE_KEYS[key]
         for index, key in enumerate(fallback)
     }
+
+
+def _ensure_dynamic_doc(frappe, doctype, name, values, child_field, rows):
+    if frappe.db.exists(doctype, name):
+        return frappe.get_doc(doctype, name)
+    doc = frappe.new_doc(doctype)
+    if name:
+        doc.name = name
+    for fieldname, value in values.items():
+        if value is not None and doc.meta.has_field(fieldname):
+            doc.set(fieldname, value)
+    for values in rows or []:
+        child = doc.append(child_field, {})
+        for fieldname, value in values.items():
+            if value is not None and child.meta.has_field(fieldname):
+                child.set(fieldname, value)
+    doc.insert(ignore_permissions=True)
+    return doc
 
 
 def _ensure_doc(frappe, doctype, name, values, children):
@@ -614,9 +704,79 @@ def _get_master_groups(frappe):
 
     return {
         "customer_group": first("Customer Group", "All Customer Groups"),
+        "supplier_group": first("Supplier Group", "All Supplier Groups"),
         "territory": first("Territory", "All Territories"),
         "item_group": first("Item Group", "All Item Groups", leaf=True),
     }
+
+
+def _ensure_demo_customers(frappe, primary, groups, ensure):
+    customers = [primary]
+    for index in range(2, DEMO_CUSTOMER_COUNT + 1):
+        customers.append(
+            ensure(
+                "Customer",
+                f"RC-DEMO-CUSTOMER-{index:02d}",
+                {
+                    "customer_name": f"RC Demo Customer {index:02d}",
+                    "customer_type": "Company",
+                    "customer_group": groups["customer_group"],
+                    "territory": groups["territory"],
+                },
+            )
+        )
+    return customers
+
+
+def _ensure_demo_suppliers(frappe, groups, ensure):
+    suppliers = []
+    for index in range(1, DEMO_SUPPLIER_COUNT + 1):
+        suppliers.append(
+            ensure(
+                "Supplier",
+                f"RC-DEMO-SUPPLIER-{index:02d}",
+                {
+                    "supplier_name": f"RC Demo Materials Supplier {index:02d}",
+                    "supplier_group": groups["supplier_group"],
+                    "supplier_type": "Company",
+                },
+            )
+        )
+    return suppliers
+
+
+def _ensure_demo_warehouses(frappe, company, ensure):
+    """Return deterministic demo warehouses, reusing existing leaf warehouses when available."""
+    warehouses = []
+    existing = frappe.get_all(
+        "Warehouse",
+        filters={"company": company, "is_group": 0},
+        pluck="name",
+        order_by="creation asc",
+        limit=DEMO_WAREHOUSE_COUNT,
+    )
+    warehouses.extend(frappe.get_doc("Warehouse", name) for name in existing)
+    parent = frappe.get_all(
+        "Warehouse",
+        filters={"company": company, "is_group": 1},
+        pluck="name",
+        order_by="creation asc",
+        limit=1,
+    )
+    for index in range(len(warehouses) + 1, DEMO_WAREHOUSE_COUNT + 1):
+        name = f"RC Demo Warehouse {index:02d}"
+        if not frappe.db.exists("Warehouse", name):
+            values = {
+                "warehouse_name": name,
+                "company": company,
+                "is_group": 0,
+            }
+            if parent:
+                values["parent_warehouse"] = parent[0]
+            warehouses.append(ensure("Warehouse", name, values))
+        else:
+            warehouses.append(frappe.get_doc("Warehouse", name))
+    return warehouses[:DEMO_WAREHOUSE_COUNT]
 
 
 def _ensure_uoms(frappe, names):
@@ -802,6 +962,304 @@ def _ensure_sales_order(frappe, company, customer, currency, project, quotation,
     return sales_order
 
 
+def _ensure_portfolio_sales_orders(frappe, company, currency, items, projects):
+    orders = []
+    selling_price_list = _first_optional(frappe, "Price List", "Standard Selling")
+    for project_data in projects:
+        index = project_data["index"]
+        name = f"RC-DEMO-SO-PORT-{index:03d}"
+        values = {
+            "customer": project_data["customer"],
+            "company": company,
+            "currency": currency,
+            "transaction_date": project_data["start"],
+            "delivery_date": project_data["end"],
+            "project": project_data["project"],
+            "selling_price_list": selling_price_list,
+            "order_type": "Sales",
+        }
+        rows = [
+            {"item_code": items["excavation"].name, "qty": 200 + index * 3, "rate": 450, "uom": "m3", "schedule_date": project_data["end"]},
+            {"item_code": items["concrete"].name, "qty": 40 + index, "rate": 8500, "uom": "m3", "schedule_date": project_data["end"]},
+        ]
+        order = _ensure_dynamic_doc(frappe, "Sales Order", name, values, "items", rows)
+        orders.append(order)
+    return orders
+
+
+def _ensure_portfolio_construction_records(
+    frappe,
+    company,
+    currency,
+    items,
+    assemblies,
+    projects,
+    sales_orders,
+    warehouses,
+    user,
+    ensure,
+):
+    counts = {"boqs": 0, "baselines": 0, "daily_reports": 0, "site_issues": 0, "progress_certificates": 0}
+    for project_data, sales_order in zip(projects, sales_orders):
+        index = project_data["index"]
+        project_name = project_data["project"]
+        scale = 0.72 + ((index * 13) % 29) / 100
+        line_specs = [
+            ("excavation", "Earthwork", "Excavation and foundation preparation", "m3", 650 * scale, 450),
+            ("concrete", "Concrete Works", "Reinforced concrete M20", "m3", 120 * scale, 8500),
+            ("block", "Masonry Works", "Concrete block wall", "m2", 420 * scale, 1200),
+            ("tile", "Finishing Works", "Ceramic floor tiles", "m2", 200 * scale, 1234.4),
+        ]
+        line_keys = {key: f"PRJ{index:03d}-{key.upper()}-001" for key, *_ in line_specs}
+        boq_name = f"RC-DEMO-BOQ-{index:03d}"
+        boq = ensure(
+            "Construction BOQ",
+            boq_name,
+            {
+                "project": project_name,
+                "customer": project_data["customer"],
+                "company": company,
+                "currency": currency,
+                "boq_type": "Construction",
+                "revision_no": 1,
+                "status": "Draft",
+                "revision_reason": "Portfolio demo BOQ for approval and project dashboard testing.",
+            },
+            {
+                "sections": [
+                    {"section_code": f"{position:02d}", "section_name": section, "description": description}
+                    for position, (_, section, description, _, _, _) in enumerate(line_specs, start=1)
+                ],
+                "items": [
+                    {
+                        "line_key": line_keys[key],
+                        "section": section,
+                        "item_code": items[key].name,
+                        "description": description,
+                        "quantity": quantity,
+                        "uom": uom,
+                        "rate": rate,
+                    }
+                    for key, section, description, uom, quantity, rate in line_specs
+                ],
+            },
+        )
+        approved = project_data["progress"] >= 12 and project_data["construction_status"] != "Cancelled"
+        if approved:
+            _submit_if_needed(boq)
+        elif boq.docstatus == 0 and index % 3 == 0 and boq.status == "Draft":
+            boq.status = "Under Review"
+            boq.save(ignore_permissions=True)
+        counts["boqs"] += 1
+
+        duration = max(frappe.utils.date_diff(project_data["end"], project_data["start"]), 1)
+        task_names = project_data["tasks"]
+        work_packages = []
+        for position, (key, section, _, uom, quantity, rate) in enumerate(line_specs):
+            start_day = min(int(duration * position / 6), duration - 1)
+            end_day = min(start_day + max(30, int(duration / 3)), duration)
+            work_packages.append(
+                {
+                    "work_package": section,
+                    "assembly": assemblies[{"excavation": "excavation", "concrete": "concrete", "block": "masonry", "tile": "finishing"}[key]].name,
+                    "task": task_names[position - 1],
+                    "boq_line_key": line_keys[key],
+                    "planned_start": frappe.utils.add_days(project_data["start"], start_day),
+                    "planned_end": frappe.utils.add_days(project_data["start"], end_day),
+                    "planned_qty": quantity,
+                    "uom": uom,
+                    "planned_cost": quantity * rate * 0.82,
+                    "planned_value": quantity * rate,
+                    "depends_on": line_specs[position - 2][1] if position > 1 else None,
+                    "milestone": 1 if position in (2, 4) else 0,
+                }
+            )
+        baseline = ensure(
+            "Project Baseline",
+            f"RC-DEMO-PB-{index:03d}",
+            {
+                "project": project_name,
+                "boq_revision": boq.name,
+                "sales_order": sales_order.name,
+                "baseline_version": 1,
+                "status": "Draft",
+            },
+            {"work_packages": work_packages},
+        )
+        if approved:
+            _submit_if_needed(baseline)
+        counts["baselines"] += 1
+
+        report_rows = []
+        if approved and project_data["progress"] > 0:
+            for key, section, _, uom, quantity, _ in line_specs:
+                report_rows.append(
+                    {
+                        "boq_line_key": line_keys[key],
+                        "work_package": section,
+                        "quantity": quantity * project_data["progress"] / 100,
+                        "uom": uom,
+                        "remarks": f"Portfolio progress update for {section.lower()}.",
+                    }
+                )
+        report = ensure(
+            "Daily Site Report",
+            f"RC-DEMO-DSR-{index:03d}",
+            {
+                "project": project_name,
+                "boq_revision": boq.name if approved else None,
+                "report_date": project_data["start"],
+                "site_engineer": user,
+                "status": "Draft",
+                "notes": "Deterministic portfolio site report for dashboard and progress testing.",
+            },
+            {"progress": report_rows},
+        )
+        if approved and report_rows and index % 4 != 0:
+            _submit_if_needed(report)
+        counts["daily_reports"] += 1
+
+        issue_status = ("Resolved", "In Progress", "Open")[index % 3]
+        ensure(
+            "Site Issue",
+            f"RC-DEMO-SI-{index:03d}",
+            {
+                "project": project_name,
+                "site_report": report.name,
+                "issue_type": ("Safety", "Quality", "Material", "Access")[index % 4],
+                "severity": ("Low", "Medium", "High", "Critical")[index % 4],
+                "title": f"Portfolio site issue {index:03d}",
+                "description": "Demo issue created to exercise construction controls and dashboard alerts.",
+                "owner": user,
+                "due_date": frappe.utils.add_days(project_data["start"], 21),
+                "status": issue_status,
+                "resolution": "Corrective action verified by the site team." if issue_status == "Resolved" else None,
+            },
+        )
+        counts["site_issues"] += 1
+
+        if approved and project_data["progress"] >= 20:
+            certificate = ensure(
+                "Progress Certificate",
+                f"RC-DEMO-PC-{index:03d}",
+                {
+                    "project": project_name,
+                    "boq": boq.name,
+                    "baseline": baseline.name,
+                    "certificate_no": 1,
+                    "period_start": project_data["start"],
+                    "period_end": project_data["end"],
+                    "status": "Draft",
+                    "retention_percent": 5,
+                },
+                {
+                    "items": [
+                        {
+                            "boq_line_key": line_keys[key],
+                            "description": description,
+                            "current_qty": quantity * project_data["progress"] / 100,
+                            "previous_certified_qty": 0,
+                            "uom": uom,
+                            "rate": rate,
+                        }
+                        for key, _, description, uom, quantity, rate in line_specs
+                    ]
+                },
+            )
+            if index % 5 == 0 and certificate.docstatus == 0 and certificate.status == "Draft":
+                certificate.status = "Under Review"
+                certificate.save(ignore_permissions=True)
+            elif index % 5 != 0:
+                _submit_if_needed(certificate)
+            counts["progress_certificates"] += 1
+    return counts
+
+
+def _ensure_portfolio_material_requests(frappe, company, items, projects, warehouses):
+    requests = []
+    material_keys = ("cement", "sand", "aggregate")
+    for project_data in projects:
+        index = project_data["index"]
+        warehouse = warehouses[(index - 1) % len(warehouses)]
+        item_key = material_keys[(index - 1) % len(material_keys)]
+        request = _ensure_dynamic_doc(
+            frappe,
+            "Material Request",
+            f"RC-DEMO-MR-{index:03d}",
+            {
+                "material_request_type": "Purchase",
+                "transaction_date": project_data["start"],
+                "schedule_date": project_data["end"],
+                "company": company,
+                "set_warehouse": warehouse.name,
+                "project": project_data["project"],
+                "construction_project": project_data["project"],
+                "replay_key": f"RC-DEMO-MR-{index:03d}",
+            },
+            "items",
+            [
+                {
+                    "item_code": items[item_key].name,
+                    "qty": 80 + index * 2,
+                    "uom": items[item_key].stock_uom,
+                    "schedule_date": project_data["end"],
+                    "warehouse": warehouse.name,
+                    "project": project_data["project"],
+                }
+            ],
+        )
+        requests.append(request)
+    return requests
+
+
+def _ensure_portfolio_purchase_orders(
+    frappe,
+    company,
+    currency,
+    items,
+    suppliers,
+    projects,
+    material_requests,
+    warehouses,
+):
+    orders = []
+    item_keys = ("cement", "sand", "aggregate")
+    for project_data, material_request in zip(projects, material_requests):
+        index = project_data["index"]
+        warehouse = warehouses[(index - 1) % len(warehouses)]
+        item_key = item_keys[(index - 1) % len(item_keys)]
+        order = _ensure_dynamic_doc(
+            frappe,
+            "Purchase Order",
+            f"RC-DEMO-PO-{index:03d}",
+            {
+                "supplier": suppliers[(index - 1) % len(suppliers)].name,
+                "company": company,
+                "currency": currency,
+                "transaction_date": project_data["start"],
+                "schedule_date": project_data["end"],
+                "set_warehouse": warehouse.name,
+                "project": project_data["project"],
+                "construction_project": project_data["project"],
+                "buying_price_list": _first_optional(frappe, "Price List", "Standard Buying"),
+            },
+            "items",
+            [
+                {
+                    "item_code": items[item_key].name,
+                    "qty": 80 + index * 2,
+                    "rate": 100 + index * 3,
+                    "schedule_date": project_data["end"],
+                    "warehouse": warehouse.name,
+                    "project": project_data["project"],
+                    "material_request": material_request.name,
+                }
+            ],
+        )
+        orders.append(order)
+    return orders
+
+
 def _first_optional(frappe, doctype, preferred):
     if frappe.db.exists(doctype, preferred):
         return preferred
@@ -932,8 +1390,19 @@ def _find_demo_targets(frappe):
     for doctype, names in exact.items():
         targets[doctype] = [name for name in names if frappe.db.exists(doctype, name)]
     for doctype, pattern in (
+        ("Customer", "RC-DEMO-CUSTOMER-%"),
         ("Project", "RC-DEMO-PROJECT-%"),
         ("Task", "RC-DEMO-TASK-%"),
+        ("Sales Order", "RC-DEMO-SO-PORT-%"),
+        ("Construction BOQ", "RC-DEMO-BOQ-%"),
+        ("Project Baseline", "RC-DEMO-PB-%"),
+        ("Daily Site Report", "RC-DEMO-DSR-%"),
+        ("Site Issue", "RC-DEMO-SI-%"),
+        ("Progress Certificate", "RC-DEMO-PC-%"),
+        ("Material Request", "RC-DEMO-MR-%"),
+        ("Purchase Order", "RC-DEMO-PO-%"),
+        ("Warehouse", "RC Demo Warehouse %"),
+        ("Supplier", "RC-DEMO-SUPPLIER-%"),
     ):
         generated = frappe.get_all(doctype, filters={"name": ["like", pattern]}, pluck="name")
         targets[doctype] = sorted(set(targets[doctype] + generated))

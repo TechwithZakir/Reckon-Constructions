@@ -53,7 +53,7 @@ def get_dashboard_projects():
         "Project",
         fields=["name", "project_name", "customer", "company", "construction_currency", "construction_status", "construction_contract_value"],
         order_by="modified desc",
-        limit=50,
+        limit=100,
     )
     return {"projects": projects}
 

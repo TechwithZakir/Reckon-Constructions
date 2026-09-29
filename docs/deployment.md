@@ -36,10 +36,15 @@ bench --site <site> execute reckon_constructions.demo.seed_demo_data
 ```
 
 The default seed creates 100 ERPNext Projects in total: one complete UAT project plus 99
-portfolio projects. Portfolio projects contain four phase Tasks each, with staggered dates across
-roughly one year and varied completion percentages and statuses. Use `project_count` to request a
-different total. The command is idempotent. To rebuild the dataset, use `reset=true`. Before
-deletion, preview the exact records that will be removed. A real clear requires `confirm=true`:
+portfolio projects. It also creates 30 Customers distributed across the projects, 8 demo Suppliers,
+6 warehouse locations, project-linked Sales Orders, material requests, and draft Purchase Orders.
+Each portfolio project receives four phase Tasks, a BOQ and baseline, a Daily Site Report, a Site
+Issue, and, where progress is far enough along, a Progress Certificate. BOQ, baseline, report, and
+certificate records intentionally span draft, review, and approved states so the construction
+approval workflows and Project Dashboard can be demonstrated across a realistic portfolio.
+Dates are staggered across roughly one year and completion percentages vary. Use `project_count` to
+request a different total. The command is idempotent. To rebuild the dataset, use `reset=true`.
+Before deletion, preview the exact records that will be removed. A real clear requires `confirm=true`:
 
 ```bash
 bench --site <site> execute reckon_constructions.demo.seed_demo_data --kwargs '{"reset": true}'
@@ -48,9 +53,10 @@ bench --site <site> execute reckon_constructions.demo.clear_demo_data --kwargs '
 bench --site <site> execute reckon_constructions.demo.clear_demo_data --kwargs '{"confirm": true}'
 ```
 
-Cleanup is limited to deterministic `RC-DEMO-*` records plus generated Quotation, Material Request,
-and Sales Invoice records linked to the demo documents. It never removes the Company, Currency,
-UOM, item groups, customer groups, territory, chart of accounts, or other non-demo accounting setup.
+Cleanup is limited to deterministic `RC-DEMO-*` records plus generated demo Suppliers, Warehouses,
+Quotation, Material Request, Purchase Order, and Sales Invoice records. It never removes existing
+Company, Currency, UOM, item groups, customer groups, territory, chart of accounts, or warehouses
+that were already present before the seed.
 
 ## Rollback
 
