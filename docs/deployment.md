@@ -32,10 +32,10 @@ The app also installs traceability Custom Fields on standard Quotation, Material
 Run the complete UAT dataset only on a development or test site with an existing Company:
 
 ```bash
-bench --site <site> execute reckon_constructions.demo.seed_demo_data
+bench --site <site> execute reckon_constructions.demo.seed_demo_data --kwargs "{'dry_run': True}"
 ```
 
-The default seed creates 100 ERPNext Projects in total: one complete UAT project plus 99
+The dry-run command is the safe default and writes nothing. The full seed creates 100 ERPNext Projects in total: one complete UAT project plus 99
 portfolio projects. It also creates 30 Customers distributed across the projects, 8 demo Suppliers,
 6 warehouse locations, project-linked Sales Orders, material requests, and draft Purchase Orders.
 Each portfolio project receives four phase Tasks, a BOQ and baseline, a Daily Site Report, a Site
@@ -43,14 +43,15 @@ Issue, and, where progress is far enough along, a Progress Certificate. BOQ, bas
 certificate records intentionally span draft, review, and approved states so the construction
 approval workflows and Project Dashboard can be demonstrated across a realistic portfolio.
 Dates are staggered across roughly one year and completion percentages vary. Use `project_count` to
-request a different total. The command is idempotent. To rebuild the dataset, use `reset=true`.
-Before deletion, preview the exact records that will be removed. A real clear requires `confirm=true`:
+request a different total. The command is idempotent. To rebuild the dataset, use `reset=True`
+with `dry_run=False` and `confirm_demo_site=True`. Before deletion, preview the exact records
+that will be removed. A real clear requires `confirm_demo_site=True`:
 
 ```bash
-bench --site <site> execute reckon_constructions.demo.seed_demo_data --kwargs '{"reset": True}'
-bench --site <site> execute reckon_constructions.demo.seed_demo_data --kwargs '{"project_count": 25}'
-bench --site <site> execute reckon_constructions.demo.clear_demo_data --kwargs '{"dry_run": True}'
-bench --site <site> execute reckon_constructions.demo.clear_demo_data --kwargs '{"confirm": True}'
+bench --site <site> execute reckon_constructions.demo.seed_demo_data --kwargs "{'project_count': 25, 'dry_run': True}"
+bench --site <site> execute reckon_constructions.demo.seed_demo_data --kwargs "{'reset': True, 'dry_run': False, 'confirm_demo_site': True}"
+bench --site <site> execute reckon_constructions.demo.clear_demo_data --kwargs "{'dry_run': True}"
+bench --site <site> execute reckon_constructions.demo.clear_demo_data --kwargs "{'dry_run': False, 'confirm_demo_site': True}"
 ```
 
 Cleanup is limited to deterministic `RC-DEMO-*` records plus generated demo Suppliers, Warehouses,

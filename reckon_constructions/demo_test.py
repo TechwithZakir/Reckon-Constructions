@@ -1,6 +1,7 @@
 import unittest
+from inspect import signature
 
-from reckon_constructions.demo import DEMO_NAMES, ITEM_NAMES, demo_plan
+from reckon_constructions.demo import DEMO_NAMES, ITEM_NAMES, _expected_seed_counts, clear_demo_data, demo_plan, seed_demo_data
 
 
 class DemoDataPlanTest(unittest.TestCase):
@@ -22,6 +23,15 @@ class DemoDataPlanTest(unittest.TestCase):
         self.assertTrue(all(name.startswith("RC") for name in DEMO_NAMES.values()))
         self.assertTrue(all(name.startswith("RC") for name in ITEM_NAMES.values()))
         self.assertEqual(DEMO_NAMES["project"], DEMO_NAMES["construction_project"])
+
+    def test_seed_and_clear_are_safe_by_default(self):
+        self.assertTrue(signature(seed_demo_data).parameters["dry_run"].default)
+        self.assertTrue(signature(clear_demo_data).parameters["dry_run"].default)
+        counts = _expected_seed_counts(100)
+        self.assertEqual(counts["Project"], 100)
+        self.assertEqual(counts["Customer"], 30)
+        self.assertEqual(counts["Purchase Order"], 99)
+        self.assertGreater(counts["Progress Certificate"], 1)
 
 
 if __name__ == "__main__":

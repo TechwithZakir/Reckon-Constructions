@@ -119,20 +119,44 @@ def demo_plan():
     }
 
 
-def seed_demo_data(reset=False, project_count=DEMO_PROJECT_COUNT):
-    """Create the complete demo dataset and return a summary.
+def seed_demo_data(
+    project_count=DEMO_PROJECT_COUNT,
+    dry_run=True,
+    confirm_demo_site=False,
+    reset=False,
+):
+    """Preview or create the complete construction demo dataset.
 
-    The operation is idempotent.  Existing records with the deterministic demo
-    names are reused.  The default portfolio contains 100 Projects and four
-    Tasks per portfolio project. Pass ``reset=True`` to clear only this demo
-    dataset first.
+    Dry-run is the default. Writes require ``confirm_demo_site=True`` because
+    the seed creates many linked ERPNext transactions. Existing deterministic
+    demo records are reused; pass ``reset=True`` with confirmation to rebuild.
     """
     frappe = _frappe()
     project_count = max(int(project_count or DEMO_PROJECT_COUNT), 1)
-    if reset:
-        clear_demo_data(confirm=True)
-
     company = _get_company(frappe)
+    blockers = _preflight(frappe, company)
+    if blockers:
+        frappe.throw("Demo setup prerequisites are missing:\n- " + "\n- ".join(blockers))
+    if dry_run:
+        cleanup = clear_demo_data(dry_run=True)
+        return {
+            "writes": False,
+            "company": company,
+            "projects_requested": project_count,
+            "reset_requested": bool(reset),
+            "expected_documents": _expected_seed_counts(project_count),
+            "existing_demo_records": cleanup["count"],
+            "cleanup_preview": cleanup,
+            "next_step": "Run with dry_run=False and confirm_demo_site=True on a dedicated demo site.",
+        }
+    if not confirm_demo_site:
+        frappe.throw(
+            "Refusing to create demo data without confirm_demo_site=True. "
+            "Use a dedicated demo site."
+        )
+    if reset:
+        clear_demo_data(dry_run=False, confirm_demo_site=True)
+
     currency = _get_currency(frappe, company)
     groups = _get_master_groups(frappe)
     user = frappe.session.user if frappe.session.user and frappe.session.user != "Guest" else "Administrator"
@@ -416,19 +440,28 @@ def seed_demo_data(reset=False, project_count=DEMO_PROJECT_COUNT):
     return summary
 
 
-def clear_demo_data(confirm=False, dry_run=False):
+def clear_demo_data(confirm=False, dry_run=True, confirm_demo_site=False):
     """Delete only the deterministic demo records.
 
-    Use ``dry_run=True`` to inspect the target list.  A real deletion requires
-    ``confirm=True`` so an accidental bench command cannot erase demo data.
+    Use ``dry_run=True`` to inspect the target list. A real deletion requires
+    ``confirm=True`` or ``confirm_demo_site=True`` so an accidental bench
+    command cannot erase demo data.
     Submitted records are cancelled before deletion.
     """
     frappe = _frappe()
     targets = _find_demo_targets(frappe)
     if dry_run:
-        return {"status": "preview", "targets": targets, "count": sum(len(v) for v in targets.values())}
-    if not confirm:
-        frappe.throw("Demo data deletion requires confirm=True. Use dry_run=True to preview.")
+        return {
+            "status": "preview",
+            "writes": False,
+            "targets": targets,
+            "count": sum(len(v) for v in targets.values()),
+        }
+    if not (confirm or confirm_demo_site):
+        frappe.throw(
+            "Demo data deletion requires confirm=True or confirm_demo_site=True. "
+            "Use dry_run=True to preview."
+        )
 
     deleted = []
     order = [
@@ -478,7 +511,7 @@ def clear_demo_data(confirm=False, dry_run=False):
         deleted.append("Construction Settings: demo defaults cleared")
 
     frappe.db.commit()
-    return {"status": "cleared", "deleted": deleted, "count": len(deleted)}
+    return {"status": "cleared", "writes": True, "deleted": deleted, "count": len(deleted)}
 
 
 def _ensure_portfolio_projects(frappe, company, currency, customers, dates, ensure, count):
@@ -668,6 +701,73 @@ def _submit_if_needed(doc):
 def _set_if_field_exists(doc, fieldname, value):
     if value is not None and doc.meta.has_field(fieldname):
         doc.set(fieldname, value)
+
+
+def _preflight(frappe, company):
+    blockers = []
+    required = set(demo_plan()["custom_doctypes"] + demo_plan()["erpnext_doctypes"])
+    required.update({"Company", "Currency", "UOM", "Customer Group", "Supplier Group", "Territory", "Item Group", "Price List"})
+    for doctype in sorted(required):
+        if not frappe.db.exists("DocType", doctype):
+            blockers.append(f"Required ERPNext or Constructions DocType is unavailable: {doctype}")
+
+    for doctype, preferred, leaf in (
+        ("Customer Group", "All Customer Groups", False),
+        ("Supplier Group", "All Supplier Groups", False),
+        ("Territory", "All Territories", False),
+        ("Item Group", "All Item Groups", True),
+    ):
+        try:
+            _get_master_group_or_none(frappe, doctype, preferred, leaf)
+        except Exception:
+            blockers.append(f"No usable {doctype} is configured.")
+
+    if frappe.db.exists("DocType", "Warehouse"):
+        leaf_count = frappe.db.count("Warehouse", {"company": company, "is_group": 0})
+        group_count = frappe.db.count("Warehouse", {"company": company, "is_group": 1})
+        if not leaf_count and not group_count:
+            blockers.append(f"No warehouse or warehouse group is configured for {company}.")
+    return blockers
+
+
+def _get_master_group_or_none(frappe, doctype, preferred, leaf=False):
+    if frappe.db.exists(doctype, preferred) and (
+        not leaf or not frappe.db.get_value(doctype, preferred, "is_group")
+    ):
+        return preferred
+    filters = {"is_group": 0} if leaf else None
+    return frappe.get_all(doctype, filters=filters, pluck="name", limit=1)[0]
+
+
+def _expected_seed_counts(project_count):
+    generated_projects = max(project_count - 1, 0)
+    certificates = 0
+    for index in range(1, project_count):
+        progress = (index * 17 + 7) % 101
+        if index % 17 == 0:
+            progress = 100
+        if index % 29 == 0:
+            progress = min(progress, 45)
+            construction_status = "Cancelled"
+        else:
+            construction_status = "Active"
+        if construction_status != "Cancelled" and progress >= 20:
+            certificates += 1
+    return {
+        "Customer": DEMO_CUSTOMER_COUNT,
+        "Supplier": DEMO_SUPPLIER_COUNT,
+        "Warehouse": DEMO_WAREHOUSE_COUNT,
+        "Project": project_count,
+        "Task": project_count * 4,
+        "Sales Order": project_count,
+        "Material Request": project_count,
+        "Purchase Order": generated_projects,
+        "Construction BOQ": project_count,
+        "Project Baseline": project_count,
+        "Daily Site Report": project_count,
+        "Site Issue": project_count,
+        "Progress Certificate": certificates + 1,
+    }
 
 
 def _get_company(frappe):
