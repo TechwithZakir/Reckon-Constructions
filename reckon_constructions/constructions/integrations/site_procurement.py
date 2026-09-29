@@ -86,9 +86,15 @@ def create_material_request_from_preview(preview, replay_key=None):
     if not request.get("items"):
         frappe.throw("Material preview has no outstanding demand.")
     request.insert()
-    preview_doc.generated_material_request = request.name
-    preview_doc.status = "Generated"
-    preview_doc.save(ignore_permissions=True)
+    # The preview is submitted before this handoff. These traceability fields
+    # are intentionally updated atomically without reopening the submitted
+    # document for a normal save, which ERPNext correctly rejects.
+    frappe.db.set_value(
+        "Material Requirement Preview",
+        preview_doc.name,
+        {"generated_material_request": request.name, "status": "Generated"},
+        update_modified=False,
+    )
     return request.name
 
 
