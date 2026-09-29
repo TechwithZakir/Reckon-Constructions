@@ -713,9 +713,9 @@ def _preflight(frappe, company):
             blockers.append(f"Required ERPNext or Constructions DocType is unavailable: {doctype}")
 
     for doctype, preferred, leaf in (
-        ("Customer Group", "All Customer Groups", False),
-        ("Supplier Group", "All Supplier Groups", False),
-        ("Territory", "All Territories", False),
+        ("Customer Group", "All Customer Groups", True),
+        ("Supplier Group", "All Supplier Groups", True),
+        ("Territory", "All Territories", True),
         ("Item Group", "All Item Groups", True),
     ):
         try:
@@ -804,9 +804,9 @@ def _get_master_groups(frappe):
         return values[0]
 
     return {
-        "customer_group": first("Customer Group", "All Customer Groups"),
-        "supplier_group": first("Supplier Group", "All Supplier Groups"),
-        "territory": first("Territory", "All Territories"),
+        "customer_group": first("Customer Group", "All Customer Groups", leaf=True),
+        "supplier_group": first("Supplier Group", "All Supplier Groups", leaf=True),
+        "territory": first("Territory", "All Territories", leaf=True),
         "item_group": first("Item Group", "All Item Groups", leaf=True),
     }
 
