@@ -57,6 +57,8 @@ LINE_KEYS = {
     "finishing": "FIN-001",
 }
 
+DEMO_PROJECT_COUNT = 100
+
 
 def _frappe():
     import frappe
@@ -67,6 +69,7 @@ def _frappe():
 def demo_plan():
     """Return the deterministic records covered by the seed and clear actions."""
     return {
+        "portfolio_project_count": DEMO_PROJECT_COUNT,
         "custom_doctypes": [
             "Construction Settings",
             "Construction BOQ",
@@ -107,13 +110,16 @@ def demo_plan():
     }
 
 
-def seed_demo_data(reset=False):
+def seed_demo_data(reset=False, project_count=DEMO_PROJECT_COUNT):
     """Create the complete demo dataset and return a summary.
 
     The operation is idempotent.  Existing records with the deterministic demo
-    names are reused.  Pass ``reset=True`` to clear only this demo dataset first.
+    names are reused.  The default portfolio contains 100 Projects and four
+    Tasks per portfolio project. Pass ``reset=True`` to clear only this demo
+    dataset first.
     """
     frappe = _frappe()
+    project_count = max(int(project_count or DEMO_PROJECT_COUNT), 1)
     if reset:
         clear_demo_data(confirm=True)
 
@@ -159,6 +165,9 @@ def seed_demo_data(reset=False):
             "construction_site_address": "Riverside Road, Dhaka - Demo Site",
         },
     )
+    portfolio_projects = _ensure_portfolio_projects(
+        frappe, company, currency, customer, dates, ensure, project_count
+    )
 
     settings = frappe.get_single("Construction Settings")
     settings.update(
@@ -182,14 +191,15 @@ def seed_demo_data(reset=False):
     calculations = _ensure_calculations(frappe, currency, ensure)
     assemblies = _ensure_assemblies(frappe, items, ensure)
     boq = _ensure_boq(frappe, construction_project, customer, company, currency, items, ensure)
+    line_keys = _get_boq_line_keys(boq)
     measurements = _ensure_measurements(
-        frappe, construction_project, boq, calculations, dates, ensure
+        frappe, construction_project, boq, calculations, dates, line_keys, ensure
     )
     for measurement in measurements:
         _submit_if_needed(measurement)
 
     rates = _ensure_rates(
-        frappe, construction_project, boq, assemblies, items, dates, ensure
+        frappe, construction_project, boq, assemblies, items, dates, line_keys, ensure
     )
     for rate in rates:
         _submit_if_needed(rate)
@@ -212,6 +222,7 @@ def seed_demo_data(reset=False):
         assemblies,
         tasks,
         dates,
+        line_keys,
         ensure,
     )
     _submit_if_needed(baseline)
@@ -262,8 +273,8 @@ def seed_demo_data(reset=False):
         },
         {
             "progress": [
-                {"boq_line_key": LINE_KEYS["excavation"], "work_package": "Earthwork", "quantity": 195, "uom": "m3", "remarks": "Foundation excavation complete in Zone A."},
-                {"boq_line_key": LINE_KEYS["concrete"], "work_package": "Concrete Works", "quantity": 36, "uom": "m3", "remarks": "Footings poured and cured."},
+                {"boq_line_key": line_keys["excavation"], "work_package": "Earthwork", "quantity": 195, "uom": "m3", "remarks": "Foundation excavation complete in Zone A."},
+                {"boq_line_key": line_keys["concrete"], "work_package": "Concrete Works", "quantity": 36, "uom": "m3", "remarks": "Footings poured and cured."},
             ]
         },
     )
@@ -303,7 +314,7 @@ def seed_demo_data(reset=False):
         },
         {
             "items": [
-                {"boq_line_key": LINE_KEYS["concrete"], "description": "Additional drainage channel concrete", "quantity_delta": 12, "uom": "m3", "rate": 9504, "measurement_ref": "VO-MEASURE-001"}
+                {"boq_line_key": line_keys["concrete"], "description": "Additional drainage channel concrete", "quantity_delta": 12, "uom": "m3", "rate": 9504, "measurement_ref": "VO-MEASURE-001"}
             ]
         },
     )
@@ -324,8 +335,8 @@ def seed_demo_data(reset=False):
         },
         {
             "items": [
-                {"boq_line_key": LINE_KEYS["excavation"], "description": "Excavation for foundation", "current_qty": 195, "previous_certified_qty": 0, "uom": "m3", "rate": 450},
-                {"boq_line_key": LINE_KEYS["concrete"], "description": "RCC concrete M20", "current_qty": 36, "previous_certified_qty": 0, "uom": "m3", "rate": 9504},
+                {"boq_line_key": line_keys["excavation"], "description": "Excavation for foundation", "current_qty": 195, "previous_certified_qty": 0, "uom": "m3", "rate": 450},
+                {"boq_line_key": line_keys["concrete"], "description": "RCC concrete M20", "current_qty": 36, "previous_certified_qty": 0, "uom": "m3", "rate": 9504},
             ]
         },
     )
@@ -342,6 +353,12 @@ def seed_demo_data(reset=False):
         }
     )
     summary["status"] = "seeded"
+    summary["portfolio"] = {
+        "projects": len(portfolio_projects) + 1,
+        "generated_projects": len(portfolio_projects),
+        "tasks": len(tasks) + sum(len(project.get("tasks", [])) for project in portfolio_projects),
+        "progress_values": [project["progress"] for project in portfolio_projects],
+    }
     return summary
 
 
@@ -405,6 +422,135 @@ def clear_demo_data(confirm=False, dry_run=False):
 
     frappe.db.commit()
     return {"status": "cleared", "deleted": deleted, "count": len(deleted)}
+
+
+def _ensure_portfolio_projects(frappe, company, currency, customer, dates, ensure, count):
+    """Create a rolling one-year project portfolio with deterministic task progress."""
+    projects = []
+    today = dates["start"]
+    project_status_field = frappe.get_meta("Project").get_field("status")
+    project_status_options = set((project_status_field.options or "").splitlines()) if project_status_field else set()
+    for index in range(1, count):
+        progress = (index * 17 + 7) % 101
+        if index % 17 == 0:
+            progress = 100
+
+        duration = 140 + ((index * 29) % 220)
+        start_offset = -330 + ((index * 11) % 361)
+        if progress == 100:
+            start_offset = -duration - (index % 45)
+        start = frappe.utils.add_days(today, start_offset)
+        end = frappe.utils.add_days(start, duration)
+
+        if index % 29 == 0:
+            construction_status, project_status = "Cancelled", "Cancelled"
+            progress = min(progress, 45)
+        elif index % 23 == 0:
+            construction_status, project_status = "On Hold", "On Hold"
+        elif progress == 100:
+            construction_status, project_status = "Completed", "Completed"
+        elif progress == 0:
+            construction_status, project_status = "Draft", "Open"
+        else:
+            construction_status, project_status = "Active", "Open"
+        if project_status_options and project_status not in project_status_options:
+            project_status = "Open" if "Open" in project_status_options else next(iter(project_status_options))
+
+        project = ensure(
+            "Project",
+            f"RC-DEMO-PROJECT-{index:03d}",
+            {
+                "project_name": f"RC Portfolio Project {index:03d}",
+                "status": project_status,
+                "company": company,
+                "customer": customer.name,
+                "percent_complete_method": "Task Completion",
+                "percent_complete": progress,
+                "expected_start_date": start,
+                "expected_end_date": end,
+                "actual_start_date": start if progress and start <= today else None,
+                "actual_end_date": end if progress == 100 and end <= today else None,
+                "construction_status": construction_status,
+                "construction_currency": currency,
+                "construction_contract_start_date": start,
+                "construction_contract_end_date": end,
+                "construction_contract_value": 750000 + (index * 42850),
+                "construction_site_name": f"RC Portfolio Site {index:03d}",
+                "construction_site_address": f"Project Zone {((index - 1) % 12) + 1}, Dhaka",
+            },
+        )
+        tasks = _ensure_portfolio_tasks(
+            frappe,
+            project.name,
+            company,
+            start,
+            end,
+            progress,
+            construction_status,
+            ensure,
+        )
+        if project.meta.has_field("percent_complete"):
+            frappe.db.set_value("Project", project.name, "percent_complete", progress, update_modified=False)
+        projects.append({"project": project.name, "progress": progress, "tasks": tasks})
+    return projects
+
+
+def _ensure_portfolio_tasks(frappe, project, company, start, end, progress, construction_status, ensure):
+    phases = [
+        ("01", "Mobilization and site setup", 0, 45),
+        ("02", "Earthwork and foundation", 30, 110),
+        ("03", "Structure and concrete", 85, 230),
+        ("04", "Masonry and finishing", 180, 340),
+    ]
+    task_meta = frappe.get_meta("Task")
+    status_options = set((task_meta.get_field("status").options or "").splitlines())
+    tasks = []
+    for phase_number, subject, start_day, end_day in phases:
+        threshold = (int(phase_number) - 1) * 25
+        if construction_status == "Cancelled":
+            task_status, task_progress = "Cancelled", 0
+        elif progress >= threshold + 25:
+            task_status, task_progress = "Completed", 100
+        elif progress > threshold:
+            task_status, task_progress = "Working", min(95, (progress - threshold) * 4)
+        else:
+            task_status, task_progress = "Open", 0
+
+        if task_status not in status_options:
+            task_status = "Open" if "Open" in status_options else next(iter(status_options), "Open")
+
+        project_duration = frappe.utils.date_diff(end, start)
+        task_start = frappe.utils.add_days(start, min(start_day, project_duration))
+        task_end = frappe.utils.add_days(start, min(end_day, max(1, project_duration)))
+        values = {
+            "subject": subject,
+            "status": task_status,
+            "project": project,
+            "company": company,
+            "exp_start_date": task_start,
+            "exp_end_date": task_end,
+            "priority": "Medium",
+            "progress": task_progress,
+            "percent_complete": task_progress,
+        }
+        task = ensure("Task", f"RC-DEMO-TASK-{project.rsplit('-', 1)[-1]}-{phase_number}", values)
+        for fieldname, value in values.items():
+            if task.meta.has_field(fieldname):
+                task.set(fieldname, value)
+        task.save(ignore_permissions=True)
+        tasks.append(task.name)
+    return tasks
+
+
+def _get_boq_line_keys(boq):
+    fallback = ("excavation", "concrete", "masonry", "finishing")
+    items = list(boq.get("items") or [])
+    if len(items) < len(fallback):
+        return dict(LINE_KEYS)
+    return {
+        key: items[index].line_key or LINE_KEYS[key]
+        for index, key in enumerate(fallback)
+    }
 
 
 def _ensure_doc(frappe, doctype, name, values, children):
@@ -592,21 +738,21 @@ def _ensure_boq(frappe, construction_project, customer, company, currency, items
                 {"section_code": "04", "section_name": "Finishing Works", "description": "Floor finishes"},
             ],
             "items": [
-                {"section": "Earthwork", "item_code": items["excavation"].name, "description": "Excavation up to 1.5m depth including dressing and disposal", "quantity": 650, "uom": "m3", "rate": 450, "measurement_ref": DEMO_NAMES["measurement_excavation"]},
-                {"section": "Concrete Works", "item_code": items["concrete"].name, "description": "Supplying and casting RCC M20 including formwork", "quantity": 120, "uom": "m3", "rate": 8500, "measurement_ref": DEMO_NAMES["measurement_concrete"]},
-                {"section": "Masonry Works", "item_code": items["block"].name, "description": "6 inch concrete block wall including mortar", "quantity": 420, "uom": "m2", "rate": 1200, "measurement_ref": DEMO_NAMES["measurement_masonry"]},
-                {"section": "Finishing Works", "item_code": items["tile"].name, "description": "600x600 ceramic floor tiles including adhesive", "quantity": 200, "uom": "m2", "rate": 1234.4, "measurement_ref": DEMO_NAMES["measurement_finishing"]},
+                {"line_key": LINE_KEYS["excavation"], "section": "Earthwork", "item_code": items["excavation"].name, "description": "Excavation up to 1.5m depth including dressing and disposal", "quantity": 650, "uom": "m3", "rate": 450, "measurement_ref": DEMO_NAMES["measurement_excavation"]},
+                {"line_key": LINE_KEYS["concrete"], "section": "Concrete Works", "item_code": items["concrete"].name, "description": "Supplying and casting RCC M20 including formwork", "quantity": 120, "uom": "m3", "rate": 8500, "measurement_ref": DEMO_NAMES["measurement_concrete"]},
+                {"line_key": LINE_KEYS["masonry"], "section": "Masonry Works", "item_code": items["block"].name, "description": "6 inch concrete block wall including mortar", "quantity": 420, "uom": "m2", "rate": 1200, "measurement_ref": DEMO_NAMES["measurement_masonry"]},
+                {"line_key": LINE_KEYS["finishing"], "section": "Finishing Works", "item_code": items["tile"].name, "description": "600x600 ceramic floor tiles including adhesive", "quantity": 200, "uom": "m2", "rate": 1234.4, "measurement_ref": DEMO_NAMES["measurement_finishing"]},
             ],
         },
     )
 
 
-def _ensure_measurements(frappe, project, boq, calculations, dates, ensure):
+def _ensure_measurements(frappe, project, boq, calculations, dates, line_keys, ensure):
     specs = [
-        ("measurement_excavation", LINE_KEYS["excavation"], "m3", calculations["volume"].name, [{"length": 10, "width": 10, "height": 6.5, "count": 1, "factor": 1}], "Foundation excavation drawing EX-001"),
-        ("measurement_concrete", LINE_KEYS["concrete"], "m3", calculations["volume"].name, [{"length": 4, "width": 5, "height": 6, "count": 1, "factor": 1}], "Foundation concrete drawing ST-002"),
-        ("measurement_masonry", LINE_KEYS["masonry"], "m2", calculations["area"].name, [{"length": 20, "width": 21, "height": 1, "count": 1, "factor": 1}], "Blockwork layout drawing AR-003"),
-        ("measurement_finishing", LINE_KEYS["finishing"], "m2", calculations["area"].name, [{"length": 10, "width": 20, "height": 1, "count": 1, "factor": 1}], "Floor finish schedule AR-004"),
+        ("measurement_excavation", line_keys["excavation"], "m3", calculations["volume"].name, [{"length": 10, "width": 10, "height": 6.5, "count": 1, "factor": 1}], "Foundation excavation drawing EX-001"),
+        ("measurement_concrete", line_keys["concrete"], "m3", calculations["volume"].name, [{"length": 4, "width": 5, "height": 6, "count": 1, "factor": 1}], "Foundation concrete drawing ST-002"),
+        ("measurement_masonry", line_keys["masonry"], "m2", calculations["area"].name, [{"length": 20, "width": 21, "height": 1, "count": 1, "factor": 1}], "Blockwork layout drawing AR-003"),
+        ("measurement_finishing", line_keys["finishing"], "m2", calculations["area"].name, [{"length": 10, "width": 20, "height": 1, "count": 1, "factor": 1}], "Floor finish schedule AR-004"),
     ]
     result = []
     for key, line_key, uom, template, rows, drawing in specs:
@@ -614,12 +760,12 @@ def _ensure_measurements(frappe, project, boq, calculations, dates, ensure):
     return result
 
 
-def _ensure_rates(frappe, project, boq, assemblies, items, dates, ensure):
+def _ensure_rates(frappe, project, boq, assemblies, items, dates, line_keys, ensure):
     specs = [
-        ("rate_excavation", LINE_KEYS["excavation"], "excavation", "m3", [{"component_kind": "Equipment", "description": "Excavator and operator", "quantity_factor": 1, "uom": "Hour", "unit_rate": 400}, {"component_kind": "Labour", "description": "Excavation labour", "quantity_factor": 1, "uom": "Hour", "unit_rate": 50}], 0, 0),
-        ("rate_concrete", LINE_KEYS["concrete"], "concrete", "m3", [{"component_kind": "Material", "item": items["cement"].name, "description": "Cement", "quantity_factor": 5, "uom": "Bag", "unit_rate": 100}, {"component_kind": "Material", "item": items["sand"].name, "description": "Fine aggregate", "quantity_factor": 0.5, "uom": "m3", "unit_rate": 2000}, {"component_kind": "Material", "item": items["aggregate"].name, "description": "Coarse aggregate", "quantity_factor": 0.8, "uom": "m3", "unit_rate": 5000}, {"component_kind": "Labour", "description": "Concrete placing crew", "quantity_factor": 1, "uom": "Hour", "unit_rate": 2500}], 10, 8),
-        ("rate_masonry", LINE_KEYS["masonry"], "masonry", "m2", [{"component_kind": "Material", "item": items["block"].name, "description": "Concrete block", "quantity_factor": 1, "uom": "m2", "unit_rate": 850}, {"component_kind": "Labour", "description": "Masonry crew", "quantity_factor": 1, "uom": "Hour", "unit_rate": 150}], 5, 10),
-        ("rate_finishing", LINE_KEYS["finishing"], "finishing", "m2", [{"component_kind": "Material", "item": items["tile"].name, "description": "Ceramic floor tile", "quantity_factor": 1, "uom": "m2", "unit_rate": 1000}, {"component_kind": "Labour", "description": "Tiling crew", "quantity_factor": 1, "uom": "Hour", "unit_rate": 100}], 5, 7.2),
+        ("rate_excavation", line_keys["excavation"], "excavation", "m3", [{"component_kind": "Equipment", "description": "Excavator and operator", "quantity_factor": 1, "uom": "Hour", "unit_rate": 400}, {"component_kind": "Labour", "description": "Excavation labour", "quantity_factor": 1, "uom": "Hour", "unit_rate": 50}], 0, 0),
+        ("rate_concrete", line_keys["concrete"], "concrete", "m3", [{"component_kind": "Material", "item": items["cement"].name, "description": "Cement", "quantity_factor": 5, "uom": "Bag", "unit_rate": 100}, {"component_kind": "Material", "item": items["sand"].name, "description": "Fine aggregate", "quantity_factor": 0.5, "uom": "m3", "unit_rate": 2000}, {"component_kind": "Material", "item": items["aggregate"].name, "description": "Coarse aggregate", "quantity_factor": 0.8, "uom": "m3", "unit_rate": 5000}, {"component_kind": "Labour", "description": "Concrete placing crew", "quantity_factor": 1, "uom": "Hour", "unit_rate": 2500}], 10, 8),
+        ("rate_masonry", line_keys["masonry"], "masonry", "m2", [{"component_kind": "Material", "item": items["block"].name, "description": "Concrete block", "quantity_factor": 1, "uom": "m2", "unit_rate": 850}, {"component_kind": "Labour", "description": "Masonry crew", "quantity_factor": 1, "uom": "Hour", "unit_rate": 150}], 5, 10),
+        ("rate_finishing", line_keys["finishing"], "finishing", "m2", [{"component_kind": "Material", "item": items["tile"].name, "description": "Ceramic floor tile", "quantity_factor": 1, "uom": "m2", "unit_rate": 1000}, {"component_kind": "Labour", "description": "Tiling crew", "quantity_factor": 1, "uom": "Hour", "unit_rate": 100}], 5, 7.2),
     ]
     result = []
     for key, line_key, assembly_key, uom, components, overhead, markup in specs:
@@ -671,13 +817,13 @@ def _ensure_tasks(frappe, project, company, dates, ensure):
     return result
 
 
-def _ensure_baseline(frappe, project, boq, sales_order, assemblies, tasks, dates, ensure):
+def _ensure_baseline(frappe, project, boq, sales_order, assemblies, tasks, dates, line_keys, ensure):
     values = {"project": project.name, "boq_revision": boq.name, "sales_order": sales_order.name, "baseline_version": 1, "status": "Draft"}
     work_packages = [
-        {"work_package": "Earthwork", "assembly": assemblies["excavation"].name, "task": tasks["task_excavation"].name, "boq_line_key": LINE_KEYS["excavation"], "planned_start": dates["start"], "planned_end": dates["start_2"], "planned_qty": 650, "uom": "m3", "planned_cost": 292500, "planned_value": 292500, "milestone": 0},
-        {"work_package": "Concrete Works", "assembly": assemblies["concrete"].name, "task": tasks["task_concrete"].name, "boq_line_key": LINE_KEYS["concrete"], "planned_start": dates["start_2"], "planned_end": dates["progress"], "planned_qty": 120, "uom": "m3", "planned_cost": 960000, "planned_value": 1140480, "depends_on": "Earthwork", "milestone": 1},
-        {"work_package": "Masonry Works", "assembly": assemblies["masonry"].name, "task": tasks["task_masonry"].name, "boq_line_key": LINE_KEYS["masonry"], "planned_start": dates["progress"], "planned_end": dates["end"], "planned_qty": 420, "uom": "m2", "planned_cost": 441000, "planned_value": 506100, "depends_on": "Concrete Works", "milestone": 0},
-        {"work_package": "Finishing Works", "assembly": assemblies["finishing"].name, "task": tasks["task_finishing"].name, "boq_line_key": LINE_KEYS["finishing"], "planned_start": dates["progress"], "planned_end": dates["end"], "planned_qty": 200, "uom": "m2", "planned_cost": 220000, "planned_value": 247632, "depends_on": "Masonry Works", "milestone": 1},
+        {"work_package": "Earthwork", "assembly": assemblies["excavation"].name, "task": tasks["task_excavation"].name, "boq_line_key": line_keys["excavation"], "planned_start": dates["start"], "planned_end": dates["start_2"], "planned_qty": 650, "uom": "m3", "planned_cost": 292500, "planned_value": 292500, "milestone": 0},
+        {"work_package": "Concrete Works", "assembly": assemblies["concrete"].name, "task": tasks["task_concrete"].name, "boq_line_key": line_keys["concrete"], "planned_start": dates["start_2"], "planned_end": dates["progress"], "planned_qty": 120, "uom": "m3", "planned_cost": 960000, "planned_value": 1140480, "depends_on": "Earthwork", "milestone": 1},
+        {"work_package": "Masonry Works", "assembly": assemblies["masonry"].name, "task": tasks["task_masonry"].name, "boq_line_key": line_keys["masonry"], "planned_start": dates["progress"], "planned_end": dates["end"], "planned_qty": 420, "uom": "m2", "planned_cost": 441000, "planned_value": 506100, "depends_on": "Concrete Works", "milestone": 0},
+        {"work_package": "Finishing Works", "assembly": assemblies["finishing"].name, "task": tasks["task_finishing"].name, "boq_line_key": line_keys["finishing"], "planned_start": dates["progress"], "planned_end": dates["end"], "planned_qty": 200, "uom": "m2", "planned_cost": 220000, "planned_value": 247632, "depends_on": "Masonry Works", "milestone": 1},
     ]
     return ensure("Project Baseline", DEMO_NAMES["baseline"], values, {"work_packages": work_packages})
 
@@ -785,6 +931,12 @@ def _find_demo_targets(frappe):
     }
     for doctype, names in exact.items():
         targets[doctype] = [name for name in names if frappe.db.exists(doctype, name)]
+    for doctype, pattern in (
+        ("Project", "RC-DEMO-PROJECT-%"),
+        ("Task", "RC-DEMO-TASK-%"),
+    ):
+        generated = frappe.get_all(doctype, filters={"name": ["like", pattern]}, pluck="name")
+        targets[doctype] = sorted(set(targets[doctype] + generated))
     for doctype, field, value in (
         ("Quotation", "construction_boq", DEMO_NAMES["boq"]),
         ("Material Request", "material_requirement_preview", DEMO_NAMES["material_preview"]),

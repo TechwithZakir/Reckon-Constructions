@@ -35,11 +35,15 @@ Run the complete UAT dataset only on a development or test site with an existing
 bench --site <site> execute reckon_constructions.demo.seed_demo_data
 ```
 
-The command is idempotent. To rebuild the dataset, use `reset=true`. Before deletion, preview the
-exact records that will be removed. A real clear requires `confirm=true`:
+The default seed creates 100 ERPNext Projects in total: one complete UAT project plus 99
+portfolio projects. Portfolio projects contain four phase Tasks each, with staggered dates across
+roughly one year and varied completion percentages and statuses. Use `project_count` to request a
+different total. The command is idempotent. To rebuild the dataset, use `reset=true`. Before
+deletion, preview the exact records that will be removed. A real clear requires `confirm=true`:
 
 ```bash
 bench --site <site> execute reckon_constructions.demo.seed_demo_data --kwargs '{"reset": true}'
+bench --site <site> execute reckon_constructions.demo.seed_demo_data --kwargs '{"project_count": 25}'
 bench --site <site> execute reckon_constructions.demo.clear_demo_data --kwargs '{"dry_run": true}'
 bench --site <site> execute reckon_constructions.demo.clear_demo_data --kwargs '{"confirm": true}'
 ```
