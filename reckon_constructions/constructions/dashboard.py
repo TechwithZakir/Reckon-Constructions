@@ -15,6 +15,14 @@ def _number(value):
         return 0.0
 
 
+def _date_sort_key(value):
+    """Return one comparable key for Frappe date, datetime, and string values."""
+    if value is None:
+        return ""
+    isoformat = getattr(value, "isoformat", None)
+    return isoformat() if callable(isoformat) else str(value)
+
+
 def calculate_dashboard_metrics(
     contract_value=0,
     boq_value=0,
@@ -132,7 +140,7 @@ def _site_report_progress(reports, progress_rows, project_display_names):
                 "progress": round(progress, 2),
             }
         )
-    return sorted(result, key=lambda row: (row.get("report_date") or "", row["name"]), reverse=True)
+    return sorted(result, key=lambda row: (_date_sort_key(row.get("report_date")), row["name"]), reverse=True)
 
 
 def _gantt_rows(tasks, project_display_names):
@@ -150,7 +158,7 @@ def _gantt_rows(tasks, project_display_names):
                 "status": task.get("status") or "Open",
             }
         )
-    return sorted(rows, key=lambda row: (row.get("start_date") or "", row["project_name"], row["subject"]))
+    return sorted(rows, key=lambda row: (_date_sort_key(row.get("start_date")), row["project_name"], row["subject"]))
 
 
 def _recent_activity(project_names, project_display_names):
@@ -181,7 +189,7 @@ def _recent_activity(project_names, project_display_names):
                     "status": record.get(status_field) or "Draft",
                 }
             )
-    return sorted(activities, key=lambda row: row.get("date") or "", reverse=True)[:16]
+    return sorted(activities, key=lambda row: _date_sort_key(row.get("date")), reverse=True)[:16]
 
 
 def _build_dashboard_payload(project=None):

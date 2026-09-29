@@ -1,9 +1,18 @@
 import unittest
+from datetime import date, datetime
 
-from reckon_constructions.constructions.dashboard import calculate_dashboard_metrics
+from reckon_constructions.constructions.dashboard import _date_sort_key, calculate_dashboard_metrics
 
 
 class DashboardCalculationTest(unittest.TestCase):
+    def test_dashboard_date_sort_key_normalizes_frappe_date_values(self):
+        values = [date(2026, 1, 2), "2026-01-03", datetime(2026, 1, 1, 12, 30)]
+
+        self.assertEqual(
+            sorted(values, key=_date_sort_key),
+            [datetime(2026, 1, 1, 12, 30), date(2026, 1, 2), "2026-01-03"],
+        )
+
     def test_dashboard_calculates_progress_and_margin(self):
         result = calculate_dashboard_metrics(
             contract_value=1000,
