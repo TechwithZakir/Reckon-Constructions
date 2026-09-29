@@ -37,6 +37,10 @@
     {"label": "Progress Certificates", "type": "Link", "link_type": "DocType", "link_to": "Progress Certificate", "icon": "badge-check"},
     {"label": "Sales Invoices", "type": "Link", "link_type": "DocType", "link_to": "Sales Invoice", "icon": "receipt"},
     {"label": "Reports", "type": "Section Break", "icon": "chart-no-axes-combined", "collapsible": 1},
-    {"label": "Construction Approval Worklist", "type": "Link", "link_type": "Report", "link_to": "Construction Approval Worklist", "icon": "list-check"}
+    {"label": "Construction Approval Worklist", "type": "Link", "link_type": "Report", "link_to": "Construction Approval Worklist", "icon": "list-check"},
+    {"label": "Project Progress Summary", "type": "Link", "link_type": "Report", "link_to": "Project Progress Summary", "icon": "chart-no-axes-column-increasing"},
+    {"label": "Site Progress Activity", "type": "Link", "link_type": "Report", "link_to": "Site Progress Activity", "icon": "chart-line"},
+    {"label": "Project Gantt Schedule", "type": "Link", "link_type": "Report", "link_to": "Project Gantt Schedule", "icon": "gantt-chart"},
+    {"label": "Project Activity and Issues", "type": "Link", "link_type": "Report", "link_to": "Project Activity and Issues", "icon": "clipboard-list"}
   ]
 }
