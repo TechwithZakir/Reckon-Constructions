@@ -18,14 +18,24 @@ Verify `bench version`, confirm ERPNext v16 is installed, and take a site backup
 git fetch origin
 git checkout main
 git pull --ff-only origin main
+git rev-parse --short HEAD
 bench --site <site> migrate
 bench build
+bench --site <site> clear-cache
+bench --site <site> clear-website-cache
 bench restart
 bench --site <site> run-tests --app reckon_constructions
 ```
 
 Review workflow fixtures and role permissions after migration. Approved construction documents must remain immutable.
 The app also installs traceability Custom Fields on standard Quotation, Material Request, and Sales Invoice records so integration retries remain idempotent.
+
+`bench build` only refreshes browser assets; it does not reload Python modules already held by web and worker processes.
+Always complete `bench restart` after pulling code that changes API methods or Script Reports. If the command asks
+for an operating-system password, finish that prompt before testing the site. Verify that all processes are running
+the same commit with `git rev-parse --short HEAD`, then hard-refresh the browser. A dashboard call returning the
+old “Select a Project before opening the dashboard” message together with a report import error is a mixed-worker
+deployment: the code is only partially live, not a data or permissions error.
 
 ## Demo seed and cleanup
 
