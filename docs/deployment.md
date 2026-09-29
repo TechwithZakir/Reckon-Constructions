@@ -47,10 +47,10 @@ request a different total. The command is idempotent. To rebuild the dataset, us
 Before deletion, preview the exact records that will be removed. A real clear requires `confirm=true`:
 
 ```bash
-bench --site <site> execute reckon_constructions.demo.seed_demo_data --kwargs '{"reset": true}'
+bench --site <site> execute reckon_constructions.demo.seed_demo_data --kwargs '{"reset": True}'
 bench --site <site> execute reckon_constructions.demo.seed_demo_data --kwargs '{"project_count": 25}'
-bench --site <site> execute reckon_constructions.demo.clear_demo_data --kwargs '{"dry_run": true}'
-bench --site <site> execute reckon_constructions.demo.clear_demo_data --kwargs '{"confirm": true}'
+bench --site <site> execute reckon_constructions.demo.clear_demo_data --kwargs '{"dry_run": True}'
+bench --site <site> execute reckon_constructions.demo.clear_demo_data --kwargs '{"confirm": True}'
 ```
 
 Cleanup is limited to deterministic `RC-DEMO-*` records plus generated demo Suppliers, Warehouses,
