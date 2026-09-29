@@ -1162,6 +1162,9 @@ def _ensure_portfolio_construction_records(
             boq.save(ignore_permissions=True)
         counts["boqs"] += 1
 
+        # Reuse the keys stored on an existing demo BOQ. This keeps reruns
+        # compatible with records created by an earlier seed revision.
+        line_keys = _get_boq_line_keys(boq)
         approved_quantities = {
             row.line_key: float(row.quantity or 0)
             for row in boq.get("items") or []

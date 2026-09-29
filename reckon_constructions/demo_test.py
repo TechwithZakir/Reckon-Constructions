@@ -5,6 +5,7 @@ from reckon_constructions.demo import (
     DEMO_NAMES,
     ITEM_NAMES,
     _expected_seed_counts,
+    _get_boq_line_keys,
     _portfolio_progress_quantity,
     clear_demo_data,
     demo_plan,
@@ -44,6 +45,25 @@ class DemoDataPlanTest(unittest.TestCase):
     def test_portfolio_progress_quantity_does_not_exceed_approved_quantity(self):
         self.assertEqual(_portfolio_progress_quantity(94.8, 100), 94.8)
         self.assertLessEqual(_portfolio_progress_quantity(94.8, 100), 94.8)
+
+    def test_portfolio_reuses_stored_boq_line_keys(self):
+        boq = {
+            "items": [
+                type("Row", (), {"line_key": "OLD-EXCAVATION"})(),
+                type("Row", (), {"line_key": "OLD-CONCRETE"})(),
+                type("Row", (), {"line_key": "OLD-MASONRY"})(),
+                type("Row", (), {"line_key": "OLD-FINISHING"})(),
+            ]
+        }
+        self.assertEqual(
+            _get_boq_line_keys(boq),
+            {
+                "excavation": "OLD-EXCAVATION",
+                "concrete": "OLD-CONCRETE",
+                "masonry": "OLD-MASONRY",
+                "finishing": "OLD-FINISHING",
+            },
+        )
 
 
 if __name__ == "__main__":
