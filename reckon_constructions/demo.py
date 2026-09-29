@@ -697,6 +697,10 @@ def _ensure_doc(frappe, doctype, name, values, children):
 
 def _submit_if_needed(doc):
     if doc and doc.docstatus == 0:
+        # Related inserts can update modified timestamps during one seed run.
+        # Reload before submit so Frappe's optimistic concurrency check sees
+        # the current database version of the document.
+        doc.reload()
         doc.submit()
     return doc
 
