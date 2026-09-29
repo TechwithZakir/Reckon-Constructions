@@ -1,0 +1,16 @@
+{
+  "add_total_row": 1,
+  "columns": [],
+  "doctype": "Report",
+  "filters": [{"fieldname": "project", "label": "Project", "fieldtype": "Link", "options": "Project"}],
+  "is_standard": "Yes",
+  "module": "Constructions",
+  "name": "Project Commercial Position",
+  "ref_doctype": "Project",
+  "report_type": "Script Report",
+  "roles": [
+    {"role": "System Manager"},
+    {"role": "Projects Manager"},
+    {"role": "Project User"}
+  ]
+}

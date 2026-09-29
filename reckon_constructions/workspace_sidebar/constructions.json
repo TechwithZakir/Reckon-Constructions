@@ -41,6 +41,9 @@
     {"label": "Project Progress Summary", "type": "Link", "link_type": "Report", "link_to": "Project Progress Summary", "icon": "chart-no-axes-column-increasing"},
     {"label": "Site Progress Activity", "type": "Link", "link_type": "Report", "link_to": "Site Progress Activity", "icon": "chart-line"},
     {"label": "Project Gantt Schedule", "type": "Link", "link_type": "Report", "link_to": "Project Gantt Schedule", "icon": "gantt-chart"},
-    {"label": "Project Activity and Issues", "type": "Link", "link_type": "Report", "link_to": "Project Activity and Issues", "icon": "clipboard-list"}
+    {"label": "Project Activity and Issues", "type": "Link", "link_type": "Report", "link_to": "Project Activity and Issues", "icon": "clipboard-list"},
+    {"label": "Project Commercial Position", "type": "Link", "link_type": "Report", "link_to": "Project Commercial Position", "icon": "landmark"},
+    {"label": "Procurement Commitments", "type": "Link", "link_type": "Report", "link_to": "Procurement Commitments", "icon": "shopping-cart"},
+    {"label": "Project Risk and RFI Register", "type": "Link", "link_type": "Report", "link_to": "Project Risk and RFI Register", "icon": "triangle-alert"}
   ]
 }

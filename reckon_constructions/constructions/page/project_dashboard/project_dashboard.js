@@ -199,6 +199,9 @@ function report_links_panel() {
         <div class="dashboard-report-link" data-report="Site Progress Activity">${__("Site report activity report")}<span>›</span></div>
         <div class="dashboard-report-link" data-report="Project Gantt Schedule">${__("Project Gantt schedule report")}<span>›</span></div>
         <div class="dashboard-report-link" data-report="Project Activity and Issues">${__("Activity, visits, issues and resolution")}<span>›</span></div>
+        <div class="dashboard-report-link" data-report="Project Commercial Position">${__("Commercial position and certified value")}<span>›</span></div>
+        <div class="dashboard-report-link" data-report="Procurement Commitments">${__("Procurement commitments by project")}<span>›</span></div>
+        <div class="dashboard-report-link" data-report="Project Risk and RFI Register">${__("Open risks and information requests")}<span>›</span></div>
         <div class="text-muted small mt-3">${__("Use the reports for export, filtering, and management review.")}</div>
     `);
 }
