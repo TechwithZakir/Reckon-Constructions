@@ -101,8 +101,3 @@ after_migrate = [
 ]
 
 before_uninstall = "reckon_constructions.migrations.cleanup_project_customizations.before_uninstall"
-
-website_context = {
-    "favicon": "/assets/reckon_constructions/images/favicon.png",
-    "splash_image": "/assets/reckon_constructions/images/favicon.png",
-}
